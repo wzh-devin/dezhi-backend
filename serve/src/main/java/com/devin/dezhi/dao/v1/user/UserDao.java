@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.devin.dezhi.domain.v1.entity.user.User;
 import com.devin.dezhi.domain.v1.vo.req.UserInfoReq;
+import com.devin.dezhi.enums.FlagEnum;
 import com.devin.dezhi.mapper.v1.user.UserMapper;
 import org.springframework.stereotype.Service;
 import java.util.Objects;
@@ -27,6 +28,9 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
     public User getByReq(final UserInfoReq userInfoReq) {
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 
+        // 正常状态
+        lambdaQueryWrapper.eq(User::getDelFlag, FlagEnum.NORMAL.getFlag());
+
         // 动态生成查询条件
         if (Objects.nonNull(userInfoReq.getUserName())) {
             lambdaQueryWrapper.eq(User::getUsername, userInfoReq.getUserName());
@@ -39,5 +43,17 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
         }
 
         return getOne(lambdaQueryWrapper);
+    }
+
+    /**
+     * 通过用户id逻辑删除用户信息.
+     * @param uid 用户id
+     * @return boolean
+     */
+    public boolean logicRemoveById(final Long uid) {
+        return lambdaUpdate()
+                .eq(User::getId, uid)
+                .set(User::getDelFlag, FlagEnum.DISABLED.getFlag())
+                .update();
     }
 }

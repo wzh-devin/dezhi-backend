@@ -54,9 +54,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
                 "/**/loginAccount",
                 "/**/loginEmail",
                 "/**/getEmailCode",
-                "/**/signup",
-                "/**/logout",
-                "/**/deregisterAccount"
+                "/**/signup"
         );
 
         // 开启Sa-Token的路由检验

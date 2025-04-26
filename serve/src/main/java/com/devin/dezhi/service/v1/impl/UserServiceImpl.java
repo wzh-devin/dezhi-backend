@@ -5,6 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.devin.dezhi.common.utils.RedisUtil;
 import com.devin.dezhi.constant.RedisKey;
 import com.devin.dezhi.dao.v1.user.UserDao;
+import com.devin.dezhi.dao.v1.user.UserRoleDao;
 import com.devin.dezhi.domain.v1.entity.user.User;
 import com.devin.dezhi.domain.v1.vo.req.UserInfoReq;
 import com.devin.dezhi.domain.v1.vo.resp.LoginResp;
@@ -38,6 +39,8 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncrypt passwordEncrypt;
 
+    private final UserRoleDao userRoleDao;
+
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public LoginResp loginAccount(final UserInfoReq userInfoReq) {
@@ -57,5 +60,29 @@ public class UserServiceImpl implements UserService {
         }
 
         return RespEntityGenerate.loginResp(StpUtil.getTokenValue());
+    }
+
+    @Override
+    public void logout(final Long uid) {
+        // sa-token登出
+        StpUtil.logout(uid);
+
+        // 删除登陆的缓存信息
+        redisUtil.delete(RedisKey.generateRedisKey(RedisKey.LOGIN_INFO, uid));
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void deregisterAccount(final Long uid) {
+        // 用户信息登出
+        logout(uid);
+
+        // 删除用户角色关联信息
+        boolean userRoleRemove = userRoleDao.removeByUserId(uid);
+        AssertUtil.isTrue(userRoleRemove, "用户角色关联信息删除失败！！！");
+
+        // 逻辑删除用户信息
+        boolean userRemove = userDao.logicRemoveById(uid);
+        AssertUtil.isTrue(userRemove, "用户信息删除失败！！！");
     }
 }

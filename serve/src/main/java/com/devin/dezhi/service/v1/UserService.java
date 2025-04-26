@@ -19,4 +19,16 @@ public interface UserService {
      * @return LoginResp
      */
     LoginResp loginAccount(UserInfoReq userInfoReq);
+
+    /**
+     * 登出.
+     * @param uid uid
+     */
+    void logout(Long uid);
+
+    /**
+     * 注销.
+     * @param uid uid
+     */
+    void deregisterAccount(Long uid);
 }

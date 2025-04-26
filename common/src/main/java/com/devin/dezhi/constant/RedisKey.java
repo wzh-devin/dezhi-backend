@@ -12,11 +12,11 @@ package com.devin.dezhi.constant;
  */
 public class RedisKey {
 
-    public static final String LOGIN_INFO = "userLogin:uid_%d";
+    public static final String LOGIN_INFO = "userLogin:uid_%s";
 
-    public static final String USER_ROLE = "userRole:uid_%d";
+    public static final String USER_ROLE = "userRole:uid_%s";
 
-    public static final String USER_PERMISSION = "userPermission:uid_%d";
+    public static final String USER_PERMISSION = "userPermission:uid_%s";
 
     private static final String BASE_KEY = "dezhi:";
 
