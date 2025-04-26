@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 定义日志文件的存储地址，使用相对路径 -->
+    <property name="LOG_HOME" value="logs"/>
+
+    <!-- 自定义日志颜色转换器 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+
+    <!-- 定义控制台日志级别的颜色 -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}) [ %white(%thread) ] %clr(%-5level) %blue(%logger{50}) %magenta(:::) %msg%n"/>
+    <!-- 输出文件的日志格式 -->
+    <property name="FILE_LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [ %thread ] %-5level %logger{50} ::: %msg%n"/>
+
+    <!-- 控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 控制台日志输出格式，包含时间、线程、彩色日志级别、类名、方法名、行号和日志内容 -->
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 按照每天生成日志文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志文件输出的文件名，按年-月-日-时:分:秒.log命名 -->
+            <FileNamePattern>${LOG_HOME}/%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!-- 日志文件保留天数 -->
+            <MaxHistory>7</MaxHistory>
+        </rollingPolicy>
+        <encoder>
+            <!-- 文件日志输出格式，包含时间、线程、日志级别、类名、方法名、行号和日志内容 -->
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 异步输出，提高系统性能 -->
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志，如果队列已满，会阻塞而不是丢弃日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 更快的异步日志处理 -->
+        <queueSize>512</queueSize>
+        <!-- 添加附加的appender，最多只能添加一个 -->
+        <appender-ref ref="FILE"/>
+    </appender>
+
+    <!-- 根日志级别配置 -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ASYNC_FILE"/>
+    </root>
+
+    <!-- 第三方库的日志级别 -->
+    <logger name="org.springframework" level="INFO"/>
+
+    <!-- 你的应用日志级别，可以设置为更详细的DEBUG -->
+    <logger name="com.devin.dezhi" level="DEBUG"/>
+</configuration>
