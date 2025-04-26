@@ -79,6 +79,9 @@ public class GeneratorPgDataTest {
         AssertUtil.isTrue(insertResult, "生成管理员账号失败");
     }
 
+    /**
+     * 生成用户角色关联数据
+     */
     @Test
     public void generateUserRoleData() {
         User user = userDao.getById(1113544547259908096L);

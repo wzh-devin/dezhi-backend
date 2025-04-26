@@ -25,4 +25,10 @@ public interface UserService {
      * @param uid uid
      */
     void logout(Long uid);
+
+    /**
+     * 注销.
+     * @param uid uid
+     */
+    void deregisterAccount(Long uid);
 }

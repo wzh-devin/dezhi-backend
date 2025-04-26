@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,4 +62,16 @@ public class UserController {
         return ApiResult.success();
     }
 
+    /**
+     * 用户注销.
+     * @param uid 用户id
+     * @return Void
+     */
+    @DeleteMapping("/deregisterAccount")
+    @Operation(summary = "用户注销", description = "用户注销")
+    @Parameter(name = "uid", description = "用户id")
+    public ApiResult<Void> deregisterAccount(@RequestParam("uid") final Long uid) {
+        userService.deregisterAccount(uid);
+        return ApiResult.success();
+    }
 }
