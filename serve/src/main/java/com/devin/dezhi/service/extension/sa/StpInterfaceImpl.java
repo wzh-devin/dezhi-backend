@@ -2,6 +2,7 @@ package com.devin.dezhi.service.extension.sa;
 
 import cn.dev33.satoken.stp.StpInterface;
 import cn.hutool.json.JSONUtil;
+import com.devin.dezhi.common.enums.HttpErrorEnum;
 import com.devin.dezhi.common.utils.RedisUtil;
 import com.devin.dezhi.constant.RedisKey;
 import com.devin.dezhi.dao.v1.user.PermissionDao;
@@ -12,7 +13,6 @@ import com.devin.dezhi.domain.v1.entity.user.Permission;
 import com.devin.dezhi.domain.v1.entity.user.Role;
 import com.devin.dezhi.domain.v1.entity.user.RolePermission;
 import com.devin.dezhi.domain.v1.entity.user.UserRole;
-import com.devin.dezhi.enums.BusinessErrorEnum;
 import com.devin.dezhi.utils.AssertUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -100,7 +100,7 @@ public class StpInterfaceImpl implements StpInterface {
         // 查询数据库中的角色列表
         List<UserRole> userRoles = userRoleDao.getByUserId(uid);
 
-        AssertUtil.isNotEmpty(userRoles, String.format(BusinessErrorEnum.BUSINESS_ERROR.getErrMsg(), "用户没有角色信息，请联系管理员进行设置！！！"));
+        AssertUtil.isNotEmpty(userRoles, String.format(HttpErrorEnum.BUSINESS_ERROR.getErrMsg(), "用户没有角色信息，请联系管理员进行设置！！！"));
 
         // 获取角色id集合
         return userRoles.stream()

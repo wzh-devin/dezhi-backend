@@ -12,7 +12,9 @@ import lombok.Getter;
  * @author <a href="https://github.com/wzh-devin">devin</a>
  * @version 1.0
  * @since 1.0
+ * @deprecated 不再使用，以移至 { HttpErrorEnum }
  */
+@Deprecated
 @Getter
 @AllArgsConstructor
 public enum BusinessErrorEnum {

@@ -58,4 +58,17 @@ public class UserServiceImpl implements UserService {
 
         return RespEntityGenerate.loginResp(StpUtil.getTokenValue());
     }
+
+    @Override
+    public void logout(final Long uid) {
+        // 判断用户是否登录
+        if (!StpUtil.isLogin(uid)) {
+            return;
+        }
+        // sa-token登出
+        StpUtil.logout(uid);
+
+        // 删除登陆的缓存信息
+        redisUtil.delete(RedisKey.generateRedisKey(RedisKey.LOGIN_INFO, uid));
+    }
 }

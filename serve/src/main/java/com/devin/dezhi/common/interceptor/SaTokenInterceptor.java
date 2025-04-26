@@ -64,7 +64,7 @@ public class SaTokenInterceptor extends SaInterceptor {
     @Override
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler) throws Exception {
         try {
-            log.info("============ 拦截的请求路径为：{} ============", request.getRequestURI());
+            log.info("拦截的请求路径为：{}", request.getRequestURI());
             if (this.isAnnotation && handler instanceof HandlerMethod) {
                 Method method = ((HandlerMethod) handler).getMethod();
                 SaAnnotationStrategy.instance.checkMethodAnnotation.accept(method);

@@ -1,9 +1,7 @@
 package com.devin.dezhi.utils;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.devin.dezhi.enums.BusinessErrorEnum;
 import com.devin.dezhi.exception.BusinessException;
-import java.text.MessageFormat;
 import java.util.Objects;
 
 /**
@@ -75,7 +73,7 @@ public class AssertUtil {
         }
     }
 
-    private static void throwException(final Object... args) {
-        throw new BusinessException(MessageFormat.format(BusinessErrorEnum.BUSINESS_ERROR.getErrMsg(), args));
+    private static void throwException(final String errMsg) {
+        throw new BusinessException(errMsg);
     }
 }
