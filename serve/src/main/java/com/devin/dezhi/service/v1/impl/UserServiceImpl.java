@@ -3,21 +3,26 @@ package com.devin.dezhi.service.v1.impl;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.json.JSONUtil;
 import com.devin.dezhi.common.utils.RedisUtil;
+import com.devin.dezhi.constant.CacheKey;
 import com.devin.dezhi.constant.RedisKey;
 import com.devin.dezhi.dao.v1.user.UserDao;
 import com.devin.dezhi.dao.v1.user.UserRoleDao;
 import com.devin.dezhi.domain.v1.entity.user.User;
 import com.devin.dezhi.domain.v1.vo.req.UserInfoReq;
 import com.devin.dezhi.domain.v1.vo.resp.LoginResp;
+import com.devin.dezhi.service.extension.mail.MailService;
 import com.devin.dezhi.service.generate.common.RespEntityGenerate;
 import com.devin.dezhi.service.v1.UserService;
 import com.devin.dezhi.utils.AssertUtil;
 import com.devin.dezhi.utils.PasswordEncrypt;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -33,6 +38,15 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    private static final Cache<String, Integer> EMAIL_CODE = Caffeine.newBuilder()
+            // 设置初始容量
+            .initialCapacity(5)
+            // 设置最大容量
+            .maximumSize(100)
+            // 设置code的过期时间
+            .expireAfterWrite(60, TimeUnit.SECONDS)
+            .build();
+
     private final RedisUtil redisUtil;
 
     private final UserDao userDao;
@@ -40,6 +54,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncrypt passwordEncrypt;
 
     private final UserRoleDao userRoleDao;
+
+    private final MailService mailService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -84,5 +100,27 @@ public class UserServiceImpl implements UserService {
         // 逻辑删除用户信息
         boolean userRemove = userDao.logicRemoveById(uid);
         AssertUtil.isTrue(userRemove, "用户信息删除失败！！！");
+    }
+
+    @Override
+    public void getEmailCode(final String email) {
+        // 生成6位验证码
+        Integer code = generateCode();
+
+        // 缓存验证码数据
+        EMAIL_CODE.put(CacheKey.EMAIL_CODE_KEY, code);
+
+        // 发送验证码
+        mailService.sendEmailCode(email, code);
+    }
+
+    /**
+     * 生成随机的六位验证码.
+     * @return 验证码
+     */
+    private static Integer generateCode() {
+        Random random = new Random();
+        int code = random.nextInt(900000) + 100000;
+        return Integer.parseInt(String.format("%06d", code));
     }
 }
