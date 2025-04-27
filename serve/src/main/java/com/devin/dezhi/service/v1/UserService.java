@@ -31,4 +31,10 @@ public interface UserService {
      * @param uid uid
      */
     void deregisterAccount(Long uid);
+
+    /**
+     * 获取邮箱验证码.
+     * @param email 邮箱
+     */
+    void getEmailCode(String email);
 }

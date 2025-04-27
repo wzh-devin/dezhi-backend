@@ -22,6 +22,25 @@ spring:
       port: ${dezhi.redis.port}
       password: ${dezhi.redis.password}
       timeout: 3000
+  # 配置 mail
+  mail:
+    host: ${dezhi.mail.host}
+    port: ${dezhi.mail.port}
+    username: ${dezhi.mail.username}
+    password: ${dezhi.mail.password}
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            trust: ${dezhi.mail.host}
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+            port: ${dezhi.mail.port}
+          starttls:
+            enable: true
+            required: true
 
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
 sa-token:

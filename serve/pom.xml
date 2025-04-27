@@ -53,6 +53,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- Caffeine 本地缓存框架 -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

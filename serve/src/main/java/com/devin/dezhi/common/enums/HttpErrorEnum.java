@@ -22,9 +22,9 @@ import java.text.MessageFormat;
 @AllArgsConstructor
 public enum HttpErrorEnum {
 
-    SYSTEM_ERROR(5000, "系统异常: {0}"),
-    NOT_LOGIN(4003, "用户未登录: {0}"),
-    BUSINESS_ERROR(5001, "业务异常: {0}");
+    SYSTEM_ERROR(500, "系统异常: {0}"),
+    NOT_LOGIN(403, "用户未登录: {0}"),
+    BUSINESS_ERROR(501, "业务异常: {0}");
 
     private final Integer errCode;
 

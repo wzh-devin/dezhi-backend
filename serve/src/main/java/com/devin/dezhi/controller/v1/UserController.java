@@ -74,4 +74,15 @@ public class UserController {
         userService.deregisterAccount(uid);
         return ApiResult.success();
     }
+
+    /**
+     * 获取邮箱验证码.
+     * @param email 邮箱
+     * @return Void
+     */
+    @GetMapping("/getEmailCode")
+    public ApiResult<Void> getEmailCode(@RequestParam("email") final String email) {
+        userService.getEmailCode(email);
+        return ApiResult.success();
+    }
 }
