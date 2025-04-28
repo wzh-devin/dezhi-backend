@@ -128,10 +128,11 @@ public class UserServiceImpl implements UserService {
 
         AssertUtil.isNotEmpty(user, "抱歉，该邮箱尚未注册，请先进行注册！！！");
 
+        // 校验验证码是否正确
+        checkCode(userInfoReq.getEmail(), userInfoReq.getCode());
+
         // 判断该用户是否登录
         if (!StpUtil.isLogin(user.getId())) {
-            // 校验验证码是否正确
-            checkCode(userInfoReq.getEmail(), userInfoReq.getCode());
             // 进行登录操作
             login(user);
         }
@@ -144,7 +145,6 @@ public class UserServiceImpl implements UserService {
     public void signup(final UserInfoReq userInfoReq) {
         // 根据邮箱查询用户
         User user = userDao.getByEmail(userInfoReq.getEmail());
-
         AssertUtil.isEmpty(user, "抱歉，该邮箱已被注册，请重新输入！！！");
 
         // 校验验证码是否正确
@@ -160,6 +160,29 @@ public class UserServiceImpl implements UserService {
         UserRole userRole = userEntityGenerate.generateUserRole(user.getId(), role.getId());
         boolean saveUserRoleResult = userRoleDao.save(userRole);
         AssertUtil.isTrue(saveUserRoleResult, "抱歉，由于系统异常用户权限初始化失败，请联系管理员！！！");
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void forgetPassword(final UserInfoReq userInfoReq) {
+        // 根据邮箱查询用户
+        User user = userDao.getByEmail(userInfoReq.getEmail());
+        AssertUtil.isNotEmpty(user, "抱歉，该邮箱尚未注册，请先进行注册！！！");
+
+        // 校验验证码是否正确
+        checkCode(userInfoReq.getEmail(), userInfoReq.getCode());
+
+        // 登出此用户
+        logout(user.getId());
+
+        // 如果新密码和旧密码一致，则直接返回即可
+        if (passwordEncrypt.checkPassword(userInfoReq.getPassword(), user.getPassword())) {
+            return;
+        }
+
+        // 更新用户密码
+        boolean updateResult = userDao.updateById(userEntityGenerate.generateUpdateUser(userInfoReq, user.getId()));
+        AssertUtil.isTrue(updateResult, "抱歉，由于系统异常用户密码更新失败，请联系管理员！！！");
     }
 
     /**
@@ -195,6 +218,9 @@ public class UserServiceImpl implements UserService {
                 .equals(code);
 
         AssertUtil.isTrue(check, "验证码错误，请重新输入！！！");
+
+        // 校验通过，则删除此缓存
+        EMAIL_CODE.invalidate(generateCodeKey(email));
     }
 
     /**

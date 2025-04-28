@@ -50,4 +50,10 @@ public interface UserService {
      * @param userInfoReq 用户信息
      */
     void signup(UserInfoReq userInfoReq);
+
+    /**
+     * 忘记密码.
+     * @param userInfoReq 用户信息
+     */
+    void forgetPassword(UserInfoReq userInfoReq);
 }

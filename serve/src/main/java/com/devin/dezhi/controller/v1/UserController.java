@@ -110,4 +110,16 @@ public class UserController {
         userService.signup(userInfoReq);
         return ApiResult.success();
     }
+
+    /**
+     * 忘记密码.
+     * @param userInfoReq 用户信息
+     * @return Void
+     */
+    @PostMapping("/forgetPassword")
+    @Operation(summary = "忘记密码", description = "忘记密码")
+    public ApiResult<Void> forgetPassword(@RequestBody final UserInfoReq userInfoReq) {
+        userService.forgetPassword(userInfoReq);
+        return ApiResult.success();
+    }
 }

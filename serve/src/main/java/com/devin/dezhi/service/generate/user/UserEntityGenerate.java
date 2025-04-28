@@ -45,6 +45,19 @@ public class UserEntityGenerate {
     }
 
     /**
+     * 构建用户更新实体.
+     * @param userInfoReq 用户信息
+     * @param uid 用户id
+     * @return User
+     */
+    public User generateUpdateUser(final UserInfoReq userInfoReq, final Long uid) {
+        User user = new User();
+        user.setId(uid);
+        user.setPassword(passwordEncrypt.encrypt(userInfoReq.getPassword()));
+        return user;
+    }
+
+    /**
      * 构建用户角色关联实体.
      * @param uid 用户id
      * @param roleId 角色id
