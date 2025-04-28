@@ -81,6 +81,7 @@ public class UserController {
      * @return Void
      */
     @GetMapping("/getEmailCode")
+    @Operation(summary = "获取邮箱验证码", description = "获取邮箱验证码")
     public ApiResult<Void> getEmailCode(@RequestParam("email") final String email) {
         userService.getEmailCode(email);
         return ApiResult.success();
