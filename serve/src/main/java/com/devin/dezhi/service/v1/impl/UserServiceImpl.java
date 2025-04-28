@@ -10,6 +10,7 @@ import com.devin.dezhi.dao.v1.user.UserRoleDao;
 import com.devin.dezhi.domain.v1.entity.user.User;
 import com.devin.dezhi.domain.v1.vo.req.UserInfoReq;
 import com.devin.dezhi.domain.v1.vo.resp.LoginResp;
+import com.devin.dezhi.exception.BusinessException;
 import com.devin.dezhi.service.extension.mail.MailService;
 import com.devin.dezhi.service.generate.common.RespEntityGenerate;
 import com.devin.dezhi.service.v1.UserService;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -44,7 +46,7 @@ public class UserServiceImpl implements UserService {
             // 设置最大容量
             .maximumSize(100)
             // 设置code的过期时间
-            .expireAfterWrite(60, TimeUnit.SECONDS)
+            .expireAfterWrite(61, TimeUnit.SECONDS)
             .build();
 
     private final RedisUtil redisUtil;
@@ -68,11 +70,7 @@ public class UserServiceImpl implements UserService {
 
         // 判断用户是否登录，如果未登录则进行登录操作
         if (!StpUtil.isLogin(user.getId())) {
-            // 登录
-            StpUtil.login(user.getId());
-
-            // 将用户信息存储到Redis中，设置过期时间为30天
-            redisUtil.setEx(RedisKey.generateRedisKey(RedisKey.LOGIN_INFO, user.getId()), JSONUtil.toJsonStr(user), 30L, TimeUnit.DAYS);
+            login(user);
         }
 
         return RespEntityGenerate.loginResp(StpUtil.getTokenValue());
@@ -108,19 +106,72 @@ public class UserServiceImpl implements UserService {
         Integer code = generateCode();
 
         // 缓存验证码数据
-        EMAIL_CODE.put(CacheKey.EMAIL_CODE_KEY, code);
+        EMAIL_CODE.put(generateCodeKey(email), code);
 
         // 发送验证码
         mailService.sendEmailCode(email, code);
+    }
+
+    @Override
+    public LoginResp loginEmail(final UserInfoReq userInfoReq) {
+        // 查询用户信息
+        User user = userDao.getByReq(userInfoReq);
+
+        AssertUtil.isNotEmpty(user, "抱歉，该邮箱尚未注册，请先进行注册！！！");
+
+        // 判断该用户是否登录
+        if (!StpUtil.isLogin(user.getId())) {
+            // 校验验证码是否正确
+            if (!checkCode(userInfoReq.getEmail(), userInfoReq.getCode())) {
+                throw new BusinessException("验证码错误，请重新输入！！！");
+            }
+            // 进行登录操作
+            login(user);
+        }
+
+        return RespEntityGenerate.loginResp(StpUtil.getTokenValue());
+    }
+
+    /**
+     * 进行登录操作.
+     * @param user 用户信息
+     */
+    private void login(final User user) {
+        // 登录操作
+        StpUtil.login(user.getId());
+
+        // 将用户信息存储到Redis中，设置过期时间为7天
+        redisUtil.setEx(RedisKey.generateRedisKey(RedisKey.LOGIN_INFO, user.getId()), JSONUtil.toJsonStr(user), 7L, TimeUnit.DAYS);
     }
 
     /**
      * 生成随机的六位验证码.
      * @return 验证码
      */
-    private static Integer generateCode() {
+    private Integer generateCode() {
         Random random = new Random();
         int code = random.nextInt(900000) + 100000;
         return Integer.parseInt(String.format("%06d", code));
+    }
+
+    /**
+     * 校验验证码是否正确.
+     * @param email 邮箱
+     * @param code 验证码
+     * @return Boolean
+     */
+    private Boolean checkCode(final String email, final Integer code) {
+        return Optional.ofNullable(EMAIL_CODE.getIfPresent(generateCodeKey(email)))
+                .orElseThrow(() -> new BusinessException("验证码已过期，请重新获取！！！"))
+                .equals(code);
+    }
+
+    /**
+     * 生成验证码的缓存Key.
+     * @param email 邮箱
+     * @return Key
+     */
+    private String generateCodeKey(final String email) {
+        return CacheKey.generateKey(CacheKey.EMAIL_CODE_KEY, email);
     }
 }

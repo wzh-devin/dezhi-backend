@@ -85,4 +85,15 @@ public class UserController {
         userService.getEmailCode(email);
         return ApiResult.success();
     }
+
+    /**
+     * 邮箱验证码登录.
+     * @param userInfoReq 用户登录信息
+     * @return LoginResp
+     */
+    @PostMapping("/loginEmail")
+    @Operation(summary = "邮箱验证码登录", description = "邮箱验证码登录")
+    public ApiResult<LoginResp> loginEmail(@RequestBody final UserInfoReq userInfoReq) {
+        return ApiResult.success(userService.loginEmail(userInfoReq));
+    }
 }
