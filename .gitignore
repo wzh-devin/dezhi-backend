@@ -37,3 +37,6 @@ build/
 
 ### logs ###
 **/logs/
+
+### generator data ###
+**/test/**/generator

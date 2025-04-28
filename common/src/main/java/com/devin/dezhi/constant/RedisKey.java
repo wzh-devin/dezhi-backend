@@ -27,6 +27,9 @@ public class RedisKey {
      * @return RedisKey
      */
     public static String generateRedisKey(final String key, final Object... args) {
+        if (args.length == 0) {
+            return BASE_KEY.concat(key).replace("%s", "");
+        }
         return String.format(BASE_KEY.concat(key), args);
     }
 }

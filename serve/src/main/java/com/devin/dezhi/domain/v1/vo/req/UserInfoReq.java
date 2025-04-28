@@ -24,7 +24,7 @@ public class UserInfoReq {
 
     @Max(16)
     @SchemaProperty(name = "用户名")
-    private String userName;
+    private String username;
 
     @Email
     @SchemaProperty(name = "邮箱")

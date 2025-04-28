@@ -12,6 +12,15 @@ package com.devin.dezhi.constant;
  */
 public class CacheKey {
 
-    public static final String EMAIL_CODE_KEY = "email:code";
+    public static final String EMAIL_CODE_KEY = "email_%s";
 
+    /**
+     * 生成缓存Key.
+     * @param key key
+     * @param args 参数
+     * @return 缓存Key
+     */
+    public static String generateKey(final String key, final Object... args) {
+        return String.format(key, args);
+    }
 }

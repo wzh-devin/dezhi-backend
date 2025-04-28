@@ -37,4 +37,23 @@ public interface UserService {
      * @param email 邮箱
      */
     void getEmailCode(String email);
+
+    /**
+     * 邮箱验证码登录.
+     * @param userInfoReq 用户信息
+     * @return LoginResp
+     */
+    LoginResp loginEmail(UserInfoReq userInfoReq);
+
+    /**
+     * 用户注册.
+     * @param userInfoReq 用户信息
+     */
+    void signup(UserInfoReq userInfoReq);
+
+    /**
+     * 忘记密码.
+     * @param userInfoReq 用户信息
+     */
+    void forgetPassword(UserInfoReq userInfoReq);
 }

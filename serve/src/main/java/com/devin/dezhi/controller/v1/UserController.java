@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -81,8 +82,44 @@ public class UserController {
      * @return Void
      */
     @GetMapping("/getEmailCode")
+    @Operation(summary = "获取邮箱验证码", description = "获取邮箱验证码")
     public ApiResult<Void> getEmailCode(@RequestParam("email") final String email) {
         userService.getEmailCode(email);
+        return ApiResult.success();
+    }
+
+    /**
+     * 邮箱验证码登录.
+     * @param userInfoReq 用户登录信息
+     * @return LoginResp
+     */
+    @PostMapping("/loginEmail")
+    @Operation(summary = "邮箱验证码登录", description = "邮箱验证码登录")
+    public ApiResult<LoginResp> loginEmail(@RequestBody final UserInfoReq userInfoReq) {
+        return ApiResult.success(userService.loginEmail(userInfoReq));
+    }
+
+    /**
+     * 用户注册.
+     * @param userInfoReq 用户信息
+     * @return Void
+     */
+    @PutMapping("/signup")
+    @Operation(summary = "用户注册", description = "用户注册")
+    public ApiResult<Void> signup(@RequestBody final UserInfoReq userInfoReq) {
+        userService.signup(userInfoReq);
+        return ApiResult.success();
+    }
+
+    /**
+     * 忘记密码.
+     * @param userInfoReq 用户信息
+     * @return Void
+     */
+    @PostMapping("/forgetPassword")
+    @Operation(summary = "忘记密码", description = "忘记密码")
+    public ApiResult<Void> forgetPassword(@RequestBody final UserInfoReq userInfoReq) {
+        userService.forgetPassword(userInfoReq);
         return ApiResult.success();
     }
 }
