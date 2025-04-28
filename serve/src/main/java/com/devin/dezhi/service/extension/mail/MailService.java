@@ -83,7 +83,7 @@ public class MailService {
                     </div>
                 
                     <p style="font-size: 14px; color: #999; text-align: center;">
-                        * 请勿将此验证码分享给他人
+                        请勿将此验证码分享给他人
                     </p>
                 
                 </div>
