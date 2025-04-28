@@ -5,14 +5,19 @@ import cn.hutool.json.JSONUtil;
 import com.devin.dezhi.common.utils.RedisUtil;
 import com.devin.dezhi.constant.CacheKey;
 import com.devin.dezhi.constant.RedisKey;
+import com.devin.dezhi.dao.v1.user.RoleDao;
 import com.devin.dezhi.dao.v1.user.UserDao;
 import com.devin.dezhi.dao.v1.user.UserRoleDao;
+import com.devin.dezhi.domain.v1.entity.user.Role;
 import com.devin.dezhi.domain.v1.entity.user.User;
+import com.devin.dezhi.domain.v1.entity.user.UserRole;
 import com.devin.dezhi.domain.v1.vo.req.UserInfoReq;
 import com.devin.dezhi.domain.v1.vo.resp.LoginResp;
+import com.devin.dezhi.enums.rpac.RoleEnum;
 import com.devin.dezhi.exception.BusinessException;
 import com.devin.dezhi.service.extension.mail.MailService;
 import com.devin.dezhi.service.generate.common.RespEntityGenerate;
+import com.devin.dezhi.service.generate.user.UserEntityGenerate;
 import com.devin.dezhi.service.v1.UserService;
 import com.devin.dezhi.utils.AssertUtil;
 import com.devin.dezhi.utils.PasswordEncrypt;
@@ -58,6 +63,10 @@ public class UserServiceImpl implements UserService {
     private final UserRoleDao userRoleDao;
 
     private final MailService mailService;
+
+    private final UserEntityGenerate userEntityGenerate;
+
+    private final RoleDao roleDao;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -122,14 +131,35 @@ public class UserServiceImpl implements UserService {
         // 判断该用户是否登录
         if (!StpUtil.isLogin(user.getId())) {
             // 校验验证码是否正确
-            if (!checkCode(userInfoReq.getEmail(), userInfoReq.getCode())) {
-                throw new BusinessException("验证码错误，请重新输入！！！");
-            }
+            checkCode(userInfoReq.getEmail(), userInfoReq.getCode());
             // 进行登录操作
             login(user);
         }
 
         return RespEntityGenerate.loginResp(StpUtil.getTokenValue());
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void signup(final UserInfoReq userInfoReq) {
+        // 根据邮箱查询用户
+        User user = userDao.getByEmail(userInfoReq.getEmail());
+
+        AssertUtil.isEmpty(user, "抱歉，该邮箱已被注册，请重新输入！！！");
+
+        // 校验验证码是否正确
+        checkCode(userInfoReq.getEmail(), userInfoReq.getCode());
+
+        // 将信息保存到数据库
+        user = userEntityGenerate.generateRegisterUser(userInfoReq);
+        boolean saveUserResult = userDao.save(user);
+        AssertUtil.isTrue(saveUserResult, "抱歉，由于系统异常用户信息注册失败，请联系管理员！！！");
+
+        // 角色管理员赋权
+        Role role = roleDao.getRoleByName(RoleEnum.ADMIN.getRole());
+        UserRole userRole = userEntityGenerate.generateUserRole(user.getId(), role.getId());
+        boolean saveUserRoleResult = userRoleDao.save(userRole);
+        AssertUtil.isTrue(saveUserRoleResult, "抱歉，由于系统异常用户权限初始化失败，请联系管理员！！！");
     }
 
     /**
@@ -158,12 +188,13 @@ public class UserServiceImpl implements UserService {
      * 校验验证码是否正确.
      * @param email 邮箱
      * @param code 验证码
-     * @return Boolean
      */
-    private Boolean checkCode(final String email, final Integer code) {
-        return Optional.ofNullable(EMAIL_CODE.getIfPresent(generateCodeKey(email)))
+    private void checkCode(final String email, final Integer code) {
+        boolean check = Optional.ofNullable(EMAIL_CODE.getIfPresent(generateCodeKey(email)))
                 .orElseThrow(() -> new BusinessException("验证码已过期，请重新获取！！！"))
                 .equals(code);
+
+        AssertUtil.isTrue(check, "验证码错误，请重新输入！！！");
     }
 
     /**

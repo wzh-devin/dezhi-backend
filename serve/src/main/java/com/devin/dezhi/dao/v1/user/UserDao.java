@@ -6,6 +6,7 @@ import com.devin.dezhi.domain.v1.entity.user.User;
 import com.devin.dezhi.domain.v1.vo.req.UserInfoReq;
 import com.devin.dezhi.enums.FlagEnum;
 import com.devin.dezhi.mapper.v1.user.UserMapper;
+import jakarta.validation.constraints.Email;
 import org.springframework.stereotype.Service;
 import java.util.Objects;
 
@@ -32,8 +33,8 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
         lambdaQueryWrapper.eq(User::getDelFlag, FlagEnum.NORMAL.getFlag());
 
         // 动态生成查询条件
-        if (Objects.nonNull(userInfoReq.getUserName())) {
-            lambdaQueryWrapper.eq(User::getUsername, userInfoReq.getUserName());
+        if (Objects.nonNull(userInfoReq.getUsername())) {
+            lambdaQueryWrapper.eq(User::getUsername, userInfoReq.getUsername());
         }
         if (Objects.nonNull(userInfoReq.getPassword())) {
             lambdaQueryWrapper.eq(User::getPassword, userInfoReq.getPassword());
@@ -55,5 +56,16 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
                 .eq(User::getId, uid)
                 .set(User::getDelFlag, FlagEnum.DISABLED.getFlag())
                 .update();
+    }
+
+    /**
+     * 根据邮箱获取用户.
+     * @param email 邮箱
+     * @return User
+     */
+    public User getByEmail(@Email final String email) {
+        return lambdaQuery()
+                .eq(User::getEmail, email)
+                .one();
     }
 }

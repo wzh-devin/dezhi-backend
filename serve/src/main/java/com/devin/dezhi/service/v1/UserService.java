@@ -44,4 +44,10 @@ public interface UserService {
      * @return LoginResp
      */
     LoginResp loginEmail(UserInfoReq userInfoReq);
+
+    /**
+     * 用户注册.
+     * @param userInfoReq 用户信息
+     */
+    void signup(UserInfoReq userInfoReq);
 }

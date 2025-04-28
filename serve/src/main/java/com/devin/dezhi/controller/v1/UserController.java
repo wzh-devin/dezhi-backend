@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -96,5 +97,17 @@ public class UserController {
     @Operation(summary = "邮箱验证码登录", description = "邮箱验证码登录")
     public ApiResult<LoginResp> loginEmail(@RequestBody final UserInfoReq userInfoReq) {
         return ApiResult.success(userService.loginEmail(userInfoReq));
+    }
+
+    /**
+     * 用户注册.
+     * @param userInfoReq 用户信息
+     * @return Void
+     */
+    @PutMapping("/signup")
+    @Operation(summary = "用户注册", description = "用户注册")
+    public ApiResult<Void> signup(@RequestBody final UserInfoReq userInfoReq) {
+        userService.signup(userInfoReq);
+        return ApiResult.success();
     }
 }
