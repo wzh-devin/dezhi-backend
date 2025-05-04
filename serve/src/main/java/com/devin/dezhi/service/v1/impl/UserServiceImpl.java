@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
             login(user);
         }
 
-        return RespEntityGenerate.loginResp(StpUtil.getTokenValue());
+        return RespEntityGenerate.loginResp(StpUtil.getTokenValueByLoginId(user.getId()));
     }
 
     @Override
@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
             login(user);
         }
 
-        return RespEntityGenerate.loginResp(StpUtil.getTokenValue());
+        return RespEntityGenerate.loginResp(StpUtil.getTokenValueByLoginId(user.getId()));
     }
 
     @Override
