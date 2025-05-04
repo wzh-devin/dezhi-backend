@@ -1,6 +1,6 @@
 <p align="center">
  <img width="100px" src="https://github.com/wzh-devin/dezhi-frontend/blob/master/public/logo.png" align="center" alt="Github Readme Stats" />
- <h2 align="center">DeZhi</h2>
+ <h2 align="center">DeZhi 得智</h2>
 </p>
 <p align="center">
 <a href="https://devin.wang" target="_blank"><img alt="Website" src="https://img.shields.io/badge/Website-www.devin.wang-blue?style=flat&logo=google-chrome"></a>
