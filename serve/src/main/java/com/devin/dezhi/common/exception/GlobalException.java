@@ -33,7 +33,7 @@ public class GlobalException {
      */
     @ExceptionHandler(NotLoginException.class)
     public void notLoginException(final NotLoginException e) throws IOException {
-        log.error("用户未登录 :: {}", e.getMessage());
+        log.error("用户未登录: {}", e.getMessage());
         HttpErrorEnum.NOT_LOGIN.sendHttpError(response, e.getMessage());
     }
 
@@ -43,7 +43,7 @@ public class GlobalException {
      */
     @ExceptionHandler(BusinessException.class)
     public void businessException(final BusinessException e) throws IOException {
-        log.error("业务异常 :: {}", e.getMessage());
+        log.error("业务异常: {}", e.getMessage());
         HttpErrorEnum.BUSINESS_ERROR.sendHttpError(response, e.getMessage());
     }
 }
