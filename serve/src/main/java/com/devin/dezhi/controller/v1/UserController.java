@@ -126,12 +126,12 @@ public class UserController {
     }
 
     /**
-     * 获取用户信息.
+     * 获取登录用户信息.
      * @return UserInfoResp
      */
-    @GetMapping("/getUserInfo")
-    @Operation(summary = "获取用户信息", description = "获取用户信息")
-    public ApiResult<UserInfoResp> getUserInfo() {
-        return ApiResult.success(userService.getUserInfo());
+    @GetMapping("/getLoginUserInfo")
+    @Operation(summary = "获取登录用户信息", description = "获取登录用户信息")
+    public ApiResult<UserInfoResp> getLoginUserInfo() {
+        return ApiResult.success(userService.getLoginUserInfo());
     }
 }

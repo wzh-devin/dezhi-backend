@@ -59,8 +59,8 @@ public interface UserService {
     void forgetPassword(UserInfoReq userInfoReq);
 
     /**
-     * 获取用户信息.
+     * 获取登录用户信息.
      * @return UserInfoResp
      */
-    UserInfoResp getUserInfo();
+    UserInfoResp getLoginUserInfo();
 }

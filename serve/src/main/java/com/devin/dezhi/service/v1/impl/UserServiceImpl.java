@@ -197,7 +197,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfoResp getUserInfo() {
+    public UserInfoResp getLoginUserInfo() {
         // 获取当前登录用户id
         Long uid = Long.valueOf(StpUtil.getLoginId().toString());
 
