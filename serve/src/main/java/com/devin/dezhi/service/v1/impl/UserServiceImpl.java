@@ -5,6 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.devin.dezhi.common.utils.RedisUtil;
 import com.devin.dezhi.constant.CacheKey;
 import com.devin.dezhi.constant.RedisKey;
+import com.devin.dezhi.dao.v1.user.PermissionDao;
 import com.devin.dezhi.dao.v1.user.RoleDao;
 import com.devin.dezhi.dao.v1.user.UserDao;
 import com.devin.dezhi.dao.v1.user.UserRoleDao;
@@ -13,9 +14,13 @@ import com.devin.dezhi.domain.v1.entity.user.User;
 import com.devin.dezhi.domain.v1.entity.user.UserRole;
 import com.devin.dezhi.domain.v1.vo.req.UserInfoReq;
 import com.devin.dezhi.domain.v1.vo.resp.LoginResp;
+import com.devin.dezhi.domain.v1.vo.resp.PermissionResp;
+import com.devin.dezhi.domain.v1.vo.resp.RoleResp;
+import com.devin.dezhi.domain.v1.vo.resp.UserInfoResp;
 import com.devin.dezhi.enums.rpac.RoleEnum;
 import com.devin.dezhi.exception.BusinessException;
 import com.devin.dezhi.service.extension.mail.MailService;
+import com.devin.dezhi.service.extension.sa.StpInterfaceImpl;
 import com.devin.dezhi.service.generate.common.RespEntityGenerate;
 import com.devin.dezhi.service.generate.user.UserEntityGenerate;
 import com.devin.dezhi.service.v1.UserService;
@@ -28,6 +33,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -67,6 +74,10 @@ public class UserServiceImpl implements UserService {
     private final UserEntityGenerate userEntityGenerate;
 
     private final RoleDao roleDao;
+
+    private final PermissionDao permissionDao;
+
+    private final StpInterfaceImpl stpInterface;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -183,6 +194,44 @@ public class UserServiceImpl implements UserService {
         // 更新用户密码
         boolean updateResult = userDao.updateById(userEntityGenerate.generateUpdateUser(userInfoReq, user.getId()));
         AssertUtil.isTrue(updateResult, "抱歉，由于系统异常用户密码更新失败，请联系管理员！！！");
+    }
+
+    @Override
+    public UserInfoResp getUserInfo() {
+        // 获取当前登录用户id
+        Long uid = Long.valueOf(StpUtil.getLoginId().toString());
+
+        // 获取登录用户信息
+        User user = JSONUtil.toBean(redisUtil.get(RedisKey.generateRedisKey(RedisKey.LOGIN_INFO, uid)), User.class);
+
+        // 如果缓存未命中，则查询数据库
+        if (Objects.isNull(user)) {
+            user = userDao.getById(uid);
+        }
+
+        // 查询所需信息
+        List<Long> roleIds = stpInterface.getRoleIds(uid);
+        List<Long> permissionIds = stpInterface.getPermissionIds(roleIds);
+        List<RoleResp> roleResps = roleDao.listByIds(roleIds)
+                .stream()
+                .map(role -> {
+                    RoleResp roleResp = new RoleResp();
+                    roleResp.setName(role.getRole());
+                    roleResp.setRemark(role.getRemark());
+                    return roleResp;
+                }).toList();
+        List<PermissionResp> permissionResps = permissionDao.listByIds(permissionIds)
+                .stream()
+                .map(permission -> {
+                    PermissionResp permissionResp = new PermissionResp();
+                    permissionResp.setName(permission.getPermission());
+                    permissionResp.setRemark(permission.getRemark());
+                    return permissionResp;
+                }).toList();
+        String createUser = userDao.getUsernameById(user.getCreateUserId());
+        String updateUser = userDao.getUsernameById(user.getCreateUserId());
+
+        return RespEntityGenerate.generateUserInfoResp(user, roleResps, permissionResps, createUser, updateUser);
     }
 
     /**

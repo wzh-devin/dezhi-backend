@@ -54,13 +54,7 @@ public class StpInterfaceImpl implements StpInterface {
             // 查询用户的角色列表
             List<Long> roleIds = getRoleIds((Long) uid);
 
-            // 查询权限列表信息
-            List<RolePermission> rolePermissions = rolePermissionDao.getByRoleIds(roleIds);
-
-            // 获取权限id集合
-            List<Long> permissionIds = rolePermissions.stream()
-                    .map(RolePermission::getPermissionId)
-                    .toList();
+            List<Long> permissionIds = getPermissionIds(roleIds);
 
             permissions = permissionDao.listByIds(permissionIds)
                     .stream()
@@ -96,7 +90,7 @@ public class StpInterfaceImpl implements StpInterface {
      * @param uid 用户id
      * @return List
      */
-    private List<Long> getRoleIds(final Long uid) {
+    public List<Long> getRoleIds(final Long uid) {
         // 查询数据库中的角色列表
         List<UserRole> userRoles = userRoleDao.getByUserId(uid);
 
@@ -105,6 +99,21 @@ public class StpInterfaceImpl implements StpInterface {
         // 获取角色id集合
         return userRoles.stream()
                 .map(UserRole::getRoleId)
+                .toList();
+    }
+
+    /**
+     * 获取权限id集合.
+     * @param roleIds 角色id集合
+     * @return List
+     */
+    public List<Long> getPermissionIds(final List<Long> roleIds) {
+        // 查询权限列表信息
+        List<RolePermission> rolePermissions = rolePermissionDao.getByRoleIds(roleIds);
+
+        // 获取权限id集合
+        return rolePermissions.stream()
+                .map(RolePermission::getPermissionId)
                 .toList();
     }
 }

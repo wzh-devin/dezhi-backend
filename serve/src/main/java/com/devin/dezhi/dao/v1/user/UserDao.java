@@ -68,4 +68,18 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
                 .eq(User::getEmail, email)
                 .one();
     }
+
+    /**
+     * 根据用户id获取用户名.
+     * @param uid 用户id
+     * @return String
+     */
+    public String getUsernameById(final Long uid) {
+        return lambdaQuery()
+                .eq(User::getDelFlag, FlagEnum.NORMAL.getFlag())
+                .eq(User::getId, uid)
+                .select(User::getUsername)
+                .one()
+                .getUsername();
+    }
 }

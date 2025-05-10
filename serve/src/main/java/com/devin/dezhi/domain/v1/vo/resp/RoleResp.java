@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
- * 2025/4/26 16:52.
+ * 2025/5/10 22:07.
  *
  * <p></p>
  * @author <a href="https://github.com/wzh-devin">devin</a>
@@ -12,10 +12,12 @@ import lombok.Data;
  * @since 1.0
  */
 @Data
-@Schema(description = "登录信息响应")
-public class LoginResp {
+@Schema(description = "角色信息响应")
+public class RoleResp {
 
-    @Schema(description = "token信息")
-    private String token;
+    @Schema(description = "角色名称")
+    private String name;
 
+    @Schema(description = "角色描述")
+    private String remark;
 }

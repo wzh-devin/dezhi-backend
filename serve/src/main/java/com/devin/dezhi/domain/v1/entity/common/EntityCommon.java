@@ -1,6 +1,7 @@
 package com.devin.dezhi.domain.v1.entity.common;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import lombok.Data;
 import java.util.Date;
 
 /**
@@ -13,6 +14,7 @@ import java.util.Date;
  * @version 1.0
  * @since 1.0
  */
+@Data
 public class EntityCommon {
 
     /**
