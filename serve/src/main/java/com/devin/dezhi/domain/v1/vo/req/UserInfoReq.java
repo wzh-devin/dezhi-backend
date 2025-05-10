@@ -1,7 +1,6 @@
 package com.devin.dezhi.domain.v1.vo.req;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -23,18 +22,18 @@ import lombok.Data;
 public class UserInfoReq {
 
     @Max(16)
-    @SchemaProperty(name = "用户名")
+    @Schema(description = "用户名")
     private String username;
 
     @Email
-    @SchemaProperty(name = "邮箱")
+    @Schema(description = "邮箱")
     private String email;
 
     @Size(max = 6)
-    @SchemaProperty(name = "验证码")
+    @Schema(description = "验证码")
     private Integer code;
 
     @Min(6)
-    @SchemaProperty(name = "密码")
+    @Schema(description = "密码")
     private String password;
 }

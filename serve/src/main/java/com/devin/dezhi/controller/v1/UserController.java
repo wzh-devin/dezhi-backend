@@ -4,6 +4,7 @@ import com.devin.dezhi.common.annocation.ApiV1;
 import com.devin.dezhi.common.utils.r.ApiResult;
 import com.devin.dezhi.domain.v1.vo.req.UserInfoReq;
 import com.devin.dezhi.domain.v1.vo.resp.LoginResp;
+import com.devin.dezhi.domain.v1.vo.resp.UserInfoResp;
 import com.devin.dezhi.service.v1.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -83,6 +84,7 @@ public class UserController {
      */
     @GetMapping("/getEmailCode")
     @Operation(summary = "获取邮箱验证码", description = "获取邮箱验证码")
+    @Parameter(name = "email", description = "用户邮箱")
     public ApiResult<Void> getEmailCode(@RequestParam("email") final String email) {
         userService.getEmailCode(email);
         return ApiResult.success();
@@ -121,5 +123,15 @@ public class UserController {
     public ApiResult<Void> forgetPassword(@RequestBody final UserInfoReq userInfoReq) {
         userService.forgetPassword(userInfoReq);
         return ApiResult.success();
+    }
+
+    /**
+     * 获取用户信息.
+     * @return UserInfoResp
+     */
+    @GetMapping("/getUserInfo")
+    @Operation(summary = "获取用户信息", description = "获取用户信息")
+    public ApiResult<UserInfoResp> getUserInfo() {
+        return ApiResult.success(userService.getUserInfo());
     }
 }

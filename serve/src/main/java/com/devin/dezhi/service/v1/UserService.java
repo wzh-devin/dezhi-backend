@@ -2,6 +2,7 @@ package com.devin.dezhi.service.v1;
 
 import com.devin.dezhi.domain.v1.vo.req.UserInfoReq;
 import com.devin.dezhi.domain.v1.vo.resp.LoginResp;
+import com.devin.dezhi.domain.v1.vo.resp.UserInfoResp;
 
 /**
  * 2025/4/25 18:28.
@@ -56,4 +57,10 @@ public interface UserService {
      * @param userInfoReq 用户信息
      */
     void forgetPassword(UserInfoReq userInfoReq);
+
+    /**
+     * 获取用户信息.
+     * @return UserInfoResp
+     */
+    UserInfoResp getUserInfo();
 }
