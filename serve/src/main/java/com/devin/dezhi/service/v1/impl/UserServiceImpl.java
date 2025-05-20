@@ -17,7 +17,7 @@ import com.devin.dezhi.domain.v1.vo.resp.LoginResp;
 import com.devin.dezhi.domain.v1.vo.resp.PermissionResp;
 import com.devin.dezhi.domain.v1.vo.resp.RoleResp;
 import com.devin.dezhi.domain.v1.vo.resp.UserInfoResp;
-import com.devin.dezhi.enums.rpac.RoleEnum;
+import com.devin.dezhi.enums.rbac.RoleEnum;
 import com.devin.dezhi.exception.BusinessException;
 import com.devin.dezhi.service.extension.mail.MailService;
 import com.devin.dezhi.service.extension.sa.StpInterfaceImpl;

@@ -1,4 +1,4 @@
-package com.devin.dezhi.enums.rpac;
+package com.devin.dezhi.enums.rbac;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
