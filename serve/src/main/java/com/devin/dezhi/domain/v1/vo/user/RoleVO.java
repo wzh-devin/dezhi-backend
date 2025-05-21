@@ -1,4 +1,4 @@
-package com.devin.dezhi.domain.v1.vo.resp;
+package com.devin.dezhi.domain.v1.vo.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -13,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @Schema(description = "角色信息响应")
-public class RoleResp {
+public class RoleVO {
 
     @Schema(description = "角色名称")
     private String name;

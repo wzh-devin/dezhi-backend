@@ -1,4 +1,4 @@
-package com.devin.dezhi.domain.v1.vo.resp;
+package com.devin.dezhi.domain.v1.vo.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Data
 @Schema(description = "用户信息响应")
-public class UserInfoResp {
+public class UserInfoVO {
 
     @Schema(description = "用户id")
     private Long uid;
@@ -27,10 +27,10 @@ public class UserInfoResp {
     private String email;
 
     @Schema(description = "用户角色信息")
-    private List<RoleResp> roles;
+    private List<RoleVO> roles;
 
     @Schema(description = "用户权限信息")
-    private List<PermissionResp> permissions;
+    private List<PermissionVO> permissions;
 
     @Schema(description = "创建用户")
     private String createUser;

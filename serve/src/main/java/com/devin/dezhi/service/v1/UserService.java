@@ -1,8 +1,8 @@
 package com.devin.dezhi.service.v1;
 
-import com.devin.dezhi.domain.v1.vo.req.UserInfoReq;
-import com.devin.dezhi.domain.v1.vo.resp.LoginResp;
-import com.devin.dezhi.domain.v1.vo.resp.UserInfoResp;
+import com.devin.dezhi.domain.v1.dto.UserInfoDTO;
+import com.devin.dezhi.domain.v1.vo.user.LoginVO;
+import com.devin.dezhi.domain.v1.vo.user.UserInfoVO;
 
 /**
  * 2025/4/25 18:28.
@@ -16,10 +16,10 @@ public interface UserService {
 
     /**
      * 账号登录.
-     * @param userInfoReq 用户信息
+     * @param userInfoDTO 用户信息
      * @return LoginResp
      */
-    LoginResp loginAccount(UserInfoReq userInfoReq);
+    LoginVO loginAccount(UserInfoDTO userInfoDTO);
 
     /**
      * 登出.
@@ -41,26 +41,26 @@ public interface UserService {
 
     /**
      * 邮箱验证码登录.
-     * @param userInfoReq 用户信息
+     * @param userInfoDTO 用户信息
      * @return LoginResp
      */
-    LoginResp loginEmail(UserInfoReq userInfoReq);
+    LoginVO loginEmail(UserInfoDTO userInfoDTO);
 
     /**
      * 用户注册.
-     * @param userInfoReq 用户信息
+     * @param userInfoDTO 用户信息
      */
-    void signup(UserInfoReq userInfoReq);
+    void signup(UserInfoDTO userInfoDTO);
 
     /**
      * 忘记密码.
-     * @param userInfoReq 用户信息
+     * @param userInfoDTO 用户信息
      */
-    void forgetPassword(UserInfoReq userInfoReq);
+    void forgetPassword(UserInfoDTO userInfoDTO);
 
     /**
      * 获取登录用户信息.
      * @return UserInfoResp
      */
-    UserInfoResp getLoginUserInfo();
+    UserInfoVO getLoginUserInfo();
 }
