@@ -9,14 +9,14 @@ import com.devin.dezhi.dao.v1.user.PermissionDao;
 import com.devin.dezhi.dao.v1.user.RoleDao;
 import com.devin.dezhi.dao.v1.user.UserDao;
 import com.devin.dezhi.dao.v1.user.UserRoleDao;
+import com.devin.dezhi.domain.v1.dto.UserInfoDTO;
 import com.devin.dezhi.domain.v1.entity.user.Role;
 import com.devin.dezhi.domain.v1.entity.user.User;
 import com.devin.dezhi.domain.v1.entity.user.UserRole;
-import com.devin.dezhi.domain.v1.vo.req.UserInfoReq;
-import com.devin.dezhi.domain.v1.vo.resp.LoginResp;
-import com.devin.dezhi.domain.v1.vo.resp.PermissionResp;
-import com.devin.dezhi.domain.v1.vo.resp.RoleResp;
-import com.devin.dezhi.domain.v1.vo.resp.UserInfoResp;
+import com.devin.dezhi.domain.v1.vo.user.LoginVO;
+import com.devin.dezhi.domain.v1.vo.user.PermissionVO;
+import com.devin.dezhi.domain.v1.vo.user.RoleVO;
+import com.devin.dezhi.domain.v1.vo.user.UserInfoVO;
 import com.devin.dezhi.enums.rbac.RoleEnum;
 import com.devin.dezhi.exception.BusinessException;
 import com.devin.dezhi.service.extension.mail.MailService;
@@ -81,10 +81,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public LoginResp loginAccount(final UserInfoReq userInfoReq) {
-        userInfoReq.setPassword(passwordEncrypt.encrypt(userInfoReq.getPassword()));
+    public LoginVO loginAccount(final UserInfoDTO userInfoDTO) {
+        userInfoDTO.setPassword(passwordEncrypt.encrypt(userInfoDTO.getPassword()));
         // 查询数据库判断用户信息是否存在
-        User user = userDao.getByReq(userInfoReq);
+        User user = userDao.getByDTO(userInfoDTO);
 
         AssertUtil.isNotEmpty(user, "用户名，密码错误，请重新登录！！！");
 
@@ -133,14 +133,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LoginResp loginEmail(final UserInfoReq userInfoReq) {
+    public LoginVO loginEmail(final UserInfoDTO userInfoDTO) {
         // 查询用户信息
-        User user = userDao.getByReq(userInfoReq);
+        User user = userDao.getByDTO(userInfoDTO);
 
         AssertUtil.isNotEmpty(user, "抱歉，该邮箱尚未注册，请先进行注册！！！");
 
         // 校验验证码是否正确
-        checkCode(userInfoReq.getEmail(), userInfoReq.getCode());
+        checkCode(userInfoDTO.getEmail(), userInfoDTO.getCode());
 
         // 判断该用户是否登录
         if (!StpUtil.isLogin(user.getId())) {
@@ -153,16 +153,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void signup(final UserInfoReq userInfoReq) {
+    public void signup(final UserInfoDTO userInfoDTO) {
         // 根据邮箱查询用户
-        User user = userDao.getByEmail(userInfoReq.getEmail());
+        User user = userDao.getByEmail(userInfoDTO.getEmail());
         AssertUtil.isEmpty(user, "抱歉，该邮箱已被注册，请重新输入！！！");
 
         // 校验验证码是否正确
-        checkCode(userInfoReq.getEmail(), userInfoReq.getCode());
+        checkCode(userInfoDTO.getEmail(), userInfoDTO.getCode());
 
         // 将信息保存到数据库
-        user = userEntityGenerate.generateRegisterUser(userInfoReq);
+        user = userEntityGenerate.generateRegisterUser(userInfoDTO);
         boolean saveUserResult = userDao.save(user);
         AssertUtil.isTrue(saveUserResult, "抱歉，由于系统异常用户信息注册失败，请联系管理员！！！");
 
@@ -175,29 +175,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void forgetPassword(final UserInfoReq userInfoReq) {
+    public void forgetPassword(final UserInfoDTO userInfoDTO) {
         // 根据邮箱查询用户
-        User user = userDao.getByEmail(userInfoReq.getEmail());
+        User user = userDao.getByEmail(userInfoDTO.getEmail());
         AssertUtil.isNotEmpty(user, "抱歉，该邮箱尚未注册，请先进行注册！！！");
 
         // 校验验证码是否正确
-        checkCode(userInfoReq.getEmail(), userInfoReq.getCode());
+        checkCode(userInfoDTO.getEmail(), userInfoDTO.getCode());
 
         // 登出此用户
         logout(user.getId());
 
         // 如果新密码和旧密码一致，则直接返回即可
-        if (passwordEncrypt.checkPassword(userInfoReq.getPassword(), user.getPassword())) {
+        if (passwordEncrypt.checkPassword(userInfoDTO.getPassword(), user.getPassword())) {
             return;
         }
 
         // 更新用户密码
-        boolean updateResult = userDao.updateById(userEntityGenerate.generateUpdateUser(userInfoReq, user.getId()));
+        boolean updateResult = userDao.updateById(userEntityGenerate.generateUpdateUser(userInfoDTO, user.getId()));
         AssertUtil.isTrue(updateResult, "抱歉，由于系统异常用户密码更新失败，请联系管理员！！！");
     }
 
     @Override
-    public UserInfoResp getLoginUserInfo() {
+    public UserInfoVO getLoginUserInfo() {
         // 获取当前登录用户id
         Long uid = Long.valueOf(StpUtil.getLoginId().toString());
 
@@ -212,21 +212,21 @@ public class UserServiceImpl implements UserService {
         // 查询所需信息
         List<Long> roleIds = stpInterface.getRoleIds(uid);
         List<Long> permissionIds = stpInterface.getPermissionIds(roleIds);
-        List<RoleResp> roleResps = roleDao.listByIds(roleIds)
+        List<RoleVO> roleResps = roleDao.listByIds(roleIds)
                 .stream()
                 .map(role -> {
-                    RoleResp roleResp = new RoleResp();
-                    roleResp.setName(role.getRole());
-                    roleResp.setRemark(role.getRemark());
-                    return roleResp;
+                    RoleVO roleVO = new RoleVO();
+                    roleVO.setName(role.getRole());
+                    roleVO.setRemark(role.getRemark());
+                    return roleVO;
                 }).toList();
-        List<PermissionResp> permissionResps = permissionDao.listByIds(permissionIds)
+        List<PermissionVO> permissionResps = permissionDao.listByIds(permissionIds)
                 .stream()
                 .map(permission -> {
-                    PermissionResp permissionResp = new PermissionResp();
-                    permissionResp.setName(permission.getPermission());
-                    permissionResp.setRemark(permission.getRemark());
-                    return permissionResp;
+                    PermissionVO permissionVO = new PermissionVO();
+                    permissionVO.setName(permission.getPermission());
+                    permissionVO.setRemark(permission.getRemark());
+                    return permissionVO;
                 }).toList();
         String createUser = userDao.getUsernameById(user.getCreateUserId());
         String updateUser = userDao.getUsernameById(user.getCreateUserId());

@@ -1,10 +1,10 @@
 package com.devin.dezhi.service.generate.common;
 
 import com.devin.dezhi.domain.v1.entity.user.User;
-import com.devin.dezhi.domain.v1.vo.resp.LoginResp;
-import com.devin.dezhi.domain.v1.vo.resp.PermissionResp;
-import com.devin.dezhi.domain.v1.vo.resp.RoleResp;
-import com.devin.dezhi.domain.v1.vo.resp.UserInfoResp;
+import com.devin.dezhi.domain.v1.vo.user.LoginVO;
+import com.devin.dezhi.domain.v1.vo.user.PermissionVO;
+import com.devin.dezhi.domain.v1.vo.user.RoleVO;
+import com.devin.dezhi.domain.v1.vo.user.UserInfoVO;
 import org.springframework.beans.BeanUtils;
 import java.util.List;
 
@@ -25,10 +25,10 @@ public class RespEntityGenerate {
      * @param token token
      * @return LoginResp
      */
-    public static LoginResp loginResp(final String token) {
-        LoginResp loginResp = new LoginResp();
-        loginResp.setToken(token);
-        return loginResp;
+    public static LoginVO loginResp(final String token) {
+        LoginVO loginVO = new LoginVO();
+        loginVO.setToken(token);
+        return loginVO;
     }
 
     /**
@@ -40,14 +40,14 @@ public class RespEntityGenerate {
      * @param updateUser 更新人
      * @return UserInfoResp
      */
-    public static UserInfoResp generateUserInfoResp(final User user, final List<RoleResp> roles, final List<PermissionResp> permissions, final String createUser, final String updateUser) {
-        UserInfoResp userInfoResp = new UserInfoResp();
-        BeanUtils.copyProperties(user, userInfoResp);
-        userInfoResp.setUid(user.getId());
-        userInfoResp.setRoles(roles);
-        userInfoResp.setPermissions(permissions);
-        userInfoResp.setCreateUser(createUser);
-        userInfoResp.setUpdateUser(updateUser);
-        return userInfoResp;
+    public static UserInfoVO generateUserInfoResp(final User user, final List<RoleVO> roles, final List<PermissionVO> permissions, final String createUser, final String updateUser) {
+        UserInfoVO userInfoVO = new UserInfoVO();
+        BeanUtils.copyProperties(user, userInfoVO);
+        userInfoVO.setUid(user.getId());
+        userInfoVO.setRoles(roles);
+        userInfoVO.setPermissions(permissions);
+        userInfoVO.setCreateUser(createUser);
+        userInfoVO.setUpdateUser(updateUser);
+        return userInfoVO;
     }
 }

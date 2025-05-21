@@ -1,4 +1,4 @@
-package com.devin.dezhi.domain.v1.vo.req;
+package com.devin.dezhi.domain.v1.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
@@ -19,7 +19,7 @@ import lombok.Data;
  */
 @Data
 @Schema(description = "用户信息请求实体")
-public class UserInfoReq {
+public class UserInfoDTO {
 
     @Max(16)
     @Schema(description = "用户名")

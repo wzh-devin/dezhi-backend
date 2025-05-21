@@ -2,9 +2,9 @@ package com.devin.dezhi.controller.v1;
 
 import com.devin.dezhi.common.annocation.ApiV1;
 import com.devin.dezhi.common.utils.r.ApiResult;
-import com.devin.dezhi.domain.v1.vo.req.UserInfoReq;
-import com.devin.dezhi.domain.v1.vo.resp.LoginResp;
-import com.devin.dezhi.domain.v1.vo.resp.UserInfoResp;
+import com.devin.dezhi.domain.v1.dto.UserInfoDTO;
+import com.devin.dezhi.domain.v1.vo.user.LoginVO;
+import com.devin.dezhi.domain.v1.vo.user.UserInfoVO;
 import com.devin.dezhi.service.v1.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -42,13 +42,13 @@ public class UserController {
 
     /**
      * 账号登录.
-     * @param userInfoReq 用户登录信息
+     * @param userInfoDTO 用户登录信息
      * @return LoginResp
      */
     @PostMapping("/loginAccount")
     @Operation(summary = "账密登录", description = "账密登录")
-    public ApiResult<LoginResp> loginAccount(@RequestBody final UserInfoReq userInfoReq) {
-        return ApiResult.success(userService.loginAccount(userInfoReq));
+    public ApiResult<LoginVO> loginAccount(@RequestBody final UserInfoDTO userInfoDTO) {
+        return ApiResult.success(userService.loginAccount(userInfoDTO));
     }
 
     /**
@@ -92,36 +92,36 @@ public class UserController {
 
     /**
      * 邮箱验证码登录.
-     * @param userInfoReq 用户登录信息
+     * @param userInfoDTO 用户登录信息
      * @return LoginResp
      */
     @PostMapping("/loginEmail")
     @Operation(summary = "邮箱验证码登录", description = "邮箱验证码登录")
-    public ApiResult<LoginResp> loginEmail(@RequestBody final UserInfoReq userInfoReq) {
-        return ApiResult.success(userService.loginEmail(userInfoReq));
+    public ApiResult<LoginVO> loginEmail(@RequestBody final UserInfoDTO userInfoDTO) {
+        return ApiResult.success(userService.loginEmail(userInfoDTO));
     }
 
     /**
      * 用户注册.
-     * @param userInfoReq 用户信息
+     * @param userInfoDTO 用户信息
      * @return Void
      */
     @PutMapping("/signup")
     @Operation(summary = "用户注册", description = "用户注册")
-    public ApiResult<Void> signup(@RequestBody final UserInfoReq userInfoReq) {
-        userService.signup(userInfoReq);
+    public ApiResult<Void> signup(@RequestBody final UserInfoDTO userInfoDTO) {
+        userService.signup(userInfoDTO);
         return ApiResult.success();
     }
 
     /**
      * 忘记密码.
-     * @param userInfoReq 用户信息
+     * @param userInfoDTO 用户信息
      * @return Void
      */
     @PostMapping("/forgetPassword")
     @Operation(summary = "忘记密码", description = "忘记密码")
-    public ApiResult<Void> forgetPassword(@RequestBody final UserInfoReq userInfoReq) {
-        userService.forgetPassword(userInfoReq);
+    public ApiResult<Void> forgetPassword(@RequestBody final UserInfoDTO userInfoDTO) {
+        userService.forgetPassword(userInfoDTO);
         return ApiResult.success();
     }
 
@@ -131,7 +131,7 @@ public class UserController {
      */
     @GetMapping("/getLoginUserInfo")
     @Operation(summary = "获取登录用户信息", description = "获取登录用户信息")
-    public ApiResult<UserInfoResp> getLoginUserInfo() {
+    public ApiResult<UserInfoVO> getLoginUserInfo() {
         return ApiResult.success(userService.getLoginUserInfo());
     }
 }

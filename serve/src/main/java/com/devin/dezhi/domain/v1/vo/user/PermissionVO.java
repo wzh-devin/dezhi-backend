@@ -1,4 +1,4 @@
-package com.devin.dezhi.domain.v1.vo.resp;
+package com.devin.dezhi.domain.v1.vo.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -13,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @Schema(description = "权限信息响应")
-public class PermissionResp {
+public class PermissionVO {
     
     @Schema(description = "权限名称")
     private String name;

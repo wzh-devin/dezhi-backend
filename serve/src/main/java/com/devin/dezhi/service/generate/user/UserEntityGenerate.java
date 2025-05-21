@@ -1,8 +1,8 @@
 package com.devin.dezhi.service.generate.user;
 
+import com.devin.dezhi.domain.v1.dto.UserInfoDTO;
 import com.devin.dezhi.domain.v1.entity.user.User;
 import com.devin.dezhi.domain.v1.entity.user.UserRole;
-import com.devin.dezhi.domain.v1.vo.req.UserInfoReq;
 import com.devin.dezhi.enums.FlagEnum;
 import com.devin.dezhi.utils.PasswordEncrypt;
 import com.devin.dezhi.utils.SnowFlake;
@@ -27,15 +27,15 @@ public class UserEntityGenerate {
 
     /**
      * 构建用户实体.
-     * @param userInfoReq 用户信息
+     * @param userInfoDTO 用户信息
      * @return User
      */
-    public User generateRegisterUser(final UserInfoReq userInfoReq) {
+    public User generateRegisterUser(final UserInfoDTO userInfoDTO) {
         User user = new User();
         user.setId(snowFlake.nextId());
-        user.setUsername(userInfoReq.getUsername());
-        user.setPassword(passwordEncrypt.encrypt(userInfoReq.getPassword()));
-        user.setEmail(userInfoReq.getEmail());
+        user.setUsername(userInfoDTO.getUsername());
+        user.setPassword(passwordEncrypt.encrypt(userInfoDTO.getPassword()));
+        user.setEmail(userInfoDTO.getEmail());
         user.setCreateUserId(user.getId());
         user.setUpdateUserId(user.getId());
         user.initDate();
@@ -46,14 +46,14 @@ public class UserEntityGenerate {
 
     /**
      * 构建用户更新实体.
-     * @param userInfoReq 用户信息
+     * @param userInfoDTO 用户信息
      * @param uid 用户id
      * @return User
      */
-    public User generateUpdateUser(final UserInfoReq userInfoReq, final Long uid) {
+    public User generateUpdateUser(final UserInfoDTO userInfoDTO, final Long uid) {
         User user = new User();
         user.setId(uid);
-        user.setPassword(passwordEncrypt.encrypt(userInfoReq.getPassword()));
+        user.setPassword(passwordEncrypt.encrypt(userInfoDTO.getPassword()));
         return user;
     }
 
