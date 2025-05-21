@@ -1,5 +1,5 @@
 # 基础镜像
-FROM openjdk:17-jdk-alpine
+FROM openjdk:17-jdk
 
 # 作者
 LABEL devin=<wzh.devin@gmail.com>
@@ -14,4 +14,5 @@ ENV LANG=C.UTF-8
 
 # 设置暴露端口
 EXPOSE 8080
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
