@@ -5,10 +5,7 @@ import com.devin.dezhi.domain.v1.vo.user.LoginVO;
 import com.devin.dezhi.domain.v1.vo.user.PermissionVO;
 import com.devin.dezhi.domain.v1.vo.user.RoleVO;
 import com.devin.dezhi.domain.v1.vo.user.UserInfoVO;
-import com.devin.dezhi.entity.FileInfo;
 import org.springframework.beans.BeanUtils;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 /**

@@ -1,7 +1,6 @@
 package com.devin.dezhi.service.v1.impl;
 
 import cn.hutool.core.io.FileUtil;
-import com.devin.dezhi.common.enums.HttpErrorEnum;
 import com.devin.dezhi.common.utils.MinioTemplate;
 import com.devin.dezhi.dao.v1.MaterialDao;
 import com.devin.dezhi.dao.v1.SysDictDao;
@@ -13,15 +12,12 @@ import com.devin.dezhi.exception.VerifyException;
 import com.devin.dezhi.service.generate.common.EntityGenerate;
 import com.devin.dezhi.service.v1.MaterialService;
 import com.devin.dezhi.utils.AssertUtil;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
@@ -49,8 +45,6 @@ public class MaterialServiceImpl implements MaterialService {
     private final EntityGenerate entityGenerate;
 
     private final MaterialDao materialDao;
-
-    private final HttpServletResponse response;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -105,6 +99,7 @@ public class MaterialServiceImpl implements MaterialService {
      * 检查文件类型.
      *
      * @param suffix 文件后缀
+     * @return Boolean
      */
     private boolean checkFileType(final String suffix) {
         // 获取文件类型所支持的枚举类
