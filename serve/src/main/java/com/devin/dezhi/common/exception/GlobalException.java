@@ -3,6 +3,8 @@ package com.devin.dezhi.common.exception;
 import cn.dev33.satoken.exception.NotLoginException;
 import com.devin.dezhi.common.enums.HttpErrorEnum;
 import com.devin.dezhi.exception.BusinessException;
+import com.devin.dezhi.exception.FileException;
+import com.devin.dezhi.exception.VerifyException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,5 +47,25 @@ public class GlobalException {
     public void businessException(final BusinessException e) throws IOException {
         log.error("业务异常: {}", e.getMessage());
         HttpErrorEnum.BUSINESS_ERROR.sendHttpError(response, e.getMessage());
+    }
+
+    /**
+     * 文件异常.
+     * @param e 异常信息
+     */
+    @ExceptionHandler(FileException.class)
+    public void fileException(final FileException e) throws IOException {
+        log.error("文件异常: {}", e.getMessage());
+        HttpErrorEnum.BUSINESS_ERROR.sendHttpError(response, e.getMessage());
+    }
+
+    /**
+     * 校验异常.
+     * @param e 校验异常
+     */
+    @ExceptionHandler(VerifyException.class)
+    public void fileException(final VerifyException e) throws IOException {
+        log.error("校验异常: {}", e.getMessage());
+        HttpErrorEnum.VERIFY_ERROR.sendHttpError(response, e.getMessage());
     }
 }

@@ -37,6 +37,7 @@
         <lombok.version>1.18.36</lombok.version>
         <knife4j.version>4.5.0</knife4j.version>
         <fastjson2.version>2.0.56</fastjson2.version>
+        <minio.version>8.5.17</minio.version>
 
         <!-- 这个只是为了解决spring-boot-test中的2.9.1版本的安全问题警告，不涉及业务流程 -->
         <xmlunit.version>2.10.0</xmlunit.version>
@@ -91,6 +92,12 @@
                 <groupId>com.alibaba.fastjson2</groupId>
                 <artifactId>fastjson2</artifactId>
                 <version>${fastjson2.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

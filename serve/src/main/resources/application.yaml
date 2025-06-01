@@ -6,6 +6,10 @@ spring:
     active: dev
   application:
     name: dezhi-blog
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 
   # 配置数据源
   datasource:
@@ -22,6 +26,7 @@ spring:
       port: ${dezhi.redis.port}
       password: ${dezhi.redis.password}
       timeout: 3000
+
   # 配置 mail
   mail:
     host: ${dezhi.mail.host}
@@ -58,6 +63,13 @@ sa-token:
   token-style: ${dezhi.sa-token.token-style}
   # 是否输出操作日志
   is-log: true
+
+# minio 配置
+minio:
+  endpoint: ${dezhi.minio.endpoint}
+  access-key: ${dezhi.minio.access-key}
+  secret-key: ${dezhi.minio.secret-key}
+  bucket-name: ${dezhi.minio.bucket-name}
 
 # swagger 配置
 springdoc:
