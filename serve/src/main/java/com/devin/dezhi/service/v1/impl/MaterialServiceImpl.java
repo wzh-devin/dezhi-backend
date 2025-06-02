@@ -1,15 +1,23 @@
 package com.devin.dezhi.service.v1.impl;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.lang.Assert;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.devin.dezhi.common.utils.MinioTemplate;
+import com.devin.dezhi.common.utils.r.PageResult;
 import com.devin.dezhi.dao.v1.MaterialDao;
 import com.devin.dezhi.dao.v1.SysDictDao;
+import com.devin.dezhi.domain.v1.dto.FileInfoDTO;
+import com.devin.dezhi.domain.v1.entity.Material;
+import com.devin.dezhi.domain.v1.vo.FileInfoVO;
 import com.devin.dezhi.entity.FileInfo;
 import com.devin.dezhi.enums.StorageTypeEnum;
 import com.devin.dezhi.exception.BusinessException;
 import com.devin.dezhi.exception.FileException;
 import com.devin.dezhi.exception.VerifyException;
 import com.devin.dezhi.service.generate.common.EntityGenerate;
+import com.devin.dezhi.service.generate.common.RespEntityGenerate;
 import com.devin.dezhi.service.v1.MaterialService;
 import com.devin.dezhi.utils.AssertUtil;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +26,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 2025/6/1 23:06.
@@ -36,7 +46,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class MaterialServiceImpl implements MaterialService {
 
-    private static final String DICT_TYPE = "FILE";
+    private static final String DICT_TYPE_FILE = "FILE";
 
     private final MinioTemplate minioTemplate;
 
@@ -95,6 +105,34 @@ public class MaterialServiceImpl implements MaterialService {
         }
     }
 
+    @Override
+    public PageResult<FileInfoVO> list(final FileInfoDTO fileInfoDTO) {
+        // 获取分页列表
+        IPage<Material> pageList = materialDao.getList(fileInfoDTO);
+
+        // 返回分页数据
+        return Optional.ofNullable(pageList)
+                .map(page -> {
+                    PageResult<FileInfoVO> pageResult = new PageResult<>();
+                    pageResult.setPageNum(page.getCurrent());
+                    pageResult.setPageSize(page.getSize());
+                    pageResult.setTotal(page.getTotal());
+                    // 设置数据集合
+                    pageResult.setDataList(page.getRecords().stream()
+                            .map(RespEntityGenerate::generateFileInfoVO)
+                            .toList());
+                    return pageResult;
+                }).orElse(null);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public void delMaterial(final List<String> pathList) {
+        // 对数据库中的文件进行逻辑删除
+        boolean delResult = materialDao.delBatchByUrl(pathList);
+        AssertUtil.isTrue(delResult, "素材信息删除失败，请联系管理员！！！");
+    }
+
     /**
      * 检查文件类型.
      *
@@ -103,7 +141,7 @@ public class MaterialServiceImpl implements MaterialService {
      */
     private boolean checkFileType(final String suffix) {
         // 获取文件类型所支持的枚举类
-        List<String> codes = sysDictDao.getCodeByType(DICT_TYPE);
+        List<String> codes = sysDictDao.getCodeByType(DICT_TYPE_FILE);
 
         return Objects.nonNull(suffix) && codes.contains(suffix.toUpperCase());
     }

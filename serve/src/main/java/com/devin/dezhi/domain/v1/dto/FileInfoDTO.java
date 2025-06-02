@@ -27,6 +27,9 @@ public class FileInfoDTO {
     @Schema(description = "文件类型")
     private String fileType;
 
+    @Schema(description = "文件状态：0 草稿；1 正常")
+    private Integer status;
+
     @Schema(description = "页码")
     private Integer pageNum;
 
