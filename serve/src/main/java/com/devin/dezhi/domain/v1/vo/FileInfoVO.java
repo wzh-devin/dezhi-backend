@@ -2,7 +2,6 @@ package com.devin.dezhi.domain.v1.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-
 import java.util.Date;
 
 /**

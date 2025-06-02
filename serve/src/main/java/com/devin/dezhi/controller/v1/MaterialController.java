@@ -5,7 +5,6 @@ import com.devin.dezhi.common.utils.r.ApiResult;
 import com.devin.dezhi.common.utils.r.PageResult;
 import com.devin.dezhi.domain.v1.dto.FileInfoDTO;
 import com.devin.dezhi.domain.v1.vo.FileInfoVO;
-import com.devin.dezhi.entity.FileInfo;
 import com.devin.dezhi.service.v1.MaterialService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
 /**

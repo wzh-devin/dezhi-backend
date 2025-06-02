@@ -1,6 +1,5 @@
 package com.devin.dezhi.service.generate.common;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.devin.dezhi.domain.v1.entity.Material;
 import com.devin.dezhi.domain.v1.entity.user.User;
 import com.devin.dezhi.domain.v1.vo.FileInfoVO;
@@ -9,7 +8,6 @@ import com.devin.dezhi.domain.v1.vo.user.PermissionVO;
 import com.devin.dezhi.domain.v1.vo.user.RoleVO;
 import com.devin.dezhi.domain.v1.vo.user.UserInfoVO;
 import org.springframework.beans.BeanUtils;
-
 import java.util.List;
 
 /**
