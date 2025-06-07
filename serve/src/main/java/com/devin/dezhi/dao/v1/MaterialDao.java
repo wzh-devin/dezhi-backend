@@ -49,6 +49,8 @@ public class MaterialDao extends ServiceImpl<MaterialMapper, Material> {
             lambdaQueryWrapper.eq(Material::getFileTypeCode, fileInfoDTO.getFileType());
         }
 
+        lambdaQueryWrapper.orderByDesc(Material::getCreateTime);
+
         return page(page, lambdaQueryWrapper);
     }
 
