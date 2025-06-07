@@ -36,7 +36,7 @@ public class GlobalException {
     @ExceptionHandler(NotLoginException.class)
     public void notLoginException(final NotLoginException e) throws IOException {
         log.error("用户未登录: {}", e.getMessage());
-        HttpErrorEnum.NOT_LOGIN.sendHttpError(response, e.getMessage());
+        HttpErrorEnum.NOT_LOGIN.sendHttpError(response, "登录身份无效，请重新进行登录");
     }
 
     /**

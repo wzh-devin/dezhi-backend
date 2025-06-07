@@ -33,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -43,6 +44,7 @@ import java.util.concurrent.TimeUnit;
  * 2025/4/25 18:29.
  *
  * <p></p>
+ *
  * @author <a href="https://github.com/wzh-devin">devin</a>
  * @version 1.0
  * @since 1.0
@@ -89,9 +91,7 @@ public class UserServiceImpl implements UserService {
         AssertUtil.isNotEmpty(user, "用户名，密码错误，请重新登录！！！");
 
         // 判断用户是否登录，如果未登录则进行登录操作
-        if (!StpUtil.isLogin(user.getId())) {
-            login(user);
-        }
+        checkLogin(user);
 
         return RespEntityGenerate.loginResp(StpUtil.getTokenValueByLoginId(user.getId()));
     }
@@ -142,11 +142,8 @@ public class UserServiceImpl implements UserService {
         // 校验验证码是否正确
         checkCode(userInfoDTO.getEmail(), userInfoDTO.getCode());
 
-        // 判断该用户是否登录
-        if (!StpUtil.isLogin(user.getId())) {
-            // 进行登录操作
-            login(user);
-        }
+        // 判断用户是否登录，如果未登录则进行登录操作
+        checkLogin(user);
 
         return RespEntityGenerate.loginResp(StpUtil.getTokenValueByLoginId(user.getId()));
     }
@@ -236,11 +233,41 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 进行登录操作.
+     *
      * @param user 用户信息
      */
     private void login(final User user) {
         // 登录操作
         StpUtil.login(user.getId());
+    }
+
+    /**
+     * 登录续签.
+     *
+     * @param user 用户信息
+     */
+    private void loginRefresh(final User user) {
+        // 判断Token是否以临期（如果过期，则抛出异常）
+        StpUtil.checkActiveTimeout();
+
+        // Token续签
+        StpUtil.updateLastActiveToNow();
+    }
+
+    /**
+     * 检查用户是否登录.
+     *
+     * @param user 用户信息
+     */
+    private void checkLogin(final User user) {
+        // 判断该用户是否登录
+        if (!StpUtil.isLogin(user.getId())) {
+            // 进行登录操作
+            login(user);
+        } else {
+            // 登录续签
+            loginRefresh(user);
+        }
 
         // 将用户信息存储到Redis中，设置过期时间为7天
         redisUtil.setEx(RedisKey.generateRedisKey(RedisKey.LOGIN_INFO, user.getId()), JSONUtil.toJsonStr(user), 7L, TimeUnit.DAYS);
@@ -248,6 +275,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 生成随机的六位验证码.
+     *
      * @return 验证码
      */
     private Integer generateCode() {
@@ -258,8 +286,9 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 校验验证码是否正确.
+     *
      * @param email 邮箱
-     * @param code 验证码
+     * @param code  验证码
      */
     private void checkCode(final String email, final Integer code) {
         boolean check = Optional.ofNullable(EMAIL_CODE.getIfPresent(generateCodeKey(email)))
@@ -274,6 +303,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 生成验证码的缓存Key.
+     *
      * @param email 邮箱
      * @return Key
      */
