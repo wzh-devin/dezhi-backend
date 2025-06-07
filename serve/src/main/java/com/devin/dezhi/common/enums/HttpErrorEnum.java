@@ -23,7 +23,7 @@ import java.text.MessageFormat;
 public enum HttpErrorEnum {
 
     SYSTEM_ERROR(500, "系统异常: {0}"),
-    NOT_LOGIN(403, "用户未登录: {0}"),
+    NOT_LOGIN(4003, "用户未登录: {0}"),
     BUSINESS_ERROR(501, "业务异常: {0}"),
     VERIFY_ERROR(502, "验证失败: {0}");
 
