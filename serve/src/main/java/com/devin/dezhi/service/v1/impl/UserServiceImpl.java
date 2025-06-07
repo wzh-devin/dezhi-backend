@@ -33,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -243,10 +242,8 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 登录续签.
-     *
-     * @param user 用户信息
      */
-    private void loginRefresh(final User user) {
+    private void loginRefresh() {
         // 判断Token是否以临期（如果过期，则抛出异常）
         StpUtil.checkActiveTimeout();
 
@@ -266,7 +263,7 @@ public class UserServiceImpl implements UserService {
             login(user);
         } else {
             // 登录续签
-            loginRefresh(user);
+            loginRefresh();
         }
 
         // 将用户信息存储到Redis中，设置过期时间为7天
