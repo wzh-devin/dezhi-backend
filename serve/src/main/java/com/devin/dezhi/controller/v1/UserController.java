@@ -1,6 +1,5 @@
 package com.devin.dezhi.controller.v1;
 
-import cn.dev33.satoken.stp.StpUtil;
 import com.devin.dezhi.common.annocation.ApiV1;
 import com.devin.dezhi.common.utils.r.ApiResult;
 import com.devin.dezhi.domain.v1.dto.UserInfoDTO;
@@ -54,7 +53,6 @@ public class UserController {
 
     /**
      * 用户登出.
-     * @param uid 用户id
      * @return Void
      */
     @GetMapping("/logout")
