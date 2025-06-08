@@ -30,6 +30,7 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,9 +84,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public LoginVO loginAccount(final UserInfoDTO userInfoDTO) {
-        userInfoDTO.setPassword(passwordEncrypt.encrypt(userInfoDTO.getPassword()));
+
+        UserInfoDTO userInfo = new UserInfoDTO();
+        BeanUtils.copyProperties(userInfoDTO, userInfo);
+        userInfo.setPassword(passwordEncrypt.encrypt(userInfoDTO.getPassword()));
         // 查询数据库判断用户信息是否存在
-        User user = userDao.getByDTO(userInfoDTO);
+        User user = userDao.getByDTO(userInfo);
 
         AssertUtil.isNotEmpty(user, "用户名，密码错误，请重新登录！！！");
 
@@ -96,7 +100,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void logout(final Long uid) {
+    public void logout() {
+        String uid = StpUtil.getLoginId().toString();
+
         // sa-token登出
         StpUtil.logout(uid);
 
@@ -108,7 +114,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void deregisterAccount(final Long uid) {
         // 用户信息登出
-        logout(uid);
+        logout();
 
         // 删除用户角色关联信息
         boolean userRoleRemove = userRoleDao.removeByUserId(uid);
@@ -180,7 +186,7 @@ public class UserServiceImpl implements UserService {
         checkCode(userInfoDTO.getEmail(), userInfoDTO.getCode());
 
         // 登出此用户
-        logout(user.getId());
+        logout();
 
         // 如果新密码和旧密码一致，则直接返回即可
         if (passwordEncrypt.checkPassword(userInfoDTO.getPassword(), user.getPassword())) {
