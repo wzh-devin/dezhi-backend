@@ -23,9 +23,8 @@ public interface UserService {
 
     /**
      * 登出.
-     * @param uid uid
      */
-    void logout(Long uid);
+    void logout();
 
     /**
      * 注销.

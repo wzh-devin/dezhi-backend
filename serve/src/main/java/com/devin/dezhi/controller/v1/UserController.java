@@ -53,14 +53,12 @@ public class UserController {
 
     /**
      * 用户登出.
-     * @param uid 用户id
      * @return Void
      */
     @GetMapping("/logout")
     @Operation(summary = "用户登出", description = "用户登出")
-    @Parameter(name = "uid", description = "用户id")
-    public ApiResult<Void> logout(@RequestParam("uid") final Long uid) {
-        userService.logout(uid);
+    public ApiResult<Void> logout() {
+        userService.logout();
         return ApiResult.success();
     }
 
