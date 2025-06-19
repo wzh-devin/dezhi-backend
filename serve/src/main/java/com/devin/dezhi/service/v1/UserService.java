@@ -28,9 +28,8 @@ public interface UserService {
 
     /**
      * 注销.
-     * @param uid uid
      */
-    void deregisterAccount(Long uid);
+    void deregisterAccount();
 
     /**
      * 获取邮箱验证码.

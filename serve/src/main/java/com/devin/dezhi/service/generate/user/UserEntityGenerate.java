@@ -3,7 +3,6 @@ package com.devin.dezhi.service.generate.user;
 import com.devin.dezhi.domain.v1.dto.UserInfoDTO;
 import com.devin.dezhi.domain.v1.entity.user.User;
 import com.devin.dezhi.domain.v1.entity.user.UserRole;
-import com.devin.dezhi.enums.FlagEnum;
 import com.devin.dezhi.utils.PasswordEncrypt;
 import com.devin.dezhi.utils.SnowFlake;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +38,6 @@ public class UserEntityGenerate {
         user.setCreateUserId(user.getId());
         user.setUpdateUserId(user.getId());
         user.initDate();
-        user.setDelFlag(FlagEnum.NORMAL.getFlag());
 
         return user;
     }

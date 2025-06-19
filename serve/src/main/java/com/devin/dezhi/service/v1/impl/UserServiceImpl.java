@@ -17,6 +17,7 @@ import com.devin.dezhi.domain.v1.vo.user.LoginVO;
 import com.devin.dezhi.domain.v1.vo.user.PermissionVO;
 import com.devin.dezhi.domain.v1.vo.user.RoleVO;
 import com.devin.dezhi.domain.v1.vo.user.UserInfoVO;
+import com.devin.dezhi.enums.FlagEnum;
 import com.devin.dezhi.enums.rbac.RoleEnum;
 import com.devin.dezhi.exception.BusinessException;
 import com.devin.dezhi.service.extension.mail.MailService;
@@ -34,6 +35,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -112,7 +114,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void deregisterAccount(final Long uid) {
+    public void deregisterAccount() {
+        // 获取当前用户登录id
+        Long uid = Long.valueOf(StpUtil.getLoginId().toString());
+
         // 用户信息登出
         logout();
 
@@ -120,8 +125,8 @@ public class UserServiceImpl implements UserService {
         boolean userRoleRemove = userRoleDao.removeByUserId(uid);
         AssertUtil.isTrue(userRoleRemove, "用户角色关联信息删除失败！！！");
 
-        // 逻辑删除用户信息
-        boolean userRemove = userDao.logicRemoveById(uid);
+        // 删除用户信息
+        boolean userRemove = userDao.removeById(uid);
         AssertUtil.isTrue(userRemove, "用户信息删除失败！！！");
     }
 
