@@ -64,14 +64,12 @@ public class UserController {
 
     /**
      * 用户注销.
-     * @param uid 用户id
      * @return Void
      */
     @DeleteMapping("/deregisterAccount")
     @Operation(summary = "用户注销", description = "用户注销")
-    @Parameter(name = "uid", description = "用户id")
-    public ApiResult<Void> deregisterAccount(@RequestParam("uid") final Long uid) {
-        userService.deregisterAccount(uid);
+    public ApiResult<Void> deregisterAccount() {
+        userService.deregisterAccount();
         return ApiResult.success();
     }
 

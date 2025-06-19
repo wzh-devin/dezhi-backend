@@ -14,35 +14,35 @@ spring:
   # 配置数据源
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${dezhi.postgresql.host}:${dezhi.postgresql.port}/${dezhi.postgresql.database}?currentSchema=${dezhi.postgresql.schema}
-    username: ${dezhi.postgresql.username}
-    password: ${dezhi.postgresql.password}
+    url: jdbc:postgresql://${DEZHI.POSTGRESQL.HOST}:${DEZHI.POSTGRESQL.PORT}/${DEZHI.POSTGRESQL.DATABASE}?currentSchema=${DEZHI.POSTGRESQL.SCHEMA}
+    username: ${DEZHI.POSTGRESQL.USERNAME}
+    password: ${DEZHI.POSTGRESQL.PASSWORD}
 
   # 配置 redis
   data:
     redis:
-      database: ${dezhi.redis.database}
-      host: ${dezhi.redis.host}
-      port: ${dezhi.redis.port}
-      password: ${dezhi.redis.password}
+      database: ${DEZHI.REDIS.DATABASE}
+      host: ${DEZHI.REDIS.HOST}
+      port: ${DEZHI.REDIS.PORT}
+      password: ${DEZHI.REDIS.PASSWORD}
       timeout: 3000
 
   # 配置 mail
   mail:
-    host: ${dezhi.mail.host}
-    port: ${dezhi.mail.port}
-    username: ${dezhi.mail.username}
-    password: ${dezhi.mail.password}
+    host: ${DEZHI.MAIL.HOST}
+    port: ${DEZHI.MAIL.PORT}
+    username: ${DEZHI.MAIL.USERNAME}
+    password: ${DEZHI.MAIL.PASSWORD}
     default-encoding: UTF-8
     properties:
       mail:
         smtp:
           auth: true
           ssl:
-            trust: ${dezhi.mail.host}
+            trust: ${DEZHI.MAIL.HOST}
           socketFactory:
             class: javax.net.ssl.SSLSocketFactory
-            port: ${dezhi.mail.port}
+            port: ${DEZHI.MAIL.PORT}
           starttls:
             enable: true
             required: true
@@ -50,26 +50,26 @@ spring:
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
 sa-token:
   # token 名称（同时也是 cookie 名称）
-  token-name: ${dezhi.sa-token.token-name}
+  token-name: token
   # token 有效期（单位：秒） 默认30天，-1 代表永久有效
-  timeout: ${dezhi.sa-token.timeout}
+  timeout: 604800
   # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
-  active-timeout: ${dezhi.sa-token.active-timeout}
+  active-timeout: -1
   # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
-  is-concurrent: ${dezhi.sa-token.is-concurrent}
+  is-concurrent: false
   # 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token, 为 false 时每次登录新建一个 token）
-  is-share: ${dezhi.sa-token.is-share}
+  is-share: false
   # token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
-  token-style: ${dezhi.sa-token.token-style}
+  token-style: random-32
   # 是否输出操作日志
   is-log: true
 
 # minio 配置
 minio:
-  endpoint: ${dezhi.minio.endpoint}
-  access-key: ${dezhi.minio.access-key}
-  secret-key: ${dezhi.minio.secret-key}
-  bucket-name: ${dezhi.minio.bucket-name}
+  endpoint: ${DEZHI.MINIO.ENDPOINT}
+  access-key: ${DEZHI.MINIO.ACCESS_KEY}
+  secret-key: ${DEZHI.MINIO.SECRET_KEY}
+  bucket-name: ${DEZHI.MINIO.BUCKET_NAME}
 
 # swagger 配置
 springdoc:
@@ -96,4 +96,4 @@ logging:
 
 dezhi:
   # 配置加密密钥
-  secret-key: ${dezhi.secret-key}
+  secret-key: ${DEZHI.SECRET_KEY}

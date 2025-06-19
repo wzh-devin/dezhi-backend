@@ -112,7 +112,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void deregisterAccount(final Long uid) {
+    public void deregisterAccount() {
+        // 获取当前用户登录id
+        Long uid = Long.valueOf(StpUtil.getLoginId().toString());
+
         // 用户信息登出
         logout();
 
@@ -120,8 +123,8 @@ public class UserServiceImpl implements UserService {
         boolean userRoleRemove = userRoleDao.removeByUserId(uid);
         AssertUtil.isTrue(userRoleRemove, "用户角色关联信息删除失败！！！");
 
-        // 逻辑删除用户信息
-        boolean userRemove = userDao.logicRemoveById(uid);
+        // 删除用户信息
+        boolean userRemove = userDao.removeById(uid);
         AssertUtil.isTrue(userRemove, "用户信息删除失败！！！");
     }
 

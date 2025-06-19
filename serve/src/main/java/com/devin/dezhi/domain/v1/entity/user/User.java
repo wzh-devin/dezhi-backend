@@ -63,10 +63,4 @@ public class User extends EntityCommon {
      */
     @TableField(value = "update_user_id")
     private Long updateUserId;
-
-    /**
-     * 删除标志(0: 已删除；1: 未删除).
-     */
-    @TableField(value = "del_flag")
-    private Integer delFlag;
 }
