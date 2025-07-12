@@ -2,7 +2,7 @@ package com.devin.dezhi.service.extension.sa;
 
 import cn.dev33.satoken.stp.StpInterface;
 import cn.hutool.json.JSONUtil;
-import com.devin.dezhi.common.enums.HttpErrorEnum;
+import com.devin.dezhi.enums.HttpErrorEnum;
 import com.devin.dezhi.common.utils.RedisUtil;
 import com.devin.dezhi.constant.RedisKey;
 import com.devin.dezhi.dao.v1.user.PermissionDao;

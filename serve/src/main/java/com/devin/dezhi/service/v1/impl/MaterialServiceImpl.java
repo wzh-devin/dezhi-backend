@@ -1,21 +1,19 @@
 package com.devin.dezhi.service.v1.impl;
 
 import cn.hutool.core.io.FileUtil;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.devin.dezhi.common.utils.MinioTemplate;
-import com.devin.dezhi.common.utils.r.PageResult;
+import com.devin.dezhi.constant.ErrMsgConstant;
 import com.devin.dezhi.dao.v1.MaterialDao;
 import com.devin.dezhi.dao.v1.SysDictDao;
-import com.devin.dezhi.domain.v1.dto.FileInfoDTO;
 import com.devin.dezhi.domain.v1.entity.Material;
-import com.devin.dezhi.domain.v1.vo.FileInfoVO;
-import com.devin.dezhi.entity.FileInfo;
+import com.devin.dezhi.domain.v1.vo.FileInfoQueryVO;
+import com.devin.dezhi.model.FileInfo;
 import com.devin.dezhi.enums.StorageTypeEnum;
 import com.devin.dezhi.exception.BusinessException;
 import com.devin.dezhi.exception.FileException;
 import com.devin.dezhi.exception.VerifyException;
 import com.devin.dezhi.service.generate.common.EntityGenerate;
-import com.devin.dezhi.service.generate.common.RespEntityGenerate;
 import com.devin.dezhi.service.v1.MaterialService;
 import com.devin.dezhi.utils.AssertUtil;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * 2025/6/1 23:06.
@@ -59,7 +56,9 @@ public class MaterialServiceImpl implements MaterialService {
         try (InputStream is = material.getInputStream()) {
             // 获取文件后缀
             String suffix = FileUtil.getSuffix(material.getOriginalFilename());
-            AssertUtil.isTrue(checkFileType(suffix), "不支持的文件类型，请重新上传...");
+            if (!checkFileType(suffix)) {
+                throw new VerifyException(ErrMsgConstant.FILE_TYPE_ERROR);
+            }
 
             // 生成文件名
             String fileMd5 = minioTemplate.generateMd5(material.getBytes());
@@ -83,11 +82,10 @@ public class MaterialServiceImpl implements MaterialService {
 
             // 上传文件
             String url = minioTemplate.uploadFile(fileInfo);
-            AssertUtil.isNotEmpty(url, "文件地址生成失败，请联系管理员！！！");
+            AssertUtil.isNotEmpty(url, ErrMsgConstant.FILE_URL_ERROR);
 
             // 将信息保存至数据库
-            boolean saveResult = materialDao.save(entityGenerate.generateMaterial(fileInfo, StorageTypeEnum.MINIO.getType(), url));
-            AssertUtil.isTrue(saveResult, "素材信息新增失败，请联系管理员！！！");
+            materialDao.save(entityGenerate.generateMaterial(fileInfo, StorageTypeEnum.MINIO.name(), url));
 
             return url;
 
@@ -98,36 +96,21 @@ public class MaterialServiceImpl implements MaterialService {
         } catch (VerifyException e) {
             throw new VerifyException(e.getMessage());
         } catch (Exception e) {
-            throw new BusinessException("文件上传失败，请联系管理员！！！");
+            throw new FileException(ErrMsgConstant.FILE_ERROR);
         }
-    }
-
-    @Override
-    public PageResult<FileInfoVO> list(final FileInfoDTO fileInfoDTO) {
-        // 获取分页列表
-        IPage<Material> pageList = materialDao.getList(fileInfoDTO);
-
-        // 返回分页数据
-        return Optional.ofNullable(pageList)
-                .map(page -> {
-                    PageResult<FileInfoVO> pageResult = new PageResult<>();
-                    pageResult.setPageNum(page.getCurrent());
-                    pageResult.setPageSize(page.getSize());
-                    pageResult.setTotal(page.getTotal());
-                    // 设置数据集合
-                    pageResult.setDataList(page.getRecords().stream()
-                            .map(RespEntityGenerate::generateFileInfoVO)
-                            .toList());
-                    return pageResult;
-                }).orElse(null);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public void delMaterial(final List<String> pathList) {
         // 对数据库中的文件进行逻辑删除
-        boolean delResult = materialDao.delBatchByUrl(pathList);
-        AssertUtil.isTrue(delResult, "素材信息删除失败，请联系管理员！！！");
+        materialDao.delBatchByUrl(pathList);
+    }
+
+    @Override
+    public Page<Material> page(final FileInfoQueryVO queryVO) {
+        // 获取分页列表
+        return materialDao.getList(queryVO);
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.devin.dezhi.common.utils;
 
 import cn.hutool.crypto.digest.DigestUtil;
-import com.devin.dezhi.entity.FileInfo;
+import com.devin.dezhi.model.FileInfo;
 import com.devin.dezhi.exception.VerifyException;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;

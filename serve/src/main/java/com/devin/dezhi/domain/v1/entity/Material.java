@@ -48,14 +48,14 @@ public class Material extends EntityCommon {
     /**
      * 文件类型.
      */
-    @TableField(value = "file_type_code")
-    private String fileTypeCode;
+    @TableField(value = "file_type")
+    private String fileType;
 
     /**
      * 文件存储类型.
      */
-    @TableField(value = "storage_type_code")
-    private String storageTypeCode;
+    @TableField(value = "storage_type")
+    private String storageType;
 
     /**
      * 文件存储路径.

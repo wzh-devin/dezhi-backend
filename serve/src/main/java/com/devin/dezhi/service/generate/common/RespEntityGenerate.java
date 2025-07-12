@@ -68,9 +68,9 @@ public class RespEntityGenerate {
         fileInfo.setName(material.getName());
         fileInfo.setSize(material.getSize());
         fileInfo.setUrl(material.getUrl());
-        fileInfo.setStorageType(material.getStorageTypeCode());
-        fileInfo.setFileType(material.getFileTypeCode());
-        fileInfo.setUploadTime(material.getCreateTime());
+        fileInfo.setStorageType(material.getStorageType());
+        fileInfo.setFileType(material.getFileType());
+        fileInfo.setCreateTime(material.getCreateTime());
         return fileInfo;
     }
 }

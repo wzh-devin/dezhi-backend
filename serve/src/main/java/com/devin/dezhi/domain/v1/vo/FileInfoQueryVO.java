@@ -1,7 +1,9 @@
 package com.devin.dezhi.domain.v1.vo;
 
+import com.devin.dezhi.result.CommonQueryVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import java.util.Date;
 
 /**
@@ -17,7 +19,8 @@ import java.util.Date;
  */
 @Data
 @Schema(description = "文件信息")
-public class FileInfoVO {
+@EqualsAndHashCode(callSuper = true)
+public class FileInfoQueryVO extends CommonQueryVO {
     @Schema(description = "文件id")
     private Long id;
 
@@ -36,6 +39,9 @@ public class FileInfoVO {
     @Schema(description = "存储类型")
     private String storageType;
 
-    @Schema(description = "创建时间")
-    private Date createTime;
+    @Schema(description = "文件状态")
+    private String status;
+
+    @Schema(description = "上传时间")
+    private Date uploadTime;
 }

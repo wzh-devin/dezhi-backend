@@ -1,4 +1,4 @@
-package com.devin.dezhi.entity;
+package com.devin.dezhi.model;
 
 import lombok.Builder;
 import lombok.Data;
