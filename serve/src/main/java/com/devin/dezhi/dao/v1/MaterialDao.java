@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.devin.dezhi.domain.v1.dto.FileInfoDTO;
 import com.devin.dezhi.domain.v1.entity.Material;
+import com.devin.dezhi.domain.v1.vo.FileInfoQueryVO;
+import com.devin.dezhi.domain.v1.vo.FileInfoVO;
 import com.devin.dezhi.enums.FlagEnum;
 import com.devin.dezhi.mapper.v1.MaterialMapper;
 import org.springframework.stereotype.Service;
@@ -27,26 +28,26 @@ public class MaterialDao extends ServiceImpl<MaterialMapper, Material> {
     /**
      * 获取文件分页列表.
      *
-     * @param fileInfoDTO 文件信息对象
+     * @param fileInfoVO 文件信息对象
      * @return 分页信息
      */
-    public IPage<Material> getList(final FileInfoDTO fileInfoDTO) {
-        Page<Material> page = new Page<>(fileInfoDTO.getPageNum(), fileInfoDTO.getPageSize());
+    public Page<Material> getList(final FileInfoQueryVO fileInfoVO) {
+        Page<Material> page = new Page<>(fileInfoVO.getPageNum(), fileInfoVO.getPageSize());
 
         LambdaQueryWrapper<Material> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 
-        lambdaQueryWrapper.eq(Material::getDelFlag, fileInfoDTO.getStatus());
+        lambdaQueryWrapper.eq(Material::getDelFlag, FlagEnum.of(fileInfoVO.getStatus()));
 
-        if (StringUtils.hasLength(fileInfoDTO.getFileName())) {
-            lambdaQueryWrapper.eq(Material::getName, fileInfoDTO.getFileName());
+        if (StringUtils.hasLength(fileInfoVO.getName())) {
+            lambdaQueryWrapper.eq(Material::getName, fileInfoVO.getName());
         }
 
-        if (StringUtils.hasLength(fileInfoDTO.getFilePath())) {
-            lambdaQueryWrapper.eq(Material::getUrl, fileInfoDTO.getFilePath());
+        if (StringUtils.hasLength(fileInfoVO.getUrl())) {
+            lambdaQueryWrapper.eq(Material::getUrl, fileInfoVO.getUrl());
         }
 
-        if (StringUtils.hasLength(fileInfoDTO.getFileType())) {
-            lambdaQueryWrapper.eq(Material::getFileTypeCode, fileInfoDTO.getFileType());
+        if (StringUtils.hasLength(fileInfoVO.getStorageType())) {
+            lambdaQueryWrapper.eq(Material::getStorageType, fileInfoVO.getStorageType());
         }
 
         lambdaQueryWrapper.orderByDesc(Material::getCreateTime);
@@ -58,10 +59,9 @@ public class MaterialDao extends ServiceImpl<MaterialMapper, Material> {
      * 批量删除文件(逻辑删除).
      *
      * @param pathList 文件路径列表
-     * @return 删除结果
      */
-    public boolean delBatchByUrl(final List<String> pathList) {
-        return lambdaUpdate()
+    public void delBatchByUrl(final List<String> pathList) {
+        lambdaUpdate()
                 .in(Material::getUrl, pathList)
                 .set(Material::getDelFlag, FlagEnum.DISABLED.getFlag())
                 .update();

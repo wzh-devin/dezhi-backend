@@ -4,6 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.json.JSONUtil;
 import com.devin.dezhi.common.utils.RedisUtil;
 import com.devin.dezhi.constant.CacheKey;
+import com.devin.dezhi.constant.ErrMsgConstant;
 import com.devin.dezhi.constant.RedisKey;
 import com.devin.dezhi.dao.v1.user.PermissionDao;
 import com.devin.dezhi.dao.v1.user.RoleDao;
@@ -17,6 +18,7 @@ import com.devin.dezhi.domain.v1.vo.user.LoginVO;
 import com.devin.dezhi.domain.v1.vo.user.PermissionVO;
 import com.devin.dezhi.domain.v1.vo.user.RoleVO;
 import com.devin.dezhi.domain.v1.vo.user.UserInfoVO;
+import com.devin.dezhi.enums.HttpErrorEnum;
 import com.devin.dezhi.enums.rbac.RoleEnum;
 import com.devin.dezhi.exception.BusinessException;
 import com.devin.dezhi.service.extension.mail.MailService;
@@ -91,7 +93,7 @@ public class UserServiceImpl implements UserService {
         // 查询数据库判断用户信息是否存在
         User user = userDao.getByDTO(userInfo);
 
-        AssertUtil.isNotEmpty(user, "用户名，密码错误，请重新登录！！！");
+        AssertUtil.isNotEmpty(user, ErrMsgConstant.USER_PASSWORD_ERROR);
 
         // 判断用户是否登录，如果未登录则进行登录操作
         checkLogin(user);
@@ -120,12 +122,10 @@ public class UserServiceImpl implements UserService {
         logout();
 
         // 删除用户角色关联信息
-        boolean userRoleRemove = userRoleDao.removeByUserId(uid);
-        AssertUtil.isTrue(userRoleRemove, "用户角色关联信息删除失败！！！");
+        userRoleDao.removeByUserId(uid);
 
         // 删除用户信息
-        boolean userRemove = userDao.removeById(uid);
-        AssertUtil.isTrue(userRemove, "用户信息删除失败！！！");
+        userDao.removeById(uid);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class UserServiceImpl implements UserService {
         // 查询用户信息
         User user = userDao.getByDTO(userInfoDTO);
 
-        AssertUtil.isNotEmpty(user, "抱歉，该邮箱尚未注册，请先进行注册！！！");
+        AssertUtil.isNotEmpty(user, ErrMsgConstant.EMAIL_NOT_REGISTER);
 
         // 校验验证码是否正确
         checkCode(userInfoDTO.getEmail(), userInfoDTO.getCode());
@@ -161,21 +161,19 @@ public class UserServiceImpl implements UserService {
     public void signup(final UserInfoDTO userInfoDTO) {
         // 根据邮箱查询用户
         User user = userDao.getByEmail(userInfoDTO.getEmail());
-        AssertUtil.isEmpty(user, "抱歉，该邮箱已被注册，请重新输入！！！");
+        AssertUtil.isEmpty(user, ErrMsgConstant.USER_EMAIL_EXIST);
 
         // 校验验证码是否正确
         checkCode(userInfoDTO.getEmail(), userInfoDTO.getCode());
 
         // 将信息保存到数据库
         user = userEntityGenerate.generateRegisterUser(userInfoDTO);
-        boolean saveUserResult = userDao.save(user);
-        AssertUtil.isTrue(saveUserResult, "抱歉，由于系统异常用户信息注册失败，请联系管理员！！！");
+        userDao.save(user);
 
         // 角色管理员赋权
         Role role = roleDao.getRoleByName(RoleEnum.ADMIN.getRole());
         UserRole userRole = userEntityGenerate.generateUserRole(user.getId(), role.getId());
-        boolean saveUserRoleResult = userRoleDao.save(userRole);
-        AssertUtil.isTrue(saveUserRoleResult, "抱歉，由于系统异常用户权限初始化失败，请联系管理员！！！");
+        userRoleDao.save(userRole);
     }
 
     @Override
@@ -183,7 +181,7 @@ public class UserServiceImpl implements UserService {
     public void forgetPassword(final UserInfoDTO userInfoDTO) {
         // 根据邮箱查询用户
         User user = userDao.getByEmail(userInfoDTO.getEmail());
-        AssertUtil.isNotEmpty(user, "抱歉，该邮箱尚未注册，请先进行注册！！！");
+        AssertUtil.isNotEmpty(user, ErrMsgConstant.EMAIL_NOT_REGISTER);
 
         // 校验验证码是否正确
         checkCode(userInfoDTO.getEmail(), userInfoDTO.getCode());
@@ -197,8 +195,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 更新用户密码
-        boolean updateResult = userDao.updateById(userEntityGenerate.generateUpdateUser(userInfoDTO, user.getId()));
-        AssertUtil.isTrue(updateResult, "抱歉，由于系统异常用户密码更新失败，请联系管理员！！！");
+        userDao.updateById(userEntityGenerate.generateUpdateUser(userInfoDTO, user.getId()));
     }
 
     @Override
@@ -298,10 +295,10 @@ public class UserServiceImpl implements UserService {
      */
     private void checkCode(final String email, final Integer code) {
         boolean check = Optional.ofNullable(EMAIL_CODE.getIfPresent(generateCodeKey(email)))
-                .orElseThrow(() -> new BusinessException("验证码已过期，请重新获取！！！"))
+                .orElseThrow(() -> new BusinessException(HttpErrorEnum.EMAIL_CODE_INVALID))
                 .equals(code);
 
-        AssertUtil.isTrue(check, "验证码错误，请重新输入！！！");
+        AssertUtil.isTrue(check, ErrMsgConstant.EMAIL_CODE_ERROR);
 
         // 校验通过，则删除此缓存
         EMAIL_CODE.invalidate(generateCodeKey(email));

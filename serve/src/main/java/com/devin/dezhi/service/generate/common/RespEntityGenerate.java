@@ -7,6 +7,7 @@ import com.devin.dezhi.domain.v1.vo.user.LoginVO;
 import com.devin.dezhi.domain.v1.vo.user.PermissionVO;
 import com.devin.dezhi.domain.v1.vo.user.RoleVO;
 import com.devin.dezhi.domain.v1.vo.user.UserInfoVO;
+import com.devin.dezhi.enums.StorageTypeEnum;
 import org.springframework.beans.BeanUtils;
 import java.util.List;
 
@@ -68,9 +69,9 @@ public class RespEntityGenerate {
         fileInfo.setName(material.getName());
         fileInfo.setSize(material.getSize());
         fileInfo.setUrl(material.getUrl());
-        fileInfo.setStorageType(material.getStorageTypeCode());
-        fileInfo.setFileType(material.getFileTypeCode());
-        fileInfo.setUploadTime(material.getCreateTime());
+        fileInfo.setStorageType(material.getStorageType());
+        fileInfo.setFileType(material.getFileType());
+        fileInfo.setCreateTime(material.getCreateTime());
         return fileInfo;
     }
 }

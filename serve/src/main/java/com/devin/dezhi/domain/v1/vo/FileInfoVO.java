@@ -1,7 +1,12 @@
 package com.devin.dezhi.domain.v1.vo;
 
+import com.devin.dezhi.enums.FlagEnum;
+import com.devin.dezhi.enums.StorageTypeEnum;
+import com.devin.dezhi.result.CommonQueryVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.util.Date;
 
 /**
@@ -16,7 +21,7 @@ import java.util.Date;
  * @since 1.0
  */
 @Data
-@Schema(description = "登录信息响应")
+@Schema(description = "文件信息")
 public class FileInfoVO {
     @Schema(description = "文件id")
     private Long id;
@@ -36,6 +41,6 @@ public class FileInfoVO {
     @Schema(description = "存储类型")
     private String storageType;
 
-    @Schema(description = "上传时间")
-    private Date uploadTime;
+    @Schema(description = "创建时间")
+    private Date createTime;
 }

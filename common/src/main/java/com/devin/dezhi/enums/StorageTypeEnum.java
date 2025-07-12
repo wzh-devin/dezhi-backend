@@ -18,15 +18,19 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum StorageTypeEnum {
 
-    MINIO("MINIO", "minio存储");
+    MINIO;
 
     /**
-     * 存储类型.
+     * 根据名称获取枚举.
+     * @param name 枚举名称
+     * @return StorageTypeEnum
      */
-    private final String type;
-
-    /**
-     * 描述.
-     */
-    private final String desc;
+    public static StorageTypeEnum of(final String name) {
+        for (StorageTypeEnum value : values()) {
+            if (value.name().equals(name)) {
+                return value;
+            }
+        }
+        return null;
+    }
 }

@@ -2,7 +2,7 @@ package com.devin.dezhi.service.generate.common;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.devin.dezhi.domain.v1.entity.Material;
-import com.devin.dezhi.entity.FileInfo;
+import com.devin.dezhi.model.FileInfo;
 import com.devin.dezhi.enums.FlagEnum;
 import com.devin.dezhi.utils.SnowFlake;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +41,8 @@ public class EntityGenerate {
         material.setUrl(url);
         material.setSize(fileInfo.getSize());
         material.setDelFlag(FlagEnum.NORMAL.getFlag());
-        material.setFileTypeCode(fileInfo.getSuffix().toUpperCase());
-        material.setStorageTypeCode(storageType);
+        material.setFileType(fileInfo.getSuffix().toUpperCase());
+        material.setStorageType(storageType);
         material.setCreateUserId(Long.valueOf(StpUtil.getLoginId().toString()));
         material.setUpdateUserId(Long.valueOf(StpUtil.getLoginId().toString()));
         material.initDate();

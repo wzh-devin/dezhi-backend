@@ -31,10 +31,9 @@ public class UserRoleDao extends ServiceImpl<UserRoleMapper, UserRole> {
     /**
      * 根据用户id删除用户角色关联列表信息.
      * @param uid uid
-     * @return boolean
      */
-    public boolean removeByUserId(final Long uid) {
-        return lambdaUpdate()
+    public void removeByUserId(final Long uid) {
+        lambdaUpdate()
                 .eq(UserRole::getUserId, uid)
                 .remove();
     }

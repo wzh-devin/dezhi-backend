@@ -23,4 +23,18 @@ public enum FlagEnum {
     private final Integer flag;
 
     private final String desc;
+
+    /**
+     * 通过标识名称获取标识.
+     * @param flagName 标识名称
+     * @return 标识
+     */
+    public static Integer of(final String flagName) {
+        for (FlagEnum flagEnum : FlagEnum.values()) {
+            if (flagEnum.name().equals(flagName)) {
+                return flagEnum.getFlag();
+            }
+        }
+        return null;
+    }
 }
