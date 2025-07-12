@@ -1,10 +1,8 @@
 package com.devin.dezhi.service.v1;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.devin.dezhi.common.utils.r.PageResult;
 import com.devin.dezhi.domain.v1.entity.Material;
 import com.devin.dezhi.domain.v1.vo.FileInfoQueryVO;
-import com.devin.dezhi.domain.v1.vo.FileInfoVO;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 

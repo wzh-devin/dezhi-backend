@@ -1,12 +1,7 @@
 package com.devin.dezhi.domain.v1.vo;
 
-import com.devin.dezhi.enums.FlagEnum;
-import com.devin.dezhi.enums.StorageTypeEnum;
-import com.devin.dezhi.result.CommonQueryVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-
 import java.util.Date;
 
 /**

@@ -1,12 +1,10 @@
 package com.devin.dezhi.dao.v1;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.devin.dezhi.domain.v1.entity.Material;
 import com.devin.dezhi.domain.v1.vo.FileInfoQueryVO;
-import com.devin.dezhi.domain.v1.vo.FileInfoVO;
 import com.devin.dezhi.enums.FlagEnum;
 import com.devin.dezhi.mapper.v1.MaterialMapper;
 import org.springframework.stereotype.Service;

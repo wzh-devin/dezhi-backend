@@ -9,15 +9,12 @@ import com.devin.dezhi.domain.v1.vo.FileInfoQueryVO;
 import com.devin.dezhi.domain.v1.vo.FileInfoVO;
 import com.devin.dezhi.enums.FlagEnum;
 import com.devin.dezhi.enums.StorageTypeEnum;
-import com.devin.dezhi.model.FileInfo;
 import com.devin.dezhi.service.v1.MaterialService;
 import com.devin.dezhi.utils.BeanCopyUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 import java.util.Objects;
 

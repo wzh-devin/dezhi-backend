@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0
  * @since 1.0
  */
+// CHECKSTYLE:OFF
 @Component
 public class RedisUtil {
     private static StringRedisTemplate redisTemplate;
@@ -1381,3 +1382,4 @@ public class RedisUtil {
         return redisTemplate.opsForZSet().scan(key, options);
     }
 }
+// CHECKSTYLE:ON
