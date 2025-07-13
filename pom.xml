@@ -34,6 +34,8 @@
         <hutool-all.version>5.8.27</hutool-all.version>
         <postgresql.version>42.7.5</postgresql.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
+        <mybatis-plus-generate.version>3.5.12</mybatis-plus-generate.version>
+        <freemarker.version>2.3.32</freemarker.version>
         <lombok.version>1.18.36</lombok.version>
         <knife4j.version>4.5.0</knife4j.version>
         <fastjson2.version>2.0.56</fastjson2.version>
@@ -80,6 +82,20 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-generator</artifactId>
+                <version>${mybatis-plus-generate.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>${freemarker.version}</version>
+                <scope>test</scope>
             </dependency>
 
             <dependency>

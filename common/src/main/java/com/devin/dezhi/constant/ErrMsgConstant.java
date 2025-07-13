@@ -31,5 +31,7 @@ public class ErrMsgConstant {
     public static final String FILE_TYPE_ERROR = "文件类型错误";
 
     public static final String ILLEGAL_STATE_ERROR = "请求状态异常，请检查参数信息";
+    public static final String TAG_HAS_QUOTE = "标签已被引用，请重新选择";
+    public static final String CATEGORY_HAS_QUOTE = "类别已被引用，请重新选择";
 }
 // CHECKSTYLE:ON
