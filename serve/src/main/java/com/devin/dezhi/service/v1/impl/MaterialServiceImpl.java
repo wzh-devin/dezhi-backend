@@ -102,15 +102,16 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void delMaterial(final List<String> pathList) {
+    public void delMaterial(final List<Long> ids) {
         // 对数据库中的文件进行逻辑删除
-        materialDao.delBatchByUrl(pathList);
+        // TODO 后续30天之后删除文件
+        materialDao.delBatchLogicByIds(ids);
     }
 
     @Override
-    public Page<Material> page(final FileInfoQueryVO queryVO) {
+    public Page<Material> page(final FileInfoQueryVO fileInfoQueryVO) {
         // 获取分页列表
-        return materialDao.getList(queryVO);
+        return materialDao.getList(fileInfoQueryVO);
     }
 
     /**

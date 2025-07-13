@@ -26,14 +26,14 @@ public interface MaterialService {
 
     /**
      * 删除文件.
-     * @param pathList 文件列表
+     * @param ids 文件id列表
      */
-    void delMaterial(List<String> pathList);
+    void delMaterial(List<Long> ids);
 
     /**
      * 分页查询.
-     * @param queryVO 文件信息
+     * @param fileInfoQueryVO 文件信息
      * @return 分页文件列表
      */
-    Page<Material> page(FileInfoQueryVO queryVO);
+    Page<Material> page(FileInfoQueryVO fileInfoQueryVO);
 }

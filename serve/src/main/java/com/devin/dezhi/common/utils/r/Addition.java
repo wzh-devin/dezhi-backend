@@ -18,13 +18,13 @@ import lombok.Data;
 public class Addition {
 
     @Schema(description = "当前页码")
-    private Long pageNum;
+    private Integer pageNum;
 
     @Schema(description = "当前页码的总条数")
-    private Long pageSize;
+    private Integer pageSize;
 
     @Schema(description = "总记录数")
-    private Long total;
+    private Integer total;
 
     /**
      * 附加属性.
@@ -34,9 +34,18 @@ public class Addition {
      */
     public static Addition of(final IPage<?> page) {
         Addition addition = new Addition();
-        addition.setTotal(page.getTotal());
-        addition.setPageNum(page.getCurrent());
-        addition.setPageSize(page.getSize());
+        addition.setTotal(convert(page.getTotal()));
+        addition.setPageNum(convert(page.getCurrent()));
+        addition.setPageSize(convert(page.getSize()));
         return addition;
+    }
+
+    /**
+     * 转换分页参数格式为int.
+     * @param value 值
+     * @return 转换后的值
+     */
+    private static Integer convert(final long value) {
+        return value > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) value;
     }
 }

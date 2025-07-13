@@ -64,4 +64,15 @@ public class MaterialDao extends ServiceImpl<MaterialMapper, Material> {
                 .set(Material::getDelFlag, FlagEnum.DISABLED.getFlag())
                 .update();
     }
+
+    /**
+     * 批量逻辑删除文件.
+     * @param ids 文件id列表
+     */
+    public void delBatchLogicByIds(final List<Long> ids) {
+        lambdaUpdate()
+                .in(Material::getId, ids)
+                .set(Material::getDelFlag, FlagEnum.DISABLED.getFlag())
+                .update();
+    }
 }

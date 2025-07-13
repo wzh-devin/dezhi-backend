@@ -2,8 +2,8 @@ package com.devin.dezhi.dao.v1.user;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.devin.dezhi.domain.v1.dto.UserInfoDTO;
 import com.devin.dezhi.domain.v1.entity.user.User;
+import com.devin.dezhi.domain.v1.vo.user.UserInfoQueryVO;
 import com.devin.dezhi.mapper.v1.user.UserMapper;
 import jakarta.validation.constraints.Email;
 import org.springframework.stereotype.Service;
@@ -22,21 +22,21 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
 
     /**
      * 根据用户获取用户.
-     * @param userInfoDTO 用户信息
+     * @param userInfoQueryVO 用户信息
      * @return User
      */
-    public User getByDTO(final UserInfoDTO userInfoDTO) {
+    public User getByVO(final UserInfoQueryVO userInfoQueryVO) {
         LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 
         // 动态生成查询条件
-        if (Objects.nonNull(userInfoDTO.getUsername())) {
-            lambdaQueryWrapper.eq(User::getUsername, userInfoDTO.getUsername());
+        if (Objects.nonNull(userInfoQueryVO.getUsername())) {
+            lambdaQueryWrapper.eq(User::getUsername, userInfoQueryVO.getUsername());
         }
-        if (Objects.nonNull(userInfoDTO.getPassword())) {
-            lambdaQueryWrapper.eq(User::getPassword, userInfoDTO.getPassword());
+        if (Objects.nonNull(userInfoQueryVO.getPassword())) {
+            lambdaQueryWrapper.eq(User::getPassword, userInfoQueryVO.getPassword());
         }
-        if (Objects.nonNull(userInfoDTO.getEmail())) {
-            lambdaQueryWrapper.eq(User::getEmail, userInfoDTO.getEmail());
+        if (Objects.nonNull(userInfoQueryVO.getEmail())) {
+            lambdaQueryWrapper.eq(User::getEmail, userInfoQueryVO.getEmail());
         }
 
         return getOne(lambdaQueryWrapper);
