@@ -40,3 +40,4 @@ build/
 
 ### generator data ###
 **/test/**/generator
+generate
