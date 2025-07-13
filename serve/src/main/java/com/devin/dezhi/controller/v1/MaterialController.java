@@ -7,6 +7,7 @@ import com.devin.dezhi.common.utils.r.ApiResult;
 import com.devin.dezhi.domain.v1.entity.Material;
 import com.devin.dezhi.domain.v1.vo.FileInfoQueryVO;
 import com.devin.dezhi.domain.v1.vo.FileInfoVO;
+import com.devin.dezhi.enums.FileTypeEnum;
 import com.devin.dezhi.enums.FlagEnum;
 import com.devin.dezhi.enums.StorageTypeEnum;
 import com.devin.dezhi.service.v1.MaterialService;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,7 +70,8 @@ class MaterialController {
      * @param pageNum     页码
      * @param pageSize    每页数量
      * @param fileName    文件名称
-     * @param storageType 文件存储类型
+     * @param fileType 文件类型
+     * @param storageType 存储类型
      * @param status      文件状态
      * @return FileInfoVO
      */
@@ -79,6 +82,7 @@ class MaterialController {
             @Parameter(name = "pageNum", description = "页码", required = false),
             @Parameter(name = "pageSize", description = "每页数量", required = false),
             @Parameter(name = "fileName", description = "文件名称", required = false),
+            @Parameter(name = "fileType", description = "文件类型", required = false),
             @Parameter(name = "storageType", description = "存储类型", required = false),
             @Parameter(name = "status", description = "文件状态", required = true)
     })
@@ -87,11 +91,13 @@ class MaterialController {
             @RequestParam(value = "pageNum", required = false) final Integer pageNum,
             @RequestParam(value = "pageSize", required = false) final Integer pageSize,
             @RequestParam(value = "fileName", required = false) final String fileName,
+            @RequestParam(value = "fileType", required = false) final FileTypeEnum fileType,
             @RequestParam(value = "storageType", required = false) final StorageTypeEnum storageType,
             @RequestParam(value = "status", required = true) final FlagEnum status
     ) {
         FileInfoQueryVO queryVO = new FileInfoQueryVO();
         queryVO.setName(fileName);
+        queryVO.setFileType(Objects.isNull(fileType) ? null : fileType.name());
         queryVO.setStorageType(Objects.isNull(storageType) ? null : storageType.name());
         queryVO.setPageNum(pageNum);
         queryVO.setPageSize(pageSize);
@@ -102,10 +108,34 @@ class MaterialController {
         return ApiResult.success(pageResult, Addition.of(page));
     }
 
+    /**
+     * 批量删除文件.
+     * @param ids 文件id列表
+     * @return Void
+     */
     @PostMapping("/deleteMaterial")
     @Operation(summary = "批量删除文件", description = "根据文件id列表删除文件")
     public ApiResult<Void> delMaterial(final @RequestBody List<Long> ids) {
         materialService.delMaterial(ids);
+        return ApiResult.success();
+    }
+
+    @PostMapping("/recoverMaterial")
+    @Operation(summary = "批量恢复文件", description = "根据文件id列表恢复文件")
+    public ApiResult<Void> recoverMaterial(final @RequestBody List<Long> ids) {
+        materialService.recoverMaterial(ids);
+        return ApiResult.success();
+    }
+
+
+    /**
+     * 清空回收站.
+     * @return Void
+     */
+    @DeleteMapping("/clearRecycle")
+    @Operation(summary = "清空回收站", description = "清空回收站")
+    public ApiResult<Void> clearRecycle() {
+        materialService.clearRecycle();
         return ApiResult.success();
     }
 }

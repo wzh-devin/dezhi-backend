@@ -36,4 +36,15 @@ public interface MaterialService {
      * @return 分页文件列表
      */
     Page<Material> page(FileInfoQueryVO fileInfoQueryVO);
+
+    /**
+     * 清空回收站.
+     */
+    void clearRecycle();
+
+    /**
+     * 恢复文件.
+     * @param ids 文件id列表
+     */
+    void recoverMaterial(List<Long> ids);
 }
