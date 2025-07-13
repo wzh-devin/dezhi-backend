@@ -2,7 +2,7 @@ package com.devin.dezhi.controller.v1;
 
 import com.devin.dezhi.common.annocation.ApiV1;
 import com.devin.dezhi.common.utils.r.ApiResult;
-import com.devin.dezhi.domain.v1.dto.UserInfoDTO;
+import com.devin.dezhi.domain.v1.vo.user.UserInfoQueryVO;
 import com.devin.dezhi.domain.v1.vo.user.LoginVO;
 import com.devin.dezhi.domain.v1.vo.user.UserInfoVO;
 import com.devin.dezhi.service.v1.UserService;
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @ApiV1
 @RestController
-@Tag(name = "用户管理相关接口")
+@Tag(name = "user")
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
@@ -42,13 +42,13 @@ public class UserController {
 
     /**
      * 账号登录.
-     * @param userInfoDTO 用户登录信息
+     * @param userInfoQueryVO 用户登录信息
      * @return LoginResp
      */
     @PostMapping("/loginAccount")
     @Operation(summary = "账密登录", description = "账密登录")
-    public ApiResult<LoginVO> loginAccount(@RequestBody final UserInfoDTO userInfoDTO) {
-        return ApiResult.success(userService.loginAccount(userInfoDTO));
+    public ApiResult<LoginVO> loginAccount(@RequestBody final UserInfoQueryVO userInfoQueryVO) {
+        return ApiResult.success(userService.loginAccount(userInfoQueryVO));
     }
 
     /**
@@ -81,43 +81,43 @@ public class UserController {
     @GetMapping("/getEmailCode")
     @Operation(summary = "获取邮箱验证码", description = "获取邮箱验证码")
     @Parameter(name = "email", description = "用户邮箱")
-    public ApiResult<Void> getEmailCode(@RequestParam("email") final String email) {
+    public ApiResult<Void> getEmailCode(@RequestParam(name = "email", required = true) final String email) {
         userService.getEmailCode(email);
         return ApiResult.success();
     }
 
     /**
      * 邮箱验证码登录.
-     * @param userInfoDTO 用户登录信息
+     * @param userInfoQueryVO 用户登录信息
      * @return LoginResp
      */
     @PostMapping("/loginEmail")
     @Operation(summary = "邮箱验证码登录", description = "邮箱验证码登录")
-    public ApiResult<LoginVO> loginEmail(@RequestBody final UserInfoDTO userInfoDTO) {
-        return ApiResult.success(userService.loginEmail(userInfoDTO));
+    public ApiResult<LoginVO> loginEmail(@RequestBody final UserInfoQueryVO userInfoQueryVO) {
+        return ApiResult.success(userService.loginEmail(userInfoQueryVO));
     }
 
     /**
      * 用户注册.
-     * @param userInfoDTO 用户信息
+     * @param userInfoQueryVO 用户信息
      * @return Void
      */
     @PutMapping("/signup")
     @Operation(summary = "用户注册", description = "用户注册")
-    public ApiResult<Void> signup(@RequestBody final UserInfoDTO userInfoDTO) {
-        userService.signup(userInfoDTO);
+    public ApiResult<Void> signup(@RequestBody final UserInfoQueryVO userInfoQueryVO) {
+        userService.signup(userInfoQueryVO);
         return ApiResult.success();
     }
 
     /**
      * 忘记密码.
-     * @param userInfoDTO 用户信息
+     * @param userInfoQueryVO 用户信息
      * @return Void
      */
     @PostMapping("/forgetPassword")
     @Operation(summary = "忘记密码", description = "忘记密码")
-    public ApiResult<Void> forgetPassword(@RequestBody final UserInfoDTO userInfoDTO) {
-        userService.forgetPassword(userInfoDTO);
+    public ApiResult<Void> forgetPassword(@RequestBody final UserInfoQueryVO userInfoQueryVO) {
+        userService.forgetPassword(userInfoQueryVO);
         return ApiResult.success();
     }
 

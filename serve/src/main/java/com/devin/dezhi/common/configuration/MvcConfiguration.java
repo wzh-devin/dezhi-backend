@@ -2,12 +2,19 @@ package com.devin.dezhi.common.configuration;
 
 import com.devin.dezhi.common.annocation.ApiV1;
 import com.devin.dezhi.common.interceptor.SaTokenInterceptor;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -63,6 +70,22 @@ public class MvcConfiguration implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns(dezhiExcludePathPatterns)
                 .excludePathPatterns(swaggerExcludePathPatterns);
+    }
+
+    /**
+     * jackson序列化时将Long->String.
+     * @return ObjectMapper
+     */
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
+        return builder -> {
+            SimpleModule simpleModule = new SimpleModule();
+            // simpleModule.addSerializer(long.class, ToStringSerializer.instance);
+            simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+            simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+            simpleModule.addSerializer(BigInteger.class, ToStringSerializer.instance);
+            builder.modules(new Jdk8Module(), new JavaTimeModule(), simpleModule);
+        };
     }
 
     /**

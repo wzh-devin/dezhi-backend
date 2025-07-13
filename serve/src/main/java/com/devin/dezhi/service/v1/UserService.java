@@ -1,8 +1,8 @@
 package com.devin.dezhi.service.v1;
 
-import com.devin.dezhi.domain.v1.dto.UserInfoDTO;
 import com.devin.dezhi.domain.v1.vo.user.LoginVO;
 import com.devin.dezhi.domain.v1.vo.user.UserInfoVO;
+import com.devin.dezhi.domain.v1.vo.user.UserInfoQueryVO;
 
 /**
  * 2025/4/25 18:28.
@@ -16,10 +16,10 @@ public interface UserService {
 
     /**
      * 账号登录.
-     * @param userInfoDTO 用户信息
+     * @param userInfoQueryVO 用户信息
      * @return LoginResp
      */
-    LoginVO loginAccount(UserInfoDTO userInfoDTO);
+    LoginVO loginAccount(UserInfoQueryVO userInfoQueryVO);
 
     /**
      * 登出.
@@ -39,22 +39,22 @@ public interface UserService {
 
     /**
      * 邮箱验证码登录.
-     * @param userInfoDTO 用户信息
+     * @param userInfoQueryVO 用户信息
      * @return LoginResp
      */
-    LoginVO loginEmail(UserInfoDTO userInfoDTO);
+    LoginVO loginEmail(UserInfoQueryVO userInfoQueryVO);
 
     /**
      * 用户注册.
-     * @param userInfoDTO 用户信息
+     * @param userInfoQueryVO 用户信息
      */
-    void signup(UserInfoDTO userInfoDTO);
+    void signup(UserInfoQueryVO userInfoQueryVO);
 
     /**
      * 忘记密码.
-     * @param userInfoDTO 用户信息
+     * @param userInfoQueryVO 用户信息
      */
-    void forgetPassword(UserInfoDTO userInfoDTO);
+    void forgetPassword(UserInfoQueryVO userInfoQueryVO);
 
     /**
      * 获取登录用户信息.

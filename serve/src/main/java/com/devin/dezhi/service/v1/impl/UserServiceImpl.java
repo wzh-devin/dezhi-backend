@@ -10,13 +10,13 @@ import com.devin.dezhi.dao.v1.user.PermissionDao;
 import com.devin.dezhi.dao.v1.user.RoleDao;
 import com.devin.dezhi.dao.v1.user.UserDao;
 import com.devin.dezhi.dao.v1.user.UserRoleDao;
-import com.devin.dezhi.domain.v1.dto.UserInfoDTO;
 import com.devin.dezhi.domain.v1.entity.user.Role;
 import com.devin.dezhi.domain.v1.entity.user.User;
 import com.devin.dezhi.domain.v1.entity.user.UserRole;
 import com.devin.dezhi.domain.v1.vo.user.LoginVO;
 import com.devin.dezhi.domain.v1.vo.user.PermissionVO;
 import com.devin.dezhi.domain.v1.vo.user.RoleVO;
+import com.devin.dezhi.domain.v1.vo.user.UserInfoQueryVO;
 import com.devin.dezhi.domain.v1.vo.user.UserInfoVO;
 import com.devin.dezhi.enums.HttpErrorEnum;
 import com.devin.dezhi.enums.rbac.RoleEnum;
@@ -27,12 +27,12 @@ import com.devin.dezhi.service.generate.common.RespEntityGenerate;
 import com.devin.dezhi.service.generate.user.UserEntityGenerate;
 import com.devin.dezhi.service.v1.UserService;
 import com.devin.dezhi.utils.AssertUtil;
+import com.devin.dezhi.utils.BeanCopyUtils;
 import com.devin.dezhi.utils.PasswordEncrypt;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,13 +85,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public LoginVO loginAccount(final UserInfoDTO userInfoDTO) {
+    public LoginVO loginAccount(final UserInfoQueryVO userInfoQueryVO) {
 
-        UserInfoDTO userInfo = new UserInfoDTO();
-        BeanUtils.copyProperties(userInfoDTO, userInfo);
-        userInfo.setPassword(passwordEncrypt.encrypt(userInfoDTO.getPassword()));
+        UserInfoQueryVO userInfo = BeanCopyUtils.copy(userInfoQueryVO, UserInfoQueryVO.class);
+        userInfo.setPassword(passwordEncrypt.encrypt(userInfoQueryVO.getPassword()));
         // 查询数据库判断用户信息是否存在
-        User user = userDao.getByDTO(userInfo);
+        User user = userDao.getByVO(userInfo);
 
         AssertUtil.isNotEmpty(user, ErrMsgConstant.USER_PASSWORD_ERROR);
 
@@ -141,14 +140,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public LoginVO loginEmail(final UserInfoDTO userInfoDTO) {
+    public LoginVO loginEmail(final UserInfoQueryVO userInfoQueryVO) {
         // 查询用户信息
-        User user = userDao.getByDTO(userInfoDTO);
+        User user = userDao.getByVO(userInfoQueryVO);
 
         AssertUtil.isNotEmpty(user, ErrMsgConstant.EMAIL_NOT_REGISTER);
 
         // 校验验证码是否正确
-        checkCode(userInfoDTO.getEmail(), userInfoDTO.getCode());
+        checkCode(userInfoQueryVO.getEmail(), userInfoQueryVO.getCode());
 
         // 判断用户是否登录，如果未登录则进行登录操作
         checkLogin(user);
@@ -158,16 +157,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void signup(final UserInfoDTO userInfoDTO) {
+    public void signup(final UserInfoQueryVO userInfoQueryVO) {
         // 根据邮箱查询用户
-        User user = userDao.getByEmail(userInfoDTO.getEmail());
+        User user = userDao.getByEmail(userInfoQueryVO.getEmail());
         AssertUtil.isEmpty(user, ErrMsgConstant.USER_EMAIL_EXIST);
 
         // 校验验证码是否正确
-        checkCode(userInfoDTO.getEmail(), userInfoDTO.getCode());
+        checkCode(userInfoQueryVO.getEmail(), userInfoQueryVO.getCode());
 
         // 将信息保存到数据库
-        user = userEntityGenerate.generateRegisterUser(userInfoDTO);
+        user = userEntityGenerate.generateRegisterUser(userInfoQueryVO);
         userDao.save(user);
 
         // 角色管理员赋权
@@ -178,24 +177,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-    public void forgetPassword(final UserInfoDTO userInfoDTO) {
+    public void forgetPassword(final UserInfoQueryVO userInfoQueryVO) {
         // 根据邮箱查询用户
-        User user = userDao.getByEmail(userInfoDTO.getEmail());
+        User user = userDao.getByEmail(userInfoQueryVO.getEmail());
         AssertUtil.isNotEmpty(user, ErrMsgConstant.EMAIL_NOT_REGISTER);
 
         // 校验验证码是否正确
-        checkCode(userInfoDTO.getEmail(), userInfoDTO.getCode());
+        checkCode(userInfoQueryVO.getEmail(), userInfoQueryVO.getCode());
 
         // 登出此用户
         logout();
 
         // 如果新密码和旧密码一致，则直接返回即可
-        if (passwordEncrypt.checkPassword(userInfoDTO.getPassword(), user.getPassword())) {
+        if (passwordEncrypt.checkPassword(userInfoQueryVO.getPassword(), user.getPassword())) {
             return;
         }
 
         // 更新用户密码
-        userDao.updateById(userEntityGenerate.generateUpdateUser(userInfoDTO, user.getId()));
+        userDao.updateById(userEntityGenerate.generateUpdateUser(userInfoQueryVO, user.getId()));
     }
 
     @Override
