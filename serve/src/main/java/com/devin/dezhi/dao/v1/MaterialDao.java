@@ -44,6 +44,10 @@ public class MaterialDao extends ServiceImpl<MaterialMapper, Material> {
             lambdaQueryWrapper.eq(Material::getUrl, fileInfoVO.getUrl());
         }
 
+        if (StringUtils.hasLength(fileInfoVO.getFileType())) {
+            lambdaQueryWrapper.eq(Material::getFileType, fileInfoVO.getFileType());
+        }
+
         if (StringUtils.hasLength(fileInfoVO.getStorageType())) {
             lambdaQueryWrapper.eq(Material::getStorageType, fileInfoVO.getStorageType());
         }
@@ -73,6 +77,42 @@ public class MaterialDao extends ServiceImpl<MaterialMapper, Material> {
         lambdaUpdate()
                 .in(Material::getId, ids)
                 .set(Material::getDelFlag, FlagEnum.DISABLED.getFlag())
+                .update();
+    }
+
+    /**
+     * 根据删除标志获取文件列表.
+     * @param flag 删除标志
+     * @return 文件列表
+     */
+    public List<Material> getListByDelFlag(final Integer flag) {
+        return lambdaQuery()
+                .eq(Material::getDelFlag, flag)
+                .list();
+    }
+
+    /**
+     * 根据md5批量删除文件(物理删除).
+     * @param keys md5列表
+     */
+    public void delBatchByMd5(final List<String> keys) {
+        if (keys.isEmpty()) {
+            return;
+        }
+        lambdaUpdate()
+                .in(Material::getMd5, keys)
+                .remove();
+    }
+
+    /**
+     * 根据id批量更新删除标志.
+     * @param ids id列表
+     * @param flagEnum 删除标志枚举
+     */
+    public void updateFlagByIds(final List<Long> ids, final FlagEnum flagEnum) {
+        lambdaUpdate()
+                .in(Material::getId, ids)
+                .set(Material::getDelFlag, flagEnum.getFlag())
                 .update();
     }
 }

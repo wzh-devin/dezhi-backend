@@ -1,6 +1,9 @@
 package com.devin.dezhi.common.utils;
 
 import cn.hutool.crypto.digest.DigestUtil;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.devin.dezhi.constant.ErrMsgConstant;
+import com.devin.dezhi.exception.FileException;
 import com.devin.dezhi.model.FileInfo;
 import com.devin.dezhi.exception.VerifyException;
 import io.minio.BucketExistsArgs;
@@ -12,16 +15,21 @@ import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveBucketArgs;
 import io.minio.RemoveObjectArgs;
+import io.minio.RemoveObjectsArgs;
 import io.minio.Result;
 import io.minio.SetBucketPolicyArgs;
 import io.minio.http.Method;
+import io.minio.messages.DeleteError;
+import io.minio.messages.DeleteObject;
 import io.minio.messages.Item;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -33,6 +41,7 @@ import java.util.concurrent.TimeUnit;
  * @version 1.0
  * @since 1.0
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class MinioTemplate {
@@ -207,6 +216,35 @@ public class MinioTemplate {
                 .bucket(bucketName)
                 .object(key)
                 .build());
+    }
+
+    /**
+     * 批量删除文件.
+     *
+     * @param keys 文件名列表
+     */
+    public void delBatchFile(final List<String> keys) {
+        if (CollectionUtils.isEmpty(keys)) {
+            return;
+        }
+
+        try {
+            Iterable<Result<DeleteError>> results = minioClient.removeObjects(
+                    RemoveObjectsArgs.builder()
+                            .bucket(bucketName)
+                            .objects(keys.stream().map(DeleteObject::new).toList())
+                            .build());
+
+            // 检查删除结果
+            for (Result<DeleteError> result : results) {
+                DeleteError error = result.get();
+                if (error != null) {
+                    log.error("删除文件失败: {} - {}", error.objectName(), error.message());
+                }
+            }
+        } catch (Exception e) {
+            throw new FileException(ErrMsgConstant.FILE_ERROR);
+        }
     }
 
     /**
