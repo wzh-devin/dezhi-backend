@@ -51,7 +51,7 @@ public class CategoryController {
      */
     @PutMapping("/save")
     @Operation(summary = "添加类别", description = "添加类别")
-    public ApiResult<Void> saveCategory(final CategoryVO categoryVO) {
+    public ApiResult<Void> saveCategory(@RequestBody final CategoryVO categoryVO) {
         categoryService.saveCategory(categoryVO);
         return ApiResult.success();
     }
@@ -66,6 +66,19 @@ public class CategoryController {
     @Operation(summary = "删除类别", description = "删除类别")
     public ApiResult<Void> delCategories(@RequestBody final List<Long> ids) {
         categoryService.delCategories(ids);
+        return ApiResult.success();
+    }
+
+    /**
+     * 编辑类别.
+     *
+     * @param categoryVO 类别信息
+     * @return 编辑结果
+     */
+    @PostMapping("/edit")
+    @Operation(summary = "编辑类别", description = "编辑类别")
+    public ApiResult<Void> editCategory(@RequestBody final CategoryVO categoryVO) {
+        categoryService.editCategory(categoryVO);
         return ApiResult.success();
     }
 

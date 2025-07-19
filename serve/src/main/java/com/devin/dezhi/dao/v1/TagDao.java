@@ -1,15 +1,20 @@
 package com.devin.dezhi.dao.v1;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.devin.dezhi.domain.v1.entity.ArticleTag;
 import com.devin.dezhi.domain.v1.entity.Tag;
 import com.devin.dezhi.domain.v1.vo.TagQueryVO;
+import com.devin.dezhi.domain.v1.vo.TagVO;
 import com.devin.dezhi.mapper.v1.ArticleTagMapper;
 import com.devin.dezhi.mapper.v1.TagMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -59,5 +64,40 @@ public class TagDao extends ServiceImpl<TagMapper, Tag> {
         }
 
         return page(page, queryWrapper);
+    }
+
+    /**
+     * 修改标签.
+     *
+     * @param tagVO 标签
+     */
+    public void updateTag(final TagVO tagVO) {
+        LambdaUpdateWrapper<Tag> updateWrapper = new LambdaUpdateWrapper<>();
+
+        updateWrapper.eq(Tag::getId, tagVO.getId());
+
+        if (Objects.nonNull(tagVO.getName())) {
+            updateWrapper.set(Tag::getName, tagVO.getName());
+        }
+
+        if (Objects.nonNull(tagVO.getColor())) {
+            updateWrapper.set(Tag::getColor, tagVO.getColor());
+        }
+        updateWrapper.set(Tag::getUpdateUserId, Long.parseLong(StpUtil.getLoginId().toString()));
+        updateWrapper.set(Tag::getUpdateTime, LocalDateTime.now());
+
+        update(updateWrapper);
+    }
+
+    /**
+     * 根据标签名获取标签.
+     *
+     * @param name 标签名
+     * @return Tag
+     */
+    public Tag getTagByName(final String name) {
+        return lambdaQuery()
+                .eq(Tag::getName, name)
+                .one();
     }
 }

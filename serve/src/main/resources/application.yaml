@@ -17,6 +17,147 @@ spring:
     url: jdbc:postgresql://${DEZHI.POSTGRESQL.HOST}:${DEZHI.POSTGRESQL.PORT}/${DEZHI.POSTGRESQL.DATABASE}?currentSchema=${DEZHI.POSTGRESQL.SCHEMA}
     username: ${DEZHI.POSTGRESQL.USERNAME}
     password: ${DEZHI.POSTGRESQL.PASSWORD}
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      # ====================== 数据源基本配置 ======================
+      # 初始化时建立物理连接的个数
+      initial-size: 5
+      # 最小连接池数量
+      min-idle: 10
+      # 最大连接池数量
+      max-active: 100
+      # 获取连接时最大等待时间，单位毫秒
+      max-wait: 6000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 2000
+      # 连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 600000
+      # 连接在池中最大生存的时间，单位是毫秒
+      max-evictable-idle-time-millis: 900000
+      # 用来检测连接是否有效的sql查询语句
+      validation-query: SELECT 1
+      # 建议配置为true，不影响性能，并且保证安全性
+      # 申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效
+      test-while-idle: true
+      # 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+      test-on-borrow: false
+      # 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+      test-on-return: false
+      # 保持连接活跃
+      keep-alive: true
+      # 物理连接的最大使用次数
+      phy-max-use-count: 1000
+
+      # ====================== 连接泄露检测配置 ======================
+      # 是否开启连接泄露检测
+      remove-abandoned: true
+      # 连接泄露检测超时时间，单位秒，30分钟
+      remove-abandoned-timeout: 1800
+      # 是否记录泄露的连接的日志
+      log-abandoned: true
+
+      # ====================== 连接池监控配置 ======================
+      # 是否缓存preparedStatement，也就是PSCache
+      pool-prepared-statements: true
+      # 每个连接上PSCache的大小
+      max-pool-prepared-statement-per-connection-size: 20
+
+      # ====================== Web监控配置 ======================
+      # 配置StatFilter，用于采集web-jdbc关联监控的数据
+      web-stat-filter:
+        # 启用StatFilter
+        enabled: true
+        # 添加过滤规则
+        url-pattern: "/*"
+        # 忽略过滤的格式
+        exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
+        # 开启session统计功能
+        session-stat-enable: true
+        # session统计最大个数
+        session-stat-max-count: 1000
+        # 配置profileEnable能够监控单个url调用的sql列表
+        profile-enable: true
+        # 配置principalSessionName，使得druid能够知道当前的session的用户是谁
+        principal-session-name: USER_SESSION
+        # 配置principalCookieName，使得druid能够知道当前的cookie的用户是谁
+        principal-cookie-name: USER_COOKIE
+
+      # ====================== 监控页面配置 ======================
+      # StatViewServlet配置，用于展示Druid的统计信息
+      stat-view-servlet:
+        # 启用监控页面
+        enabled: true
+        # 访问路径
+        url-pattern: "/druid/*"
+        # 监控页面的用户名
+        login-username: dezhi
+        # 监控页面的密码
+        login-password: 123456
+        # 是否能够重置数据
+        reset-enable: true
+        # IP白名单(没有配置或者为空，则允许所有访问)
+        allow: ""
+        # IP黑名单(存在共同时，deny优先于allow)
+        deny: ""
+
+      # ====================== 过滤器配置 ======================
+      # 配置需要使用的过滤器，多个用逗号分隔
+      filters: wall,stat,slf4j
+
+      # 过滤器详细配置
+      filter:
+        # 统计过滤器配置
+        stat:
+          # 启用统计功能
+          enabled: true
+          # 数据库类型
+          db-type: postgresql
+          # 是否记录慢SQL
+          log-slow-sql: true
+          # 慢SQL的标准，单位毫秒
+          slow-sql-millis: 3000
+          # 合并多个相同SQL，避免因为参数不同而统计多条SQL
+          merge-sql: true
+
+        # 防火墙过滤器配置
+        wall:
+          # 启用防火墙功能
+          enabled: true
+          # 数据库类型
+          db-type: postgresql
+          # 具体防火墙策略配置
+          config:
+            # 是否允许修改表
+            alter-table-allow: true
+            # 是否允许创建表
+            create-table-allow: true
+            # 是否允许删除数据
+            delete-allow: true
+            # 是否允许删除表
+            drop-table-allow: false
+            # 是否允许插入数据
+            insert-allow: true
+            # 是否允许多条语句一起执行
+            multi-statement-allow: true
+            # 是否允许非基本语句执行
+            none-base-statement-allow: false
+            # 是否允许查询
+            select-allow: true
+            # 是否允许select into语句
+            select-into-allow: false
+            # 是否允许更新数据
+            update-allow: true
+            # 是否允许调用存储过程
+            call-allow: true
+
+        # 日志过滤器配置
+        slf4j:
+          # 启用日志功能
+          enabled: true
+          # 是否记录SQL语句
+          statement-log-enabled: false
+          # 是否记录可执行SQL语句
+          statement-executable-sql-log-enable: true
 
   # 配置 redis
   data:
@@ -46,6 +187,13 @@ spring:
           starttls:
             enable: true
             required: true
+
+  # 配置 flyway
+  flyway:
+    clean-disabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    locations: classpath:flyway
 
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
 sa-token:

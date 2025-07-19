@@ -36,6 +36,11 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void saveTag(final TagVO tagVO) {
+        // 检查标签名是否重复
+        Tag checkNameDuplicate = tagDao.getTagByName(tagVO.getName());
+        AssertUtil.isEmpty(checkNameDuplicate, ErrMsgConstant.TAG_NAME_DUPLICATE);
+
+        // 新增标签
         Tag tag = BeanCopyUtils.copy(tagVO, Tag.class);
         tag.setId(snowFlake.nextId());
         tag.init();
@@ -54,5 +59,10 @@ public class TagServiceImpl implements TagService {
     @Override
     public Page<Tag> page(final TagQueryVO queryVO) {
         return tagDao.getPageList(queryVO);
+    }
+
+    @Override
+    public void editTag(final TagVO tagVO) {
+        tagDao.updateTag(tagVO);
     }
 }

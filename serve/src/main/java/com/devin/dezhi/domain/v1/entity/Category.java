@@ -74,12 +74,6 @@ public class Category implements Serializable {
     private LocalDateTime updateTime;
 
     /**
-     * 删除标识（0：已删除，1：未删除）.
-     */
-    @TableField("del_flag")
-    private Integer delFlag;
-
-    /**
      * 初始化.
      */
     public void init() {

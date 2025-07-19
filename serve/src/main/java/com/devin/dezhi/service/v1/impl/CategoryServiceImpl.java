@@ -36,6 +36,11 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void saveCategory(final CategoryVO categoryVO) {
+        // 检查类别名称是否重复
+        Category checkNameDuplicate = categoryDao.getByName(categoryVO.getName());
+        AssertUtil.isEmpty(checkNameDuplicate, ErrMsgConstant.CATEGORY_NAME_DUPLICATE);
+
+        // 新增类别
         Category category = BeanCopyUtils.copy(categoryVO, Category.class);
         category.setId(snowFlake.nextId());
         category.init();
@@ -52,5 +57,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Page<Category> page(final CategoryQueryVO queryVO) {
         return categoryDao.getPageList(queryVO);
+    }
+
+    @Override
+    public void editCategory(final CategoryVO categoryVO) {
+        categoryDao.updateCategory(categoryVO);
     }
 }

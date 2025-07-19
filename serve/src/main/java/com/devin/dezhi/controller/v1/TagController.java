@@ -52,8 +52,21 @@ public class TagController {
      */
     @PutMapping("/save")
     @Operation(summary = "添加标签", description = "添加标签")
-    public ApiResult<Void> saveTag(final TagVO tagVO) {
+    public ApiResult<Void> saveTag(@RequestBody final TagVO tagVO) {
         tagService.saveTag(tagVO);
+        return ApiResult.success();
+    }
+
+    /**
+     * 编辑标签.
+     *
+     * @param tagVO 标签信息
+     * @return 编辑结果
+     */
+    @PostMapping("/edit")
+    @Operation(summary = "编辑标签", description = "编辑标签")
+    public ApiResult<Void> editTag(@RequestBody final TagVO tagVO) {
+        tagService.editTag(tagVO);
         return ApiResult.success();
     }
 

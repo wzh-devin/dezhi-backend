@@ -35,4 +35,10 @@ public interface CategoryService {
      * @return 类别列表
      */
     Page<Category> page(CategoryQueryVO queryVO);
+
+    /**
+     * 编辑类别.
+     * @param categoryVO 类别信息
+     */
+    void editCategory(CategoryVO categoryVO);
 }
