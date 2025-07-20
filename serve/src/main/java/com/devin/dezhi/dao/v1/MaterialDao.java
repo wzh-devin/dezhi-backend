@@ -34,7 +34,7 @@ public class MaterialDao extends ServiceImpl<MaterialMapper, Material> {
 
         LambdaQueryWrapper<Material> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 
-        lambdaQueryWrapper.eq(Material::getDelFlag, FlagEnum.of(fileInfoVO.getStatus()));
+        lambdaQueryWrapper.eq(Material::getIsDeleted, FlagEnum.of(fileInfoVO.getStatus()));
 
         if (StringUtils.hasLength(fileInfoVO.getName())) {
             lambdaQueryWrapper.eq(Material::getName, fileInfoVO.getName());
@@ -65,7 +65,7 @@ public class MaterialDao extends ServiceImpl<MaterialMapper, Material> {
     public void delBatchByUrl(final List<String> pathList) {
         lambdaUpdate()
                 .in(Material::getUrl, pathList)
-                .set(Material::getDelFlag, FlagEnum.DISABLED.getFlag())
+                .set(Material::getIsDeleted, FlagEnum.DISABLED.getFlag())
                 .update();
     }
 
@@ -76,7 +76,7 @@ public class MaterialDao extends ServiceImpl<MaterialMapper, Material> {
     public void delBatchLogicByIds(final List<Long> ids) {
         lambdaUpdate()
                 .in(Material::getId, ids)
-                .set(Material::getDelFlag, FlagEnum.DISABLED.getFlag())
+                .set(Material::getIsDeleted, FlagEnum.DISABLED.getFlag())
                 .update();
     }
 
@@ -87,7 +87,7 @@ public class MaterialDao extends ServiceImpl<MaterialMapper, Material> {
      */
     public List<Material> getListByDelFlag(final Integer flag) {
         return lambdaQuery()
-                .eq(Material::getDelFlag, flag)
+                .eq(Material::getIsDeleted, flag)
                 .list();
     }
 
@@ -112,7 +112,7 @@ public class MaterialDao extends ServiceImpl<MaterialMapper, Material> {
     public void updateFlagByIds(final List<Long> ids, final FlagEnum flagEnum) {
         lambdaUpdate()
                 .in(Material::getId, ids)
-                .set(Material::getDelFlag, flagEnum.getFlag())
+                .set(Material::getIsDeleted, flagEnum.getFlag())
                 .update();
     }
 }

@@ -38,4 +38,11 @@ public interface TagService {
      * @return Page
      */
     Page<Tag> page(TagQueryVO queryVO);
+
+    /**
+     * 编辑标签.
+     *
+     * @param tagVO 标签信息
+     */
+    void editTag(TagVO tagVO);
 }

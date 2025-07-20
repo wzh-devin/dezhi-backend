@@ -35,9 +35,7 @@ public class UserEntityGenerate {
         user.setUsername(userInfoQueryVO.getUsername());
         user.setPassword(passwordEncrypt.encrypt(userInfoQueryVO.getPassword()));
         user.setEmail(userInfoQueryVO.getEmail());
-        user.setCreateUserId(user.getId());
-        user.setUpdateUserId(user.getId());
-        user.initDate();
+        user.init();
 
         return user;
     }
@@ -66,7 +64,7 @@ public class UserEntityGenerate {
         userRole.setId(snowFlake.nextId());
         userRole.setUserId(uid);
         userRole.setRoleId(roleId);
-        userRole.initDate();
+        userRole.init();
 
         return userRole;
     }

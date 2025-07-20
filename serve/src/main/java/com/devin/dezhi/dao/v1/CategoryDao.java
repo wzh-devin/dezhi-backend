@@ -1,17 +1,16 @@
 package com.devin.dezhi.dao.v1;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.devin.dezhi.domain.v1.entity.ArticleCategory;
 import com.devin.dezhi.domain.v1.entity.Category;
 import com.devin.dezhi.domain.v1.vo.CategoryQueryVO;
-import com.devin.dezhi.mapper.v1.ArticleCategoryMapper;
+import com.devin.dezhi.domain.v1.vo.CategoryVO;
 import com.devin.dezhi.mapper.v1.CategoryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -26,22 +25,6 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class CategoryDao extends ServiceImpl<CategoryMapper, Category> {
-
-    private final ArticleCategoryMapper articleCategoryMapper;
-
-    /**
-     * 获取文章类别.
-     *
-     * @param ids 类别ids
-     * @return List
-     */
-    public List<ArticleCategory> getArticleCategoryByIds(final List<Long> ids) {
-        if (ids.isEmpty()) {
-            return new ArrayList<>();
-        }
-        return articleCategoryMapper.selectList(new LambdaQueryWrapper<ArticleCategory>()
-                .in(ArticleCategory::getCategoryId, ids));
-    }
 
     /**
      * 获取类别列表.
@@ -59,5 +42,38 @@ public class CategoryDao extends ServiceImpl<CategoryMapper, Category> {
         }
 
         return page(page, queryWrapper);
+    }
+
+    /**
+     * 修改类别.
+     * @param categoryVO 类别信息
+     */
+    public void updateCategory(final CategoryVO categoryVO) {
+        LambdaUpdateWrapper<Category> updateWrapper = new LambdaUpdateWrapper<>();
+
+        updateWrapper.eq(Category::getId, categoryVO.getId());
+
+        if (Objects.nonNull(categoryVO.getName())) {
+            updateWrapper.set(Category::getName, categoryVO.getName());
+        }
+
+        if (Objects.nonNull(categoryVO.getColor())) {
+            updateWrapper.set(Category::getColor, categoryVO.getColor());
+        }
+
+        updateWrapper.set(Category::getUpdateTime, LocalDateTime.now());
+
+        update(updateWrapper);
+    }
+
+    /**
+     * 通过名称获取类别.
+     * @param name 类别名称
+     * @return  Category
+     */
+    public Category getByName(final String name) {
+        return lambdaQuery()
+                .eq(Category::getName, name)
+                .one();
     }
 }

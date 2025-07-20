@@ -3,9 +3,10 @@ package com.devin.dezhi.domain.v1.entity.user;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.devin.dezhi.domain.v1.entity.common.EntityCommon;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 2025/4/25 18:06.
@@ -19,48 +20,64 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @TableName("tb_user")
-@EqualsAndHashCode(callSuper = true)
-public class User extends EntityCommon {
+public class User implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /**
      * 用户id.
      */
-    @TableId(value = "id")
+    @TableId("id")
     private Long id;
 
     /**
-     * 用户名.
+     * 用户名称.
      */
-    @TableField(value = "username")
+    @TableField("username")
     private String username;
 
     /**
-     * 邮箱.
+     * 用户密码.
      */
-    @TableField(value = "email")
-    private String email;
-
-    /**
-     * 密码.
-     */
-    @TableField(value = "password")
+    @TableField("password")
     private String password;
 
     /**
-     * 头像.
+     * 用户邮箱.
      */
-    @TableField(value = "avatar")
+    @TableField("email")
+    private String email;
+
+    /**
+     * 用户头像.
+     */
+    @TableField("avatar")
     private String avatar;
 
     /**
-     * 创建人id.
+     * 创建时间.
      */
-    @TableField(value = "create_user_id")
-    private Long createUserId;
+    @TableField("create_time")
+    private LocalDateTime createTime;
 
     /**
-     * 更新人id.
+     * 更新时间.
      */
-    @TableField(value = "update_user_id")
-    private Long updateUserId;
+    @TableField("update_time")
+    private LocalDateTime updateTime;
+
+    /**
+     * 是否被删除（0：未删除；1：已删除）.
+     */
+    @TableField("is_deleted")
+    private Integer isDeleted;
+
+    /**
+     * 初始化.
+     */
+    public void init() {
+        this.createTime = LocalDateTime.now();
+        this.updateTime = LocalDateTime.now();
+    }
 }

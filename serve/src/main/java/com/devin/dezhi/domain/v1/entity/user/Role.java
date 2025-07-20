@@ -3,9 +3,10 @@ package com.devin.dezhi.domain.v1.entity.user;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.devin.dezhi.domain.v1.entity.common.EntityCommon;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 2025/4/25 19:20.
@@ -19,24 +20,46 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @TableName("tb_role")
-@EqualsAndHashCode(callSuper = true)
-public class Role extends EntityCommon {
+public class Role implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /**
      * 角色id.
      */
-    @TableId
+    @TableId("id")
     private Long id;
 
     /**
-     * 角色名.
+     * 角色名称.
      */
-    @TableField(value = "role")
+    @TableField("role")
     private String role;
 
     /**
      * 角色描述.
      */
-    @TableField(value = "remark")
+    @TableField("remark")
     private String remark;
+
+    /**
+     * 创建时间.
+     */
+    @TableField("create_time")
+    private LocalDateTime createTime;
+
+    /**
+     * 修改时间.
+     */
+    @TableField("update_time")
+    private LocalDateTime updateTime;
+
+    /**
+     * 初始化.
+     */
+    public void init() {
+        this.createTime = LocalDateTime.now();
+        this.updateTime = LocalDateTime.now();
+    }
 }

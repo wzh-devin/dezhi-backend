@@ -33,6 +33,8 @@
         <sa-token.version>1.42.0</sa-token.version>
         <hutool-all.version>5.8.27</hutool-all.version>
         <postgresql.version>42.7.5</postgresql.version>
+        <druid.version>1.2.21</druid.version>
+        <flyway-core.version>9.22.3</flyway-core.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <mybatis-plus-generate.version>3.5.12</mybatis-plus-generate.version>
         <freemarker.version>2.3.32</freemarker.version>
@@ -43,10 +45,19 @@
 
         <!-- 这个只是为了解决spring-boot-test中的2.9.1版本的安全问题警告，不涉及业务流程 -->
         <xmlunit.version>2.10.0</xmlunit.version>
+
+        <!-- 这个解决commons-lang安全警告问题 -->
+        <common-lang3.version>3.18.0</common-lang3.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${common-lang3.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.xmlunit</groupId>
                 <artifactId>xmlunit-core</artifactId>
@@ -70,6 +81,19 @@
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.version}</version>
+            </dependency>
+
+            <!-- 数据库连接池 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-3-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-core</artifactId>
+                <version>${flyway-core.version}</version>
             </dependency>
 
             <dependency>

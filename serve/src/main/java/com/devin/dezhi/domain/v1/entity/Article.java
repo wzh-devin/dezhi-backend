@@ -33,8 +33,14 @@ public class Article implements Serializable {
     /**
      * 文章id.
      */
-    @TableId(value = "id")
+    @TableId("id")
     private Long id;
+
+    /**
+     * 文章分类.
+     */
+    @TableField("category_id")
+    private Long categoryId;
 
     /**
      * 文章标题.
@@ -43,22 +49,52 @@ public class Article implements Serializable {
     private String title;
 
     /**
+     * 文章简介.
+     */
+    @TableField("summary")
+    private String summary;
+
+    /**
      * 文章内容.
      */
     @TableField("content")
     private String content;
 
     /**
-     * 文章状态（0：草稿，1：已发布）.
+     * 文章内容（markdown格式）.
      */
-    @TableField("state")
-    private Integer state;
+    @TableField("content_md")
+    private String contentMd;
 
     /**
-     * 创建的用户id.
+     * 文章url地址.
      */
-    @TableField("create_user_id")
-    private Long createUserId;
+    @TableField("url")
+    private String url;
+
+    /**
+     * 文章是否置顶（0：否；1：是）.
+     */
+    @TableField("is_stick")
+    private Integer isStick;
+
+    /**
+     * 文章状态（0：草稿；1：发布）.
+     */
+    @TableField("status")
+    private Integer status;
+
+    /**
+     * 是否热门文章（0：否；1：是）.
+     */
+    @TableField("is_hot")
+    private Integer isHot;
+
+    /**
+     * 是否ai创建（0：否；1：是）.
+     */
+    @TableField("is_ai")
+    private Integer isAi;
 
     /**
      * 创建时间.
@@ -67,26 +103,22 @@ public class Article implements Serializable {
     private LocalDateTime createTime;
 
     /**
-     * 更新用户id.
-     */
-    @TableField("update_user_id")
-    private Long updateUserId;
-
-    /**
      * 更新时间.
      */
     @TableField("update_time")
     private LocalDateTime updateTime;
 
     /**
-     * 删除标识（0：未删除，1：已删除）.
+     * 是否被删除（0：未删除；1：已删除）.
      */
-    @TableField("del_flag")
-    private Integer delFlag;
+    @TableField("is_deleted")
+    private Integer isDeleted;
 
     /**
-     * 热门文章（0：普通文章，1：推荐文章，2：热门文章）.
+     * 初始化.
      */
-    @TableField("hot_flag")
-    private Integer hotFlag;
+    public void init() {
+        this.createTime = LocalDateTime.now();
+        this.updateTime = LocalDateTime.now();
+    }
 }
