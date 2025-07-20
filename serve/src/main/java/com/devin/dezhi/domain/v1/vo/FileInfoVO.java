@@ -2,7 +2,7 @@ package com.devin.dezhi.domain.v1.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 2025/6/2 16:45.
@@ -37,5 +37,5 @@ public class FileInfoVO {
     private String storageType;
 
     @Schema(description = "创建时间")
-    private Date createTime;
+    private LocalDateTime createTime;
 }

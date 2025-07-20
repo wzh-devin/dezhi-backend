@@ -41,18 +41,14 @@ public class RespEntityGenerate {
      * @param user        用户信息
      * @param roles       角色信息
      * @param permissions 权限信息
-     * @param createUser  创建人
-     * @param updateUser  更新人
      * @return UserInfoResp
      */
-    public static UserInfoVO generateUserInfoResp(final User user, final List<RoleVO> roles, final List<PermissionVO> permissions, final String createUser, final String updateUser) {
+    public static UserInfoVO generateUserInfoResp(final User user, final List<RoleVO> roles, final List<PermissionVO> permissions) {
         UserInfoVO userInfoVO = new UserInfoVO();
         BeanUtils.copyProperties(user, userInfoVO);
         userInfoVO.setUid(user.getId());
         userInfoVO.setRoles(roles);
         userInfoVO.setPermissions(permissions);
-        userInfoVO.setCreateUser(createUser);
-        userInfoVO.setUpdateUser(updateUser);
         return userInfoVO;
     }
 

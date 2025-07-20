@@ -1,6 +1,5 @@
 package com.devin.dezhi.service.generate.common;
 
-import cn.dev33.satoken.stp.StpUtil;
 import com.devin.dezhi.domain.v1.entity.Material;
 import com.devin.dezhi.model.FileInfo;
 import com.devin.dezhi.enums.FlagEnum;
@@ -40,12 +39,10 @@ public class EntityGenerate {
         material.setMd5(fileInfo.getMd5());
         material.setUrl(url);
         material.setSize(fileInfo.getSize());
-        material.setDelFlag(FlagEnum.NORMAL.getFlag());
+        material.setIsDeleted(FlagEnum.NORMAL.getFlag());
         material.setFileType(fileInfo.getSuffix().toUpperCase());
         material.setStorageType(storageType);
-        material.setCreateUserId(Long.valueOf(StpUtil.getLoginId().toString()));
-        material.setUpdateUserId(Long.valueOf(StpUtil.getLoginId().toString()));
-        material.initDate();
+        material.init();
         return material;
     }
 }

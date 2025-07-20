@@ -1,6 +1,5 @@
 package com.devin.dezhi.domain.v1.entity;
 
-import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -32,40 +31,28 @@ public class Category implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 类别id.
+     * 分类id.
      */
-    @TableId(value = "id")
+    @TableId("id")
     private Long id;
 
     /**
-     * 类别名称.
+     * 分类名称.
      */
     @TableField("name")
     private String name;
 
     /**
-     * 类别颜色（十六位进制）.
+     * 类别颜色.
      */
     @TableField("color")
     private String color;
-
-    /**
-     * 创建人id.
-     */
-    @TableField("create_user_id")
-    private Long createUserId;
 
     /**
      * 创建时间.
      */
     @TableField("create_time")
     private LocalDateTime createTime;
-
-    /**
-     * 更新人id.
-     */
-    @TableField("update_user_id")
-    private Long updateUserId;
 
     /**
      * 更新时间.
@@ -77,9 +64,6 @@ public class Category implements Serializable {
      * 初始化.
      */
     public void init() {
-        long uid = Long.parseLong(StpUtil.getLoginId().toString());
-        this.createUserId = uid;
-        this.updateUserId = uid;
         this.createTime = LocalDateTime.now();
         this.updateTime = LocalDateTime.now();
     }

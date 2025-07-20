@@ -2,8 +2,9 @@ package com.devin.dezhi.service.v1.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.devin.dezhi.constant.ErrMsgConstant;
+import com.devin.dezhi.dao.v1.ArticleDao;
 import com.devin.dezhi.dao.v1.CategoryDao;
-import com.devin.dezhi.domain.v1.entity.ArticleCategory;
+import com.devin.dezhi.domain.v1.entity.Article;
 import com.devin.dezhi.domain.v1.entity.Category;
 import com.devin.dezhi.domain.v1.vo.CategoryQueryVO;
 import com.devin.dezhi.domain.v1.vo.CategoryVO;
@@ -34,6 +35,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryDao categoryDao;
 
+    private final ArticleDao articleDao;
+
     @Override
     public void saveCategory(final CategoryVO categoryVO) {
         // 检查类别名称是否重复
@@ -49,8 +52,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void delCategories(final List<Long> ids) {
-        List<ArticleCategory> articleCategoryList = categoryDao.getArticleCategoryByIds(ids);
-        AssertUtil.isEmpty(articleCategoryList, ErrMsgConstant.CATEGORY_HAS_QUOTE);
+        List<Article> articleList = articleDao.getArticleByCategory(ids);
+        AssertUtil.isEmpty(articleList, ErrMsgConstant.CATEGORY_HAS_QUOTE);
         categoryDao.removeBatchByIds(ids);
     }
 

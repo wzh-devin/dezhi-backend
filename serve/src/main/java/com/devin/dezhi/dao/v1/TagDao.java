@@ -1,6 +1,5 @@
 package com.devin.dezhi.dao.v1;
 
-import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -82,7 +81,6 @@ public class TagDao extends ServiceImpl<TagMapper, Tag> {
         if (Objects.nonNull(tagVO.getColor())) {
             updateWrapper.set(Tag::getColor, tagVO.getColor());
         }
-        updateWrapper.set(Tag::getUpdateUserId, Long.parseLong(StpUtil.getLoginId().toString()));
         updateWrapper.set(Tag::getUpdateTime, LocalDateTime.now());
 
         update(updateWrapper);

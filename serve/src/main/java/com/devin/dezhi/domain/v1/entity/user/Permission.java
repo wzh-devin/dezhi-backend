@@ -3,9 +3,10 @@ package com.devin.dezhi.domain.v1.entity.user;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.devin.dezhi.domain.v1.entity.common.EntityCommon;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 2025/4/25 19:20.
@@ -19,24 +20,46 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @TableName("tb_permission")
-@EqualsAndHashCode(callSuper = true)
-public class Permission extends EntityCommon {
+public class Permission implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /**
      * 权限id.
      */
-    @TableId
+    @TableId("id")
     private Long id;
 
     /**
      * 权限名称.
      */
-    @TableField(value = "permission")
+    @TableField("permission")
     private String permission;
 
     /**
      * 权限描述.
      */
-    @TableField(value = "remark")
+    @TableField("remark")
     private String remark;
+
+    /**
+     * 创建时间.
+     */
+    @TableField("create_time")
+    private LocalDateTime createTime;
+
+    /**
+     * 更新时间.
+     */
+    @TableField("update_time")
+    private LocalDateTime updateTime;
+
+    /**
+     * 初始化.
+     */
+    public void init() {
+        this.createTime = LocalDateTime.now();
+        this.updateTime = LocalDateTime.now();
+    }
 }

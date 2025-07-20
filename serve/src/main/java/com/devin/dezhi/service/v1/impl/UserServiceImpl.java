@@ -229,10 +229,8 @@ public class UserServiceImpl implements UserService {
                     permissionVO.setRemark(permission.getRemark());
                     return permissionVO;
                 }).toList();
-        String createUser = userDao.getUsernameById(user.getCreateUserId());
-        String updateUser = userDao.getUsernameById(user.getCreateUserId());
 
-        return RespEntityGenerate.generateUserInfoResp(user, roleResps, permissionResps, createUser, updateUser);
+        return RespEntityGenerate.generateUserInfoResp(user, roleResps, permissionResps);
     }
 
     /**

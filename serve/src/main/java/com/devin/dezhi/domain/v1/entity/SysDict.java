@@ -3,9 +3,10 @@ package com.devin.dezhi.domain.v1.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.devin.dezhi.domain.v1.entity.common.EntityCommon;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 2025/6/1 23:02.
@@ -20,30 +21,52 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @TableName("sys_dict")
-@EqualsAndHashCode(callSuper = true)
-public class SysDict extends EntityCommon {
+public class SysDict implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     /**
-     * 系统表id.
+     * 系统字典id.
      */
-    @TableId(value = "id")
+    @TableId("id")
     private Long id;
 
     /**
-     * 字典编码.
+     * 字典code.
      */
-    @TableField(value = "code")
+    @TableField("code")
     private String code;
 
     /**
-     * 字典类型.
+     * code类型.
      */
-    @TableField(value = "type")
+    @TableField("type")
     private String type;
 
     /**
-     * 字典名称.
+     * code描述.
      */
-    @TableField(value = "name")
+    @TableField("name")
     private String name;
+
+    /**
+     * 创建时间.
+     */
+    @TableField("create_time")
+    private LocalDateTime createTime;
+
+    /**
+     * 更新时间.
+     */
+    @TableField("update_time")
+    private LocalDateTime updateTime;
+
+    /**
+     * 初始化.
+     */
+    public void init() {
+        this.createTime = LocalDateTime.now();
+        this.updateTime = LocalDateTime.now();
+    }
 }

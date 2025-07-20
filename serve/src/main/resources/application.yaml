@@ -133,8 +133,6 @@ spring:
             create-table-allow: true
             # 是否允许删除数据
             delete-allow: true
-            # 是否允许删除表
-            drop-table-allow: false
             # 是否允许插入数据
             insert-allow: true
             # 是否允许多条语句一起执行
