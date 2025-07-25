@@ -1,5 +1,5 @@
 # 基础镜像
-FROM eclipse-temurin:17
+FROM registry.cn-hangzhou.aliyuncs.com/wzh-devin/eclipse-temurin:17
 
 # 作者
 LABEL devin=<wzh.devin@gmail.com>
