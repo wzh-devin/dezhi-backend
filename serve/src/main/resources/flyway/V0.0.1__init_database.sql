@@ -176,6 +176,21 @@ COMMENT
 ON COLUMN tb_permission.create_time IS '创建时间';
 COMMENT
 ON COLUMN tb_permission.update_time IS '更新时间';
+INSERT INTO "tb_permission" ("id", "permission", "remark", "create_time", "update_time")
+VALUES (1, 'user:add', '用户新增', NOW(), NOW());
+INSERT INTO "tb_permission" ("id", "permission", "remark", "create_time", "update_time")
+VALUES (2, 'user:delete', '删除用户', NOW(), NOW());
+INSERT INTO "tb_permission" ("id", "permission", "remark", "create_time", "update_time")
+VALUES (3, 'user:edit', '修改用户', NOW(), NOW());
+INSERT INTO "tb_permission" ("id", "permission", "remark", "create_time", "update_time")
+VALUES (4, 'article:add', '撰写文章', NOW(), NOW());
+INSERT INTO "tb_permission" ("id", "permission", "remark", "create_time", "update_time")
+VALUES (5, 'article:delete', '删除文章', NOW(), NOW());
+INSERT INTO "tb_permission" ("id", "permission", "remark", "create_time", "update_time")
+VALUES (6, 'article:edit', '修改文章', NOW(), NOW());
+INSERT INTO "tb_permission" ("id", "permission", "remark", "create_time", "update_time")
+VALUES (7, 'article:release', '发布文章', NOW(), NOW());
+
 DROP TABLE IF EXISTS tb_role;
 CREATE TABLE tb_role
 (
@@ -198,6 +213,12 @@ COMMENT
 ON COLUMN tb_role.create_time IS '创建时间';
 COMMENT
 ON COLUMN tb_role.update_time IS '修改时间';
+INSERT INTO "tb_role" ("id", "role", "remark", "create_time", "update_time")
+VALUES (1, 'user', '普通用户', NOW(), NOW());
+INSERT INTO "tb_role" ("id", "role", "remark", "create_time", "update_time")
+VALUES (2, 'user_pro', 'Pro用户', NOW(), NOW());
+INSERT INTO "tb_role" ("id", "role", "remark", "create_time", "update_time")
+VALUES (3, 'admin', '超级管理员', NOW(), NOW());
 DROP TABLE IF EXISTS tb_role_permission;
 CREATE TABLE tb_role_permission
 (
@@ -220,6 +241,34 @@ COMMENT
 ON COLUMN tb_role_permission.create_time IS '创建时间';
 COMMENT
 ON COLUMN tb_role_permission.update_time IS '更新时间';
+INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+VALUES (1, 1, 4, NOW(), NOW());
+INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+VALUES (2, 1, 6, NOW(), NOW());
+INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+VALUES (3, 2, 1, NOW(), NOW());
+INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+VALUES (4, 2, 3, NOW(), NOW());
+INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+VALUES (5, 2, 4, NOW(), NOW());
+INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+VALUES (6, 2, 6, NOW(), NOW());
+INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+VALUES (7, 2, 7, NOW(), NOW());
+INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+VALUES (8, 3, 1, NOW(), NOW());
+INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+VALUES (11, 3, 4, NOW(), NOW());
+INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+VALUES (9, 3, 2, NOW(), NOW());
+INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+VALUES (10, 3, 3, NOW(), NOW());
+INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+VALUES (12, 3, 5, NOW(), NOW());
+INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+VALUES (13, 3, 6, NOW(), NOW());
+INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+VALUES (14, 3, 7, NOW(), NOW());
 DROP TABLE IF EXISTS tb_tag;
 CREATE TABLE tb_tag
 (

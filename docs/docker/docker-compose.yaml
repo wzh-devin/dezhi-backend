@@ -5,6 +5,8 @@ services:
     image: dezhi-serve
     container_name: dezhi-serve
     restart: always
+    ports:
+      - '13001:13001'
     volumes:
       - ./logs:/app/logs
     environment:
