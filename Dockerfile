@@ -16,4 +16,4 @@ RUN rm -f /etc/localtime \
 # 设置暴露端口
 EXPOSE 13001
 
-CMD ["sh", "-c", "java ${JAVA_OPTS} -jar ontology_core-0.0.1.jar"]
+CMD ["sh", "-c", "java ${JAVA_OPTS} -jar dezhi-serve-0.0.1.jar"]
