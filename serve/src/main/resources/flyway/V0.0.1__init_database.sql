@@ -24,6 +24,16 @@ COMMENT
 ON COLUMN sys_dict.create_time IS '创建时间';
 COMMENT
 ON COLUMN sys_dict.update_time IS '更新时间';
+INSERT INTO "sys_dict" ("id", "code", "type", "name", "create_time", "update_time")
+VALUES (1, 'JPG', 'FILE', 'jpg文件', NOW(), NOW());
+INSERT INTO "sys_dict" ("id", "code", "type", "name", "create_time", "update_time")
+VALUES (2, 'PNG', 'FILE', 'png文件', NOW(), NOW());
+INSERT INTO "sys_dict" ("id", "code", "type", "name", "create_time", "update_time")
+VALUES (3, 'JPEG', 'FILE', 'jpeg文件', NOW(), NOW());
+INSERT INTO "sys_dict" ("id", "code", "type", "name", "create_time", "update_time")
+VALUES (4, 'GIF', 'FILE', 'gif文件', NOW(), NOW());
+INSERT INTO "sys_dict" ("id", "code", "type", "name", "create_time", "update_time")
+VALUES (5, 'MINIO', 'STORAGE', 'minio存储', NOW(), NOW());
 DROP TABLE IF EXISTS tb_article;
 CREATE TABLE tb_article
 (
