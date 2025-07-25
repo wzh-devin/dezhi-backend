@@ -100,7 +100,7 @@ spring:
 
       # ====================== 过滤器配置 ======================
       # 配置需要使用的过滤器，多个用逗号分隔
-      filters: wall,stat,slf4j
+      filters: stat,slf4j
 
       # 过滤器详细配置
       filter:
@@ -116,35 +116,6 @@ spring:
           slow-sql-millis: 3000
           # 合并多个相同SQL，避免因为参数不同而统计多条SQL
           merge-sql: true
-
-        # 防火墙过滤器配置
-        wall:
-          # 启用防火墙功能
-          enabled: true
-          # 数据库类型
-          db-type: postgresql
-          # 具体防火墙策略配置
-          config:
-            # 是否允许修改表
-            alter-table-allow: true
-            # 是否允许创建表
-            create-table-allow: true
-            # 是否允许删除数据
-            delete-allow: true
-            # 是否允许插入数据
-            insert-allow: true
-            # 是否允许多条语句一起执行
-            multi-statement-allow: true
-            # 是否允许非基本语句执行
-            none-base-statement-allow: false
-            # 是否允许查询
-            select-allow: true
-            # 是否允许select into语句
-            select-into-allow: false
-            # 是否允许更新数据
-            update-allow: true
-            # 是否允许调用存储过程
-            call-allow: true
 
         # 日志过滤器配置
         slf4j:
