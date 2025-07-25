@@ -6,7 +6,7 @@ LABEL devin=<wzh.devin@gmail.com>
 
 # 工作区
 WORKDIR /app
-COPY ./serve/target/dezhi-serve-0.0.1.jar ./dezhi-serve-0.0.1.jar
+COPY /serve/target/dezhi-serve-0.0.1.jar ./dezhi-serve-0.0.1.jar
 
 # 修改容器时区
 RUN rm -f /etc/localtime \
