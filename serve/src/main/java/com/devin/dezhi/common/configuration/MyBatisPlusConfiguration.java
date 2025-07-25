@@ -27,4 +27,13 @@ public class MyBatisPlusConfiguration {
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
         return interceptor;
     }
+
+    /**
+     * 自定义sql注入器.
+     * @return DefaultSqlInjector
+     */
+    @Bean
+    public CommonSqlInjector commonSqlInjector() {
+        return new CommonSqlInjector();
+    }
 }

@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  dezhi-serve:
+    image: dezhi-serve
+    container_name: dezhi-serve
+    restart: always
+    ports:
+      - '13001:13001'
+    volumes:
+      - ./logs:/app/logs
+    environment:
+      # Java Options
+      JAVA_OPTS: ${JAVA_OPTS}
+      # Postgresql
+      POSTGRESQL_HOST: ${POSTGRESQL_HOST}
+      POSTGRESQL_PORT: ${POSTGRESQL_PORT}
+      POSTGRESQL_USER: ${POSTGRESQL_USER}
+      POSTGRESQL_PASSWORD: ${POSTGRESQL_PASSWORD}
+      POSTGRESQL_DATABASE: ${POSTGRESQL_DATABASE}
+      POSTGRESQL_SCHEMA: ${POSTGRESQL_SCHEMA}
+      # Redis
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      # Mail
+      MAIL_HOST: ${MAIL_HOST}
+      MAIL_PORT: ${MAIL_PORT}
+      MAIL_USER: ${MAIL_USER}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      # Minio
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME}
+      # SecretKey
+      SECRET_KEY: ${SECRET_KEY}

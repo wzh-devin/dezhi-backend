@@ -12,7 +12,7 @@
 
     <artifactId>serve</artifactId>
     <name>dezhi-serve</name>
-    <version>0.0.2</version>
+    <version>0.0.1</version>
     <description>主服务入口</description>
 
     <properties>
@@ -80,7 +80,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.name}</finalName>
+        <finalName>${project.name}-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

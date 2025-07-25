@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 13001
 
 spring:
   application:
@@ -8,15 +8,13 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-  profiles:
-    active: dev
 
   # 配置数据源
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DEZHI.POSTGRESQL.HOST}:${DEZHI.POSTGRESQL.PORT}/${DEZHI.POSTGRESQL.DATABASE}?currentSchema=${DEZHI.POSTGRESQL.SCHEMA}
-    username: ${DEZHI.POSTGRESQL.USERNAME}
-    password: ${DEZHI.POSTGRESQL.PASSWORD}
+    url: jdbc:postgresql://${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_DATABASE}?currentSchema=${POSTGRESQL_SCHEMA}
+    username: ${POSTGRESQL_USER}
+    password: ${POSTGRESQL_PASSWORD}
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       # ====================== 数据源基本配置 ======================
@@ -102,7 +100,7 @@ spring:
 
       # ====================== 过滤器配置 ======================
       # 配置需要使用的过滤器，多个用逗号分隔
-      filters: wall,stat,slf4j
+      filters: stat,slf4j
 
       # 过滤器详细配置
       filter:
@@ -119,35 +117,6 @@ spring:
           # 合并多个相同SQL，避免因为参数不同而统计多条SQL
           merge-sql: true
 
-        # 防火墙过滤器配置
-        wall:
-          # 启用防火墙功能
-          enabled: true
-          # 数据库类型
-          db-type: postgresql
-          # 具体防火墙策略配置
-          config:
-            # 是否允许修改表
-            alter-table-allow: true
-            # 是否允许创建表
-            create-table-allow: true
-            # 是否允许删除数据
-            delete-allow: true
-            # 是否允许插入数据
-            insert-allow: true
-            # 是否允许多条语句一起执行
-            multi-statement-allow: true
-            # 是否允许非基本语句执行
-            none-base-statement-allow: false
-            # 是否允许查询
-            select-allow: true
-            # 是否允许select into语句
-            select-into-allow: false
-            # 是否允许更新数据
-            update-allow: true
-            # 是否允许调用存储过程
-            call-allow: true
-
         # 日志过滤器配置
         slf4j:
           # 启用日志功能
@@ -160,28 +129,28 @@ spring:
   # 配置 redis
   data:
     redis:
-      database: ${DEZHI.REDIS.DATABASE}
-      host: ${DEZHI.REDIS.HOST}
-      port: ${DEZHI.REDIS.PORT}
-      password: ${DEZHI.REDIS.PASSWORD}
+      database: ${REDIS_DATABASE}
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
       timeout: 3000
 
   # 配置 mail
   mail:
-    host: ${DEZHI.MAIL.HOST}
-    port: ${DEZHI.MAIL.PORT}
-    username: ${DEZHI.MAIL.USERNAME}
-    password: ${DEZHI.MAIL.PASSWORD}
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USER}
+    password: ${MAIL_PASSWORD}
     default-encoding: UTF-8
     properties:
       mail:
         smtp:
           auth: true
           ssl:
-            trust: ${DEZHI.MAIL.HOST}
+            trust: ${MAIL_HOST}
           socketFactory:
             class: javax.net.ssl.SSLSocketFactory
-            port: ${DEZHI.MAIL.PORT}
+            port: ${MAIL_PORT}
           starttls:
             enable: true
             required: true
@@ -212,10 +181,10 @@ sa-token:
 
 # minio 配置
 minio:
-  endpoint: ${DEZHI.MINIO.ENDPOINT}
-  access-key: ${DEZHI.MINIO.ACCESS_KEY}
-  secret-key: ${DEZHI.MINIO.SECRET_KEY}
-  bucket-name: ${DEZHI.MINIO.BUCKET_NAME}
+  endpoint: ${MINIO_ENDPOINT}
+  access-key: ${MINIO_ACCESS_KEY}
+  secret-key: ${MINIO_SECRET_KEY}
+  bucket-name: ${MINIO_BUCKET_NAME}
 
 # swagger 配置
 springdoc:
@@ -242,4 +211,4 @@ logging:
 
 dezhi:
   # 配置加密密钥
-  secret-key: ${DEZHI.SECRET_KEY}
+  secret-key: ${SECRET_KEY}

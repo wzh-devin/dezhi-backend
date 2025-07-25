@@ -8,7 +8,7 @@ import com.devin.dezhi.dao.v1.MaterialDao;
 import com.devin.dezhi.dao.v1.SysDictDao;
 import com.devin.dezhi.domain.v1.entity.Material;
 import com.devin.dezhi.domain.v1.vo.FileInfoQueryVO;
-import com.devin.dezhi.enums.FlagEnum;
+import com.devin.dezhi.enums.DelFlagEnum;
 import com.devin.dezhi.model.FileInfo;
 import com.devin.dezhi.enums.StorageTypeEnum;
 import com.devin.dezhi.exception.BusinessException;
@@ -118,7 +118,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public void clearRecycle() {
         // 获取回收站所有的文件MD5
-        List<Material> materialList = materialDao.getListByDelFlag(FlagEnum.DISABLED.getFlag());
+        List<Material> materialList = materialDao.getListByDelFlag(DelFlagEnum.IS_DELETED.getFlag());
 
         List<String> keys = materialList.stream().map(material -> {
             String md5 = material.getMd5();
@@ -134,7 +134,7 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     public void recoverMaterial(final List<Long> ids) {
-        materialDao.updateFlagByIds(ids, FlagEnum.NORMAL);
+        materialDao.updateFlagByIds(ids, DelFlagEnum.NORMAL);
     }
 
     /**

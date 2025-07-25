@@ -1,5 +1,6 @@
 package com.devin.dezhi.result;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,9 +13,12 @@ import lombok.Data;
  * @since 1.0
  */
 @Data
+@Schema(description = "通用查询VO")
 public class CommonQueryVO {
 
+    @Schema(description = "页码")
     private Integer pageNum;
 
+    @Schema(description = "每页数量")
     private Integer pageSize;
 }

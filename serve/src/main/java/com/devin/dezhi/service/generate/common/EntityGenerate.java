@@ -1,8 +1,9 @@
 package com.devin.dezhi.service.generate.common;
 
+import com.devin.dezhi.domain.v1.entity.ArticleTag;
 import com.devin.dezhi.domain.v1.entity.Material;
+import com.devin.dezhi.enums.DelFlagEnum;
 import com.devin.dezhi.model.FileInfo;
-import com.devin.dezhi.enums.FlagEnum;
 import com.devin.dezhi.utils.SnowFlake;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -39,10 +40,25 @@ public class EntityGenerate {
         material.setMd5(fileInfo.getMd5());
         material.setUrl(url);
         material.setSize(fileInfo.getSize());
-        material.setIsDeleted(FlagEnum.NORMAL.getFlag());
+        material.setIsDeleted(DelFlagEnum.NORMAL.getFlag());
         material.setFileType(fileInfo.getSuffix().toUpperCase());
         material.setStorageType(storageType);
         material.init();
         return material;
+    }
+
+    /**
+     * 生成文章标签实体类.
+     * @param articleId 文章id
+     * @param tagId 标签id
+     * @return ArticleTag
+     */
+    public ArticleTag generateArticleTag(final Long articleId, final Long tagId) {
+        ArticleTag articleTag = new ArticleTag();
+        articleTag.setId(snowFlake.nextId());
+        articleTag.setArticleId(articleId);
+        articleTag.setTagId(tagId);
+        articleTag.init();
+        return articleTag;
     }
 }

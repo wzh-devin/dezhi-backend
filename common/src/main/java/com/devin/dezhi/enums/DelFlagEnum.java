@@ -15,10 +15,10 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum FlagEnum {
+public enum DelFlagEnum {
 
-    DISABLED(0, "禁用"),
-    NORMAL(1, "正常");
+    NORMAL(0, "未删除"),
+    IS_DELETED(1, "已删除");
 
     private final Integer flag;
 
@@ -26,13 +26,13 @@ public enum FlagEnum {
 
     /**
      * 通过标识名称获取标识.
-     * @param flagName 标识名称
+     * @param flag 状态名称
      * @return 标识
      */
-    public static Integer of(final String flagName) {
-        for (FlagEnum flagEnum : FlagEnum.values()) {
-            if (flagEnum.name().equals(flagName)) {
-                return flagEnum.getFlag();
+    public static Integer of(final DelFlagEnum flag) {
+        for (DelFlagEnum delFlagEnum : DelFlagEnum.values()) {
+            if (delFlagEnum.equals(flag)) {
+                return delFlagEnum.getFlag();
             }
         }
         return null;
