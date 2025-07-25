@@ -1,12 +1,15 @@
 package com.devin.dezhi.service.generate.common;
 
+import com.devin.dezhi.domain.v1.entity.Article;
 import com.devin.dezhi.domain.v1.entity.Material;
 import com.devin.dezhi.domain.v1.entity.user.User;
+import com.devin.dezhi.domain.v1.vo.ArticleVO;
 import com.devin.dezhi.domain.v1.vo.FileInfoVO;
 import com.devin.dezhi.domain.v1.vo.user.LoginVO;
 import com.devin.dezhi.domain.v1.vo.user.PermissionVO;
 import com.devin.dezhi.domain.v1.vo.user.RoleVO;
 import com.devin.dezhi.domain.v1.vo.user.UserInfoVO;
+import com.devin.dezhi.utils.BeanCopyUtils;
 import org.springframework.beans.BeanUtils;
 import java.util.List;
 
@@ -68,5 +71,14 @@ public class RespEntityGenerate {
         fileInfo.setFileType(material.getFileType());
         fileInfo.setCreateTime(material.getCreateTime());
         return fileInfo;
+    }
+
+    /**
+     * 文章信息响应实体生成器.
+     * @param article 文章信息
+     * @return ArticleVO
+     */
+    public static ArticleVO generateArticleVO(final Article article) {
+        return BeanCopyUtils.copy(article, ArticleVO.class);
     }
 }

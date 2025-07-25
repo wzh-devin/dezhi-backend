@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * 2025/7/13 22:05.
@@ -96,5 +97,17 @@ public class TagDao extends ServiceImpl<TagMapper, Tag> {
         return lambdaQuery()
                 .eq(Tag::getName, name)
                 .one();
+    }
+
+    /**
+     * 根据标签ids获取标签列表.
+     *
+     * @param tagIds 标签ids
+     * @return List
+     */
+    public List<Tag> getTagListByIds(final Set<Long> tagIds) {
+        return lambdaQuery()
+                .in(Tag::getId, tagIds)
+                .list();
     }
 }

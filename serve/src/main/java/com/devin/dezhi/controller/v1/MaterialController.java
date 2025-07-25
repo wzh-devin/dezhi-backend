@@ -7,8 +7,8 @@ import com.devin.dezhi.common.utils.r.ApiResult;
 import com.devin.dezhi.domain.v1.entity.Material;
 import com.devin.dezhi.domain.v1.vo.FileInfoQueryVO;
 import com.devin.dezhi.domain.v1.vo.FileInfoVO;
+import com.devin.dezhi.enums.DelFlagEnum;
 import com.devin.dezhi.enums.FileTypeEnum;
-import com.devin.dezhi.enums.FlagEnum;
 import com.devin.dezhi.enums.StorageTypeEnum;
 import com.devin.dezhi.service.v1.MaterialService;
 import com.devin.dezhi.utils.BeanCopyUtils;
@@ -93,7 +93,7 @@ class MaterialController {
             @RequestParam(value = "fileName", required = false) final String fileName,
             @RequestParam(value = "fileType", required = false) final FileTypeEnum fileType,
             @RequestParam(value = "storageType", required = false) final StorageTypeEnum storageType,
-            @RequestParam(value = "status", required = true) final FlagEnum status
+            @RequestParam(value = "status", required = true) final DelFlagEnum status
     ) {
         FileInfoQueryVO queryVO = new FileInfoQueryVO();
         queryVO.setName(fileName);
@@ -101,7 +101,7 @@ class MaterialController {
         queryVO.setStorageType(Objects.isNull(storageType) ? null : storageType.name());
         queryVO.setPageNum(pageNum);
         queryVO.setPageSize(pageSize);
-        queryVO.setStatus(status.name());
+        queryVO.setStatus(status);
 
         Page<Material> page = materialService.page(queryVO);
         List<FileInfoVO> pageResult = BeanCopyUtils.copy(page.getRecords(), FileInfoVO.class);

@@ -3,6 +3,7 @@ package com.devin.dezhi.service.generate.user;
 import com.devin.dezhi.domain.v1.entity.user.User;
 import com.devin.dezhi.domain.v1.entity.user.UserRole;
 import com.devin.dezhi.domain.v1.vo.user.UserInfoQueryVO;
+import com.devin.dezhi.enums.DelFlagEnum;
 import com.devin.dezhi.utils.PasswordEncrypt;
 import com.devin.dezhi.utils.SnowFlake;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class UserEntityGenerate {
         user.setUsername(userInfoQueryVO.getUsername());
         user.setPassword(passwordEncrypt.encrypt(userInfoQueryVO.getPassword()));
         user.setEmail(userInfoQueryVO.getEmail());
+        user.setIsDeleted(DelFlagEnum.NORMAL.getFlag());
         user.init();
 
         return user;

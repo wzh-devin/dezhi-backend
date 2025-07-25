@@ -1,8 +1,8 @@
 package com.devin.dezhi.service.generate.common;
 
 import com.devin.dezhi.domain.v1.entity.Material;
+import com.devin.dezhi.enums.DelFlagEnum;
 import com.devin.dezhi.model.FileInfo;
-import com.devin.dezhi.enums.FlagEnum;
 import com.devin.dezhi.utils.SnowFlake;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -39,7 +39,7 @@ public class EntityGenerate {
         material.setMd5(fileInfo.getMd5());
         material.setUrl(url);
         material.setSize(fileInfo.getSize());
-        material.setIsDeleted(FlagEnum.NORMAL.getFlag());
+        material.setIsDeleted(DelFlagEnum.NORMAL.getFlag());
         material.setFileType(fileInfo.getSuffix().toUpperCase());
         material.setStorageType(storageType);
         material.init();

@@ -1,5 +1,6 @@
 package com.devin.dezhi.domain.v1.vo;
 
+import com.devin.dezhi.enums.DelFlagEnum;
 import com.devin.dezhi.result.CommonQueryVO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -40,7 +41,7 @@ public class FileInfoQueryVO extends CommonQueryVO {
     private String storageType;
 
     @Schema(description = "文件状态")
-    private String status;
+    private DelFlagEnum status;
 
     @Schema(description = "上传时间")
     private Date uploadTime;

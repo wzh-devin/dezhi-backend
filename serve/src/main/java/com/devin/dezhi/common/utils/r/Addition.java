@@ -41,6 +41,20 @@ public class Addition {
     }
 
     /**
+     * 附加属性.
+     *
+     * @param page 分页参数
+     * @return 附加属性
+     */
+    public static Addition of(final PageResult<?> page) {
+        Addition addition = new Addition();
+        addition.setTotal(convert(page.getTotal()));
+        addition.setPageNum(convert(page.getPageNum()));
+        addition.setPageSize(convert(page.getPageSize()));
+        return addition;
+    }
+
+    /**
      * 转换分页参数格式为int.
      * @param value 值
      * @return 转换后的值
