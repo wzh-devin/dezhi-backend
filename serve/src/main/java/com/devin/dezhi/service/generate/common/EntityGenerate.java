@@ -1,5 +1,6 @@
 package com.devin.dezhi.service.generate.common;
 
+import com.devin.dezhi.domain.v1.entity.ArticleTag;
 import com.devin.dezhi.domain.v1.entity.Material;
 import com.devin.dezhi.enums.DelFlagEnum;
 import com.devin.dezhi.model.FileInfo;
@@ -44,5 +45,20 @@ public class EntityGenerate {
         material.setStorageType(storageType);
         material.init();
         return material;
+    }
+
+    /**
+     * 生成文章标签实体类.
+     * @param articleId 文章id
+     * @param tagId 标签id
+     * @return ArticleTag
+     */
+    public ArticleTag generateArticleTag(final Long articleId, final Long tagId) {
+        ArticleTag articleTag = new ArticleTag();
+        articleTag.setId(snowFlake.nextId());
+        articleTag.setArticleId(articleId);
+        articleTag.setTagId(tagId);
+        articleTag.init();
+        return articleTag;
     }
 }

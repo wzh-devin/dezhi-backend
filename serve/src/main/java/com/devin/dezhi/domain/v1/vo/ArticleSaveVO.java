@@ -1,6 +1,7 @@
 package com.devin.dezhi.domain.v1.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import java.util.List;
 
@@ -19,9 +20,11 @@ public class ArticleSaveVO {
     @Schema(description = "文章类别id")
     private Long categoryId;
 
+    @Size(max = 100)
     @Schema(description = "文章标题")
     private String title;
 
+    @Size(max = 255)
     @Schema(description = "文章摘要")
     private String summary;
 

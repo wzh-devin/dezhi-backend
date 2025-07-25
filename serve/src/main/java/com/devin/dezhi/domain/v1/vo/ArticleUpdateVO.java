@@ -1,8 +1,10 @@
 package com.devin.dezhi.domain.v1.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -15,17 +17,21 @@ import java.util.List;
  * @since 1.0
  */
 @Data
-public class ArticleVO {
+public class ArticleUpdateVO {
 
+    @NotNull
+    @NotBlank
     @Schema(description = "文章id")
     private Long id;
 
-    @Schema(description = "文章类别信息")
-    private CategoryVO category;
+    @Schema(description = "文章类别id")
+    private Long categoryId;
 
+    @Size(max = 100)
     @Schema(description = "文章标题")
     private String title;
 
+    @Size(max = 255)
     @Schema(description = "文章摘要")
     private String summary;
 
@@ -44,18 +50,9 @@ public class ArticleVO {
     @Schema(description = "文章状态")
     private Integer status;
 
-    @Schema(description = "文章是否热门")
-    private Integer isHot;
-
     @Schema(description = "文章是否AI生成")
     private Integer isAi;
 
-    @Schema(description = "文章创建时间")
-    private LocalDateTime createTime;
-
-    @Schema(description = "文章更新时间")
-    private LocalDateTime updateTime;
-
-    @Schema(description = "文章标签列表")
-    private List<TagVO> tagList;
+    @Schema(description = "文章标签id列表")
+    private List<Long> tagIdList;
 }
