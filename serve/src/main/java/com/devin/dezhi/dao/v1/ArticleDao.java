@@ -8,6 +8,7 @@ import com.devin.dezhi.domain.v1.entity.ArticleTag;
 import com.devin.dezhi.domain.v1.entity.Category;
 import com.devin.dezhi.domain.v1.vo.ArticleQueryVO;
 import com.devin.dezhi.enums.DelFlagEnum;
+import com.devin.dezhi.enums.StatusEnum;
 import com.devin.dezhi.mapper.v1.ArticleMapper;
 import com.devin.dezhi.mapper.v1.ArticleTagMapper;
 import org.springframework.stereotype.Service;
@@ -75,6 +76,8 @@ public class ArticleDao extends ServiceImpl<ArticleMapper, Article> {
             queryWrapper.like(Article::getTitle, queryVO.getTitle());
         }
 
+        queryWrapper.orderByDesc(Article::getUpdateTime);
+
         return page(page, queryWrapper);
     }
 
@@ -110,6 +113,7 @@ public class ArticleDao extends ServiceImpl<ArticleMapper, Article> {
     public void delBatchLogicByIds(final Collection<Long> idList) {
         lambdaUpdate()
                 .in(Article::getId, idList)
+                .set(Article::getStatus, StatusEnum.DRAFT.getStatus())
                 .set(Article::getIsDeleted, DelFlagEnum.IS_DELETED.getFlag())
                 .update();
     }
@@ -127,7 +131,7 @@ public class ArticleDao extends ServiceImpl<ArticleMapper, Article> {
     }
 
     /**
-     * 批量物理删除文章标签.
+     * 批量物理删除文章.
      *
      * @param idList 文章标签id列表
      */
@@ -186,5 +190,28 @@ public class ArticleDao extends ServiceImpl<ArticleMapper, Article> {
                     });
         }
         return categoryMap;
+    }
+
+    /**
+     * 根据文章状态查询文章.
+     * @param flag 状态
+     * @return 文章列表
+     */
+    public List<Article> getByDelFlag(final Integer flag) {
+        return lambdaQuery()
+                .eq(Article::getIsDeleted, flag)
+                .list();
+    }
+
+    /**
+     * 修改文章状态.
+     * @param id 文章id
+     * @param status 状态
+     */
+    public void updateStatusById(final Long id, final StatusEnum status) {
+        lambdaUpdate()
+                .eq(Article::getId, id)
+                .set(Article::getStatus, status.getStatus())
+                .update();
     }
 }

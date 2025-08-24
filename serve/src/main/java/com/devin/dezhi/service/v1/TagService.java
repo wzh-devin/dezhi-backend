@@ -45,4 +45,11 @@ public interface TagService {
      * @param tagVO 标签信息
      */
     void editTag(TagVO tagVO);
+
+    /**
+     * 获取标签可选项.
+     *
+     * @return List
+     */
+    List<TagVO> getTagOptional();
 }

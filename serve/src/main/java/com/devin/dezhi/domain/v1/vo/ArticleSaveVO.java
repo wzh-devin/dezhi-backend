@@ -17,6 +17,9 @@ import java.util.List;
 @Data
 public class ArticleSaveVO {
 
+    @Schema(description = "文章id")
+    private Long id;
+
     @Schema(description = "文章类别id")
     private Long categoryId;
 

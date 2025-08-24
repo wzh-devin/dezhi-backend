@@ -41,4 +41,10 @@ public interface CategoryService {
      * @param categoryVO 类别信息
      */
     void editCategory(CategoryVO categoryVO);
+
+    /**
+     * 获取类别列表.
+     * @return 类别列表
+     */
+    List<CategoryVO> getCategoryOptional();
 }

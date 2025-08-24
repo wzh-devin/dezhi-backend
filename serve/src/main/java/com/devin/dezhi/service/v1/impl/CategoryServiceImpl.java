@@ -66,4 +66,11 @@ public class CategoryServiceImpl implements CategoryService {
     public void editCategory(final CategoryVO categoryVO) {
         categoryDao.updateCategory(categoryVO);
     }
+
+    @Override
+    public List<CategoryVO> getCategoryOptional() {
+        return categoryDao.list().stream()
+                .map(category -> BeanCopyUtils.copy(category, CategoryVO.class))
+                .toList();
+    }
 }

@@ -83,11 +83,22 @@ public class CategoryController {
     }
 
     /**
+     * 获取类别下拉列表.
+     *
+     * @return List
+     */
+    @GetMapping("/getCategoryOptional")
+    @Operation(summary = "获取类别下拉列表", description = "获取类别下拉列表")
+    public ApiResult<List<CategoryVO>> getCategoryOptional() {
+        return ApiResult.success(categoryService.getCategoryOptional());
+    }
+
+    /**
      * 分页查询类别.
      *
-     * @param pageNum  页码
-     * @param pageSize 每页数量
-     * @param categoryName  类别名称
+     * @param pageNum      页码
+     * @param pageSize     每页数量
+     * @param categoryName 类别名称
      * @return List
      */
     @GetMapping("/page")

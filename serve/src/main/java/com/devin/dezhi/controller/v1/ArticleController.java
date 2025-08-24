@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,6 +64,17 @@ public class ArticleController {
     }
 
     /**
+     * 初始化新增.
+     *
+     * @return void
+     */
+    @GetMapping("/saveArticleInit")
+    @Operation(summary = "初始化新增", description = "初始化新增")
+    public ApiResult<ArticleVO> saveArticleInit() {
+        return ApiResult.success(articleService.saveArticleInit());
+    }
+
+    /**
      * 批量删除文章.
      *
      * @param deleteVO 文章ID列表
@@ -91,13 +103,12 @@ public class ArticleController {
     /**
      * 清空回收站.
      *
-     * @param deleteVO 批量删除文章ID列表
      * @return void
      */
-    @PostMapping("/cleanRecycle")
+    @DeleteMapping("/cleanRecycle")
     @Operation(summary = "清空回收站", description = "清空回收站")
-    public ApiResult<Void> cleanRecycle(@RequestBody final CommonDeleteVO deleteVO) {
-        articleService.cleanRecycle(deleteVO.getIdList());
+    public ApiResult<Void> cleanRecycle() {
+        articleService.cleanRecycle();
         return ApiResult.success();
     }
 
@@ -115,7 +126,24 @@ public class ArticleController {
     }
 
     /**
+     * 更新文章状态.
+     *
+     * @param id     文章ID
+     * @param status 文章状态
+     * @return void
+     */
+    @PostMapping("/{id}")
+    public ApiResult<Void> updateStatus(
+            @PathVariable("id") final Long id,
+            @RequestParam(value = "status", required = true) final StatusEnum status
+    ) {
+        articleService.updateStatus(id, status);
+        return ApiResult.success();
+    }
+
+    /**
      * 获取文章详情.
+     *
      * @param articleId 文章ID
      * @return 文章详情
      */
@@ -143,7 +171,7 @@ public class ArticleController {
             @Parameter(name = "pageSize", description = "每页数量", required = false),
             @Parameter(name = "title", description = "文章标题", required = false),
             @Parameter(name = "categoryName", description = "文章类别", required = false),
-            @Parameter(name = "status", description = "文章状态", required = true),
+            @Parameter(name = "status", description = "文章状态", required = false),
             @Parameter(name = "delFlag", description = "删除状态", required = true)
     })
     // CHECKSTYLE:ON
@@ -153,7 +181,7 @@ public class ArticleController {
             @RequestParam(value = "pageSize", required = false) final Integer pageSize,
             @RequestParam(value = "title", required = false) final String title,
             @RequestParam(value = "categoryName", required = false) final String categoryName,
-            @RequestParam(value = "status", required = true) final StatusEnum status,
+            @RequestParam(value = "status", required = false) final StatusEnum status,
             @RequestParam(value = "delFlag", required = true) final DelFlagEnum delFlag
     ) {
         ArticleQueryVO queryVO = new ArticleQueryVO();

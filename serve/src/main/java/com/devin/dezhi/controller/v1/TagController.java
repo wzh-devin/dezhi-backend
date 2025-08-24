@@ -84,6 +84,17 @@ public class TagController {
     }
 
     /**
+     * 获取标签可选项.
+     *
+     * @return List
+     */
+    @GetMapping("/getTagOptional")
+    @Operation(summary = "获取标签可选项", description = "获取标签可选项")
+    public ApiResult<List<TagVO>> getTagOptional() {
+        return ApiResult.success(tagService.getTagOptional());
+    }
+
+    /**
      * 分页查询标签.
      *
      * @param pageNum  页码

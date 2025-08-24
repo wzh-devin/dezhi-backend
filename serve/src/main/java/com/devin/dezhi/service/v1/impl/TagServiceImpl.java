@@ -65,4 +65,11 @@ public class TagServiceImpl implements TagService {
     public void editTag(final TagVO tagVO) {
         tagDao.updateTag(tagVO);
     }
+
+    @Override
+    public List<TagVO> getTagOptional() {
+        return tagDao.list().stream()
+                .map(tag -> BeanCopyUtils.copy(tag, TagVO.class))
+                .toList();
+    }
 }

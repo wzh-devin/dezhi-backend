@@ -50,7 +50,7 @@ CREATE TABLE tb_article
     is_ai       int2         NOT NULL DEFAULT 0,
     create_time timestamp    NOT NULL DEFAULT now(),
     update_time timestamp    NOT NULL DEFAULT now(),
-    is_deleted  int2         NOT NULL,
+    is_deleted  int2         NOT NULL DEFAULT 0,
     PRIMARY KEY (id)
 );
 COMMENT
@@ -88,7 +88,7 @@ CREATE TABLE tb_article_tag
 (
     id          int8      NOT NULL,
     article_id  int8      NOT NULL,
-    tag         int8      NOT NULL,
+    tag_id         int8      NOT NULL,
     create_time timestamp NOT NULL DEFAULT now(),
     update_time timestamp NOT NULL DEFAULT now(),
     PRIMARY KEY (id)
@@ -100,7 +100,7 @@ ON COLUMN tb_article_tag.id IS '文章标签关联id';
 COMMENT
 ON COLUMN tb_article_tag.article_id IS '文章id';
 COMMENT
-ON COLUMN tb_article_tag.tag IS '标签id';
+ON COLUMN tb_article_tag.tag_id IS '标签id';
 COMMENT
 ON COLUMN tb_article_tag.create_time IS '创建时间';
 COMMENT

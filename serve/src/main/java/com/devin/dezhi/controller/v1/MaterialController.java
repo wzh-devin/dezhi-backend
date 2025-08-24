@@ -57,10 +57,9 @@ class MaterialController {
      * @param material 文件素材信息
      * @return 上传之后的文件地址
      */
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload", headers = "content-type=multipart/form-data")
     @Operation(summary = "上传文件素材", description = "上传文件素材")
-    public ApiResult<String> upload(
-            @Parameter(name = "material", description = "文件素材信息") @RequestPart("material") final MultipartFile material) {
+    public ApiResult<String> upload(@RequestPart("material") final MultipartFile material) {
         return ApiResult.success(materialService.upload(material));
     }
 
@@ -120,6 +119,11 @@ class MaterialController {
         return ApiResult.success();
     }
 
+    /**
+     * 批量恢复文件.
+     * @param ids 文件id列表
+     * @return Void
+     */
     @PostMapping("/recoverMaterial")
     @Operation(summary = "批量恢复文件", description = "根据文件id列表恢复文件")
     public ApiResult<Void> recoverMaterial(final @RequestBody List<Long> ids) {

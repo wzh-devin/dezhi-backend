@@ -14,9 +14,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 2025/7/13 22:05.
@@ -108,6 +110,28 @@ public class TagDao extends ServiceImpl<TagMapper, Tag> {
     public List<Tag> getTagListByIds(final Set<Long> tagIds) {
         return lambdaQuery()
                 .in(Tag::getId, tagIds)
+                .list();
+    }
+
+    /**
+     * 根据文章ids获取标签列表.
+     * @param articleIds 文章ids
+     * @return  List
+     */
+    public List<Tag> getTagListByArticleIds(final Collection<Long> articleIds) {
+        if (articleIds.isEmpty()) {
+            return new ArrayList<>();
+        }
+        Set<Long> tagIdSet = articleTagMapper.selectList(new LambdaQueryWrapper<ArticleTag>()
+                        .in(ArticleTag::getArticleId, articleIds))
+                .stream()
+                .map(ArticleTag::getTagId)
+                .collect(Collectors.toSet());
+        if (tagIdSet.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return lambdaQuery()
+                .in(Tag::getId, tagIdSet)
                 .list();
     }
 }

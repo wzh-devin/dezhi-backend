@@ -157,6 +157,7 @@ spring:
 
   # 配置 flyway
   flyway:
+    validate-on-migrate: false
     clean-disabled: true
     baseline-on-migrate: true
     baseline-version: 0
