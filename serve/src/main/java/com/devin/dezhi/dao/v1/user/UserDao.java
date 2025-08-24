@@ -35,7 +35,7 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
         if (Objects.nonNull(userInfoQueryVO.getPassword())) {
             lambdaQueryWrapper.eq(User::getPassword, userInfoQueryVO.getPassword());
         }
-        if (Objects.nonNull(userInfoQueryVO.getEmail())) {
+        if (Objects.nonNull(userInfoQueryVO.getEmail()) && !userInfoQueryVO.getEmail().isBlank()) {
             lambdaQueryWrapper.eq(User::getEmail, userInfoQueryVO.getEmail());
         }
 
