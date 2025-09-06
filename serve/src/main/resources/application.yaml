@@ -1,5 +1,5 @@
 server:
-  port: 13001
+  port: 13009
 
 spring:
   application:
@@ -8,6 +8,8 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+  profiles:
+    active: dev
 
   # 配置数据源
   datasource:

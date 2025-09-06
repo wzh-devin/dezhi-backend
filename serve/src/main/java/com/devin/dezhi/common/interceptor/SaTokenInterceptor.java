@@ -24,10 +24,11 @@ import java.util.Objects;
  * 2025/4/19 18:05.
  *
  * <p>
- *     对SaInterceptor进行更细化的重写<br>
- *     这里只是对拦截的路径新增了一个日志打印，以及Redis的缓存策略<br>
- *     如果有更精细化操作，也可以自定义重写
+ * 对SaInterceptor进行更细化的重写<br>
+ * 这里只是对拦截的路径新增了一个日志打印，以及Redis的缓存策略<br>
+ * 如果有更精细化操作，也可以自定义重写
  * </p>
+ *
  * @author <a href="https://github.com/wzh-devin">devin</a>
  * @version 1.0
  * @since 1.0
@@ -68,7 +69,15 @@ public class SaTokenInterceptor extends SaInterceptor {
             if ("OPTIONS".equals(request.getMethod())) {
                 return true;
             }
-            log.info("拦截的请求路径为：{}", request.getRequestURI());
+            String requestPath = request.getRequestURI();
+            log.info("拦截的请求路径为：{}", requestPath);
+
+            // ✅ 新增：过滤异常路径，避免拦截JSON响应或错误页面
+            if (shouldSkipIntercept(request, requestPath)) {
+                log.debug("跳过拦截，路径：{}", requestPath);
+                return true;
+            }
+
             if (this.isAnnotation && handler instanceof HandlerMethod) {
                 Method method = ((HandlerMethod) handler).getMethod();
                 SaAnnotationStrategy.instance.checkMethodAnnotation.accept(method);
@@ -86,5 +95,39 @@ public class SaTokenInterceptor extends SaInterceptor {
         }
 
         return true;
+    }
+
+    /**
+     * 判断是否需要跳过拦截.
+     *
+     * @param request     请求
+     * @param requestPath 请求路径
+     * @return boolean
+     */
+    private boolean shouldSkipIntercept(final HttpServletRequest request, final String requestPath) {
+        // 1. 跳过错误页面
+        if (requestPath.startsWith("/error")) {
+            return true;
+        }
+
+        // 2. 跳过包含JSON格式的路径（异常响应被误当作路径）
+        if (requestPath.contains("{") || requestPath.contains("}")) {
+            return true;
+        }
+
+        // 3. 跳过非正常请求分发类型
+        if (request.getDispatcherType() != jakarta.servlet.DispatcherType.REQUEST) {
+            return true;
+        }
+
+        // 4. 跳过静态资源
+        if (requestPath.matches(".+\\.(js|css|png|jpg|jpeg|gif|ico|woff|woff2|ttf|svg)$")) {
+            return true;
+        }
+
+        // 5. 跳过健康检查等路径
+        return requestPath.startsWith("/actuator")
+                || requestPath.startsWith("/health")
+                || requestPath.startsWith("/favicon.ico");
     }
 }

@@ -5,6 +5,7 @@ import com.devin.dezhi.enums.HttpErrorEnum;
 import com.devin.dezhi.common.utils.r.ApiResult;
 import com.devin.dezhi.exception.BusinessException;
 import com.devin.dezhi.exception.FileException;
+import com.devin.dezhi.exception.ModelException;
 import com.devin.dezhi.exception.VerifyException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +51,18 @@ public class GlobalException {
     public ApiResult<?> businessException(final BusinessException e) {
         log.error("业务异常: {}", e.getMessage());
         return ApiResult.fail(HttpErrorEnum.BUSINESS_ERROR, e.getMessage());
+    }
+
+    /**
+     * 模型异常.
+     * @param e 模型异常信息
+     * @return 响应结果集
+     */
+    @ExceptionHandler(ModelException.class)
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiResult<?> modelException(final ModelException e) {
+        log.error("模型异常: {}", e.getMessage());
+        return ApiResult.fail(HttpErrorEnum.MODEL_ERROR.getErrCode(), e.getMessage());
     }
 
     /**
