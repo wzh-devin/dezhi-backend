@@ -8,8 +8,6 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
-  profiles:
-    active: dev
 
   # 配置数据源
   datasource:
