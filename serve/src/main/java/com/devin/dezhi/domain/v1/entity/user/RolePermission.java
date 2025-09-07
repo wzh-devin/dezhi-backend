@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
  * @since 1.0
  */
 @Data
-@TableName("tb_role_permission")
+@TableName("dz_role_permission")
 public class RolePermission implements Serializable {
 
     @Serial

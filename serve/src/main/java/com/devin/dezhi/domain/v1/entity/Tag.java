@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("tb_tag")
+@TableName("dz_tag")
 public class Tag implements Serializable {
 
     @Serial

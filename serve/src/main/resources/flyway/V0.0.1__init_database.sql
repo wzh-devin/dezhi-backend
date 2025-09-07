@@ -1,3 +1,6 @@
+/* --------------- 启用Pgvector --------------- */
+CREATE EXTENSION IF NOT EXISTS vector;
+
 /* --------------- 创建表 --------------- */
 DROP TABLE IF EXISTS sys_dict;
 CREATE TABLE sys_dict
@@ -34,8 +37,8 @@ INSERT INTO "sys_dict" ("id", "code", "type", "name", "create_time", "update_tim
 VALUES (4, 'GIF', 'FILE', 'gif文件', NOW(), NOW());
 INSERT INTO "sys_dict" ("id", "code", "type", "name", "create_time", "update_time")
 VALUES (5, 'MINIO', 'STORAGE', 'minio存储', NOW(), NOW());
-DROP TABLE IF EXISTS tb_article;
-CREATE TABLE tb_article
+DROP TABLE IF EXISTS dz_article;
+CREATE TABLE dz_article
 (
     id          int8         NOT NULL,
     category_id int8,
@@ -51,40 +54,43 @@ CREATE TABLE tb_article
     create_time timestamp    NOT NULL DEFAULT now(),
     update_time timestamp    NOT NULL DEFAULT now(),
     is_deleted  int2         NOT NULL DEFAULT 0,
+    summary_embedding vector(1536),
     PRIMARY KEY (id)
 );
 COMMENT
-ON TABLE tb_article IS '文章表';
+ON TABLE dz_article IS '文章表';
 COMMENT
-ON COLUMN tb_article.id IS '文章id';
+ON COLUMN dz_article.id IS '文章id';
 COMMENT
-ON COLUMN tb_article.category_id IS '文章分类';
+ON COLUMN dz_article.category_id IS '文章分类';
 COMMENT
-ON COLUMN tb_article.title IS '文章标题';
+ON COLUMN dz_article.title IS '文章标题';
 COMMENT
-ON COLUMN tb_article.summary IS '文章简介';
+ON COLUMN dz_article.summary IS '文章简介';
 COMMENT
-ON COLUMN tb_article.content IS '文章内容';
+ON COLUMN dz_article.content IS '文章内容';
 COMMENT
-ON COLUMN tb_article.content_md IS '文章内容（markdown格式）';
+ON COLUMN dz_article.content_md IS '文章内容（markdown格式）';
 COMMENT
-ON COLUMN tb_article.url IS '文章url地址';
+ON COLUMN dz_article.url IS '文章url地址';
 COMMENT
-ON COLUMN tb_article.is_stick IS '文章是否置顶（0：否；1：是）';
+ON COLUMN dz_article.is_stick IS '文章是否置顶（0：否；1：是）';
 COMMENT
-ON COLUMN tb_article.status IS '文章状态（0：草稿；1：发布）';
+ON COLUMN dz_article.status IS '文章状态（0：草稿；1：发布）';
 COMMENT
-ON COLUMN tb_article.is_hot IS '是否热门文章（0：否；1：是）';
+ON COLUMN dz_article.is_hot IS '是否热门文章（0：否；1：是）';
 COMMENT
-ON COLUMN tb_article.is_ai IS '是否ai创建（0：否；1：是）';
+ON COLUMN dz_article.is_ai IS '是否ai创建（0：否；1：是）';
 COMMENT
-ON COLUMN tb_article.create_time IS '创建时间';
+ON COLUMN dz_article.create_time IS '创建时间';
 COMMENT
-ON COLUMN tb_article.update_time IS '更新时间';
+ON COLUMN dz_article.update_time IS '更新时间';
 COMMENT
-ON COLUMN tb_article.is_deleted IS '是否被删除（0：未删除；1：已删除）';
-DROP TABLE IF EXISTS tb_article_tag;
-CREATE TABLE tb_article_tag
+ON COLUMN dz_article.is_deleted IS '是否被删除（0：未删除；1：已删除）';
+COMMENT
+ON COLUMN dz_article.summary_embedding IS '文章内容向量嵌入';
+DROP TABLE IF EXISTS dz_article_tag;
+CREATE TABLE dz_article_tag
 (
     id          int8      NOT NULL,
     article_id  int8      NOT NULL,
@@ -94,19 +100,19 @@ CREATE TABLE tb_article_tag
     PRIMARY KEY (id)
 );
 COMMENT
-ON TABLE tb_article_tag IS '文章标签关联表';
+ON TABLE dz_article_tag IS '文章标签关联表';
 COMMENT
-ON COLUMN tb_article_tag.id IS '文章标签关联id';
+ON COLUMN dz_article_tag.id IS '文章标签关联id';
 COMMENT
-ON COLUMN tb_article_tag.article_id IS '文章id';
+ON COLUMN dz_article_tag.article_id IS '文章id';
 COMMENT
-ON COLUMN tb_article_tag.tag_id IS '标签id';
+ON COLUMN dz_article_tag.tag_id IS '标签id';
 COMMENT
-ON COLUMN tb_article_tag.create_time IS '创建时间';
+ON COLUMN dz_article_tag.create_time IS '创建时间';
 COMMENT
-ON COLUMN tb_article_tag.update_time IS '更新时间';
-DROP TABLE IF EXISTS tb_category;
-CREATE TABLE tb_category
+ON COLUMN dz_article_tag.update_time IS '更新时间';
+DROP TABLE IF EXISTS dz_category;
+CREATE TABLE dz_category
 (
     id          int8         NOT NULL,
     name        VARCHAR(255) NOT NULL,
@@ -116,19 +122,19 @@ CREATE TABLE tb_category
     PRIMARY KEY (id)
 );
 COMMENT
-ON TABLE tb_category IS '类别表';
+ON TABLE dz_category IS '类别表';
 COMMENT
-ON COLUMN tb_category.id IS '分类id';
+ON COLUMN dz_category.id IS '分类id';
 COMMENT
-ON COLUMN tb_category.name IS '分类名称';
+ON COLUMN dz_category.name IS '分类名称';
 COMMENT
-ON COLUMN tb_category.color IS '类别颜色';
+ON COLUMN dz_category.color IS '类别颜色';
 COMMENT
-ON COLUMN tb_category.create_time IS '创建时间';
+ON COLUMN dz_category.create_time IS '创建时间';
 COMMENT
-ON COLUMN tb_category.update_time IS '更新时间';
-DROP TABLE IF EXISTS tb_material;
-CREATE TABLE tb_material
+ON COLUMN dz_category.update_time IS '更新时间';
+DROP TABLE IF EXISTS dz_material;
+CREATE TABLE dz_material
 (
     id           int8         NOT NULL,
     name         VARCHAR(255) NOT NULL,
@@ -143,29 +149,29 @@ CREATE TABLE tb_material
     PRIMARY KEY (id)
 );
 COMMENT
-ON TABLE tb_material IS '文件素材表';
+ON TABLE dz_material IS '文件素材表';
 COMMENT
-ON COLUMN tb_material.id IS '素材id';
+ON COLUMN dz_material.id IS '素材id';
 COMMENT
-ON COLUMN tb_material.name IS '文件名称';
+ON COLUMN dz_material.name IS '文件名称';
 COMMENT
-ON COLUMN tb_material.md5 IS '文件md5值';
+ON COLUMN dz_material.md5 IS '文件md5值';
 COMMENT
-ON COLUMN tb_material.size IS '文件大小';
+ON COLUMN dz_material.size IS '文件大小';
 COMMENT
-ON COLUMN tb_material.file_type IS '文件类型';
+ON COLUMN dz_material.file_type IS '文件类型';
 COMMENT
-ON COLUMN tb_material.storage_type IS '文件存储类型';
+ON COLUMN dz_material.storage_type IS '文件存储类型';
 COMMENT
-ON COLUMN tb_material.url IS '文件地址';
+ON COLUMN dz_material.url IS '文件地址';
 COMMENT
-ON COLUMN tb_material.create_time IS '创建时间';
+ON COLUMN dz_material.create_time IS '创建时间';
 COMMENT
-ON COLUMN tb_material.update_time IS '更新时间';
+ON COLUMN dz_material.update_time IS '更新时间';
 COMMENT
-ON COLUMN tb_material.is_deleted IS '是否删除（0：未删除；1：已删除）';
-DROP TABLE IF EXISTS tb_permission;
-CREATE TABLE tb_permission
+ON COLUMN dz_material.is_deleted IS '是否删除（0：未删除；1：已删除）';
+DROP TABLE IF EXISTS dz_permission;
+CREATE TABLE dz_permission
 (
     id          int8         NOT NULL,
     permission  VARCHAR(60)  NOT NULL,
@@ -175,34 +181,34 @@ CREATE TABLE tb_permission
     PRIMARY KEY (id)
 );
 COMMENT
-ON TABLE tb_permission IS '权限表';
+ON TABLE dz_permission IS '权限表';
 COMMENT
-ON COLUMN tb_permission.id IS '权限id';
+ON COLUMN dz_permission.id IS '权限id';
 COMMENT
-ON COLUMN tb_permission.permission IS '权限名称';
+ON COLUMN dz_permission.permission IS '权限名称';
 COMMENT
-ON COLUMN tb_permission.remark IS '权限描述';
+ON COLUMN dz_permission.remark IS '权限描述';
 COMMENT
-ON COLUMN tb_permission.create_time IS '创建时间';
+ON COLUMN dz_permission.create_time IS '创建时间';
 COMMENT
-ON COLUMN tb_permission.update_time IS '更新时间';
-INSERT INTO "tb_permission" ("id", "permission", "remark", "create_time", "update_time")
+ON COLUMN dz_permission.update_time IS '更新时间';
+INSERT INTO "dz_permission" ("id", "permission", "remark", "create_time", "update_time")
 VALUES (1, 'user:add', '用户新增', NOW(), NOW());
-INSERT INTO "tb_permission" ("id", "permission", "remark", "create_time", "update_time")
+INSERT INTO "dz_permission" ("id", "permission", "remark", "create_time", "update_time")
 VALUES (2, 'user:delete', '删除用户', NOW(), NOW());
-INSERT INTO "tb_permission" ("id", "permission", "remark", "create_time", "update_time")
+INSERT INTO "dz_permission" ("id", "permission", "remark", "create_time", "update_time")
 VALUES (3, 'user:edit', '修改用户', NOW(), NOW());
-INSERT INTO "tb_permission" ("id", "permission", "remark", "create_time", "update_time")
+INSERT INTO "dz_permission" ("id", "permission", "remark", "create_time", "update_time")
 VALUES (4, 'article:add', '撰写文章', NOW(), NOW());
-INSERT INTO "tb_permission" ("id", "permission", "remark", "create_time", "update_time")
+INSERT INTO "dz_permission" ("id", "permission", "remark", "create_time", "update_time")
 VALUES (5, 'article:delete', '删除文章', NOW(), NOW());
-INSERT INTO "tb_permission" ("id", "permission", "remark", "create_time", "update_time")
+INSERT INTO "dz_permission" ("id", "permission", "remark", "create_time", "update_time")
 VALUES (6, 'article:edit', '修改文章', NOW(), NOW());
-INSERT INTO "tb_permission" ("id", "permission", "remark", "create_time", "update_time")
+INSERT INTO "dz_permission" ("id", "permission", "remark", "create_time", "update_time")
 VALUES (7, 'article:release', '发布文章', NOW(), NOW());
 
-DROP TABLE IF EXISTS tb_role;
-CREATE TABLE tb_role
+DROP TABLE IF EXISTS dz_role;
+CREATE TABLE dz_role
 (
     id          int8           NOT NULL,
     role        VARCHAR(60)    NOT NULL,
@@ -212,25 +218,25 @@ CREATE TABLE tb_role
     PRIMARY KEY (id)
 );
 COMMENT
-ON TABLE tb_role IS '角色表';
+ON TABLE dz_role IS '角色表';
 COMMENT
-ON COLUMN tb_role.id IS '角色id';
+ON COLUMN dz_role.id IS '角色id';
 COMMENT
-ON COLUMN tb_role.role IS '角色名称';
+ON COLUMN dz_role.role IS '角色名称';
 COMMENT
-ON COLUMN tb_role.remark IS '角色描述';
+ON COLUMN dz_role.remark IS '角色描述';
 COMMENT
-ON COLUMN tb_role.create_time IS '创建时间';
+ON COLUMN dz_role.create_time IS '创建时间';
 COMMENT
-ON COLUMN tb_role.update_time IS '修改时间';
-INSERT INTO "tb_role" ("id", "role", "remark", "create_time", "update_time")
+ON COLUMN dz_role.update_time IS '修改时间';
+INSERT INTO "dz_role" ("id", "role", "remark", "create_time", "update_time")
 VALUES (1, 'user', '普通用户', NOW(), NOW());
-INSERT INTO "tb_role" ("id", "role", "remark", "create_time", "update_time")
+INSERT INTO "dz_role" ("id", "role", "remark", "create_time", "update_time")
 VALUES (2, 'user_pro', 'Pro用户', NOW(), NOW());
-INSERT INTO "tb_role" ("id", "role", "remark", "create_time", "update_time")
+INSERT INTO "dz_role" ("id", "role", "remark", "create_time", "update_time")
 VALUES (3, 'admin', '超级管理员', NOW(), NOW());
-DROP TABLE IF EXISTS tb_role_permission;
-CREATE TABLE tb_role_permission
+DROP TABLE IF EXISTS dz_role_permission;
+CREATE TABLE dz_role_permission
 (
     id            int8      NOT NULL,
     role_id       int8      NOT NULL,
@@ -240,47 +246,47 @@ CREATE TABLE tb_role_permission
     PRIMARY KEY (id)
 );
 COMMENT
-ON TABLE tb_role_permission IS '角色权限关联表';
+ON TABLE dz_role_permission IS '角色权限关联表';
 COMMENT
-ON COLUMN tb_role_permission.id IS '角色权限关联表';
+ON COLUMN dz_role_permission.id IS '角色权限关联表';
 COMMENT
-ON COLUMN tb_role_permission.role_id IS '角色id';
+ON COLUMN dz_role_permission.role_id IS '角色id';
 COMMENT
-ON COLUMN tb_role_permission.permission_id IS '权限id';
+ON COLUMN dz_role_permission.permission_id IS '权限id';
 COMMENT
-ON COLUMN tb_role_permission.create_time IS '创建时间';
+ON COLUMN dz_role_permission.create_time IS '创建时间';
 COMMENT
-ON COLUMN tb_role_permission.update_time IS '更新时间';
-INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+ON COLUMN dz_role_permission.update_time IS '更新时间';
+INSERT INTO "dz_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
 VALUES (1, 1, 4, NOW(), NOW());
-INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+INSERT INTO "dz_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
 VALUES (2, 1, 6, NOW(), NOW());
-INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+INSERT INTO "dz_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
 VALUES (3, 2, 1, NOW(), NOW());
-INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+INSERT INTO "dz_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
 VALUES (4, 2, 3, NOW(), NOW());
-INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+INSERT INTO "dz_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
 VALUES (5, 2, 4, NOW(), NOW());
-INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+INSERT INTO "dz_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
 VALUES (6, 2, 6, NOW(), NOW());
-INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+INSERT INTO "dz_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
 VALUES (7, 2, 7, NOW(), NOW());
-INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+INSERT INTO "dz_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
 VALUES (8, 3, 1, NOW(), NOW());
-INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+INSERT INTO "dz_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
 VALUES (11, 3, 4, NOW(), NOW());
-INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+INSERT INTO "dz_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
 VALUES (9, 3, 2, NOW(), NOW());
-INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+INSERT INTO "dz_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
 VALUES (10, 3, 3, NOW(), NOW());
-INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+INSERT INTO "dz_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
 VALUES (12, 3, 5, NOW(), NOW());
-INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+INSERT INTO "dz_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
 VALUES (13, 3, 6, NOW(), NOW());
-INSERT INTO "tb_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
+INSERT INTO "dz_role_permission" ("id", "role_id", "permission_id", "create_time", "update_time")
 VALUES (14, 3, 7, NOW(), NOW());
-DROP TABLE IF EXISTS tb_tag;
-CREATE TABLE tb_tag
+DROP TABLE IF EXISTS dz_tag;
+CREATE TABLE dz_tag
 (
     id          int8         NOT NULL,
     name        VARCHAR(255) NOT NULL,
@@ -290,19 +296,19 @@ CREATE TABLE tb_tag
     PRIMARY KEY (id)
 );
 COMMENT
-ON TABLE tb_tag IS '标签表';
+ON TABLE dz_tag IS '标签表';
 COMMENT
-ON COLUMN tb_tag.id IS '标签id';
+ON COLUMN dz_tag.id IS '标签id';
 COMMENT
-ON COLUMN tb_tag.name IS '标签名称';
+ON COLUMN dz_tag.name IS '标签名称';
 COMMENT
-ON COLUMN tb_tag.color IS '标签颜色（hex）';
+ON COLUMN dz_tag.color IS '标签颜色（hex）';
 COMMENT
-ON COLUMN tb_tag.create_time IS '创建时间';
+ON COLUMN dz_tag.create_time IS '创建时间';
 COMMENT
-ON COLUMN tb_tag.update_time IS '更新时间';
-DROP TABLE IF EXISTS tb_user;
-CREATE TABLE tb_user
+ON COLUMN dz_tag.update_time IS '更新时间';
+DROP TABLE IF EXISTS dz_user;
+CREATE TABLE dz_user
 (
     id          int8         NOT NULL,
     username    VARCHAR(255) NOT NULL,
@@ -315,25 +321,25 @@ CREATE TABLE tb_user
     PRIMARY KEY (id)
 );
 COMMENT
-ON TABLE tb_user IS '用户表';
+ON TABLE dz_user IS '用户表';
 COMMENT
-ON COLUMN tb_user.id IS '用户id';
+ON COLUMN dz_user.id IS '用户id';
 COMMENT
-ON COLUMN tb_user.username IS '用户名称';
+ON COLUMN dz_user.username IS '用户名称';
 COMMENT
-ON COLUMN tb_user.password IS '用户密码';
+ON COLUMN dz_user.password IS '用户密码';
 COMMENT
-ON COLUMN tb_user.email IS '用户邮箱';
+ON COLUMN dz_user.email IS '用户邮箱';
 COMMENT
-ON COLUMN tb_user.avatar IS '用户头像';
+ON COLUMN dz_user.avatar IS '用户头像';
 COMMENT
-ON COLUMN tb_user.create_time IS '创建时间';
+ON COLUMN dz_user.create_time IS '创建时间';
 COMMENT
-ON COLUMN tb_user.update_time IS '更新时间';
+ON COLUMN dz_user.update_time IS '更新时间';
 COMMENT
-ON COLUMN tb_user.is_deleted IS '是否被删除（0：未删除；1：已删除）';
-DROP TABLE IF EXISTS tb_user_role;
-CREATE TABLE tb_user_role
+ON COLUMN dz_user.is_deleted IS '是否被删除（0：未删除；1：已删除）';
+DROP TABLE IF EXISTS dz_user_role;
+CREATE TABLE dz_user_role
 (
     id          int8      NOT NULL,
     user_id     int8      NOT NULL,
@@ -343,14 +349,14 @@ CREATE TABLE tb_user_role
     PRIMARY KEY (id)
 );
 COMMENT
-ON TABLE tb_user_role IS '用户角色关联表';
+ON TABLE dz_user_role IS '用户角色关联表';
 COMMENT
-ON COLUMN tb_user_role.id IS '用户角色关联表';
+ON COLUMN dz_user_role.id IS '用户角色关联表';
 COMMENT
-ON COLUMN tb_user_role.user_id IS '用户id';
+ON COLUMN dz_user_role.user_id IS '用户id';
 COMMENT
-ON COLUMN tb_user_role.role_id IS '角色id';
+ON COLUMN dz_user_role.role_id IS '角色id';
 COMMENT
-ON COLUMN tb_user_role.create_time IS '创建时间';
+ON COLUMN dz_user_role.create_time IS '创建时间';
 COMMENT
-ON COLUMN tb_user_role.update_time IS '更新时间';
+ON COLUMN dz_user_role.update_time IS '更新时间';

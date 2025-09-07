@@ -1,5 +1,6 @@
 package com.devin.dezhi.domain.v1.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -24,7 +25,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-@TableName("tb_article")
+@TableName("dz_article")
 public class Article implements Serializable {
 
     @Serial
@@ -113,6 +114,12 @@ public class Article implements Serializable {
      */
     @TableField("is_deleted")
     private Integer isDeleted;
+
+    /**
+     * 文章摘要向量.
+     */
+    @TableField(value = "summary_embedding", insertStrategy = FieldStrategy.ALWAYS, updateStrategy = FieldStrategy.ALWAYS)
+    private String summaryEmbedding;
 
     /**
      * 初始化.

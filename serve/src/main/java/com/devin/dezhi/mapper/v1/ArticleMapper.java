@@ -3,6 +3,7 @@ package com.devin.dezhi.mapper.v1;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.devin.dezhi.domain.v1.entity.Article;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 2025/6/1 23:06.
@@ -16,4 +17,10 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ArticleMapper extends BaseMapper<Article> {
 
+    /**
+     * 插入文章以及向量.
+     * @param article 文章
+     * @return 插入数量
+     */
+    int insertWithVector(@Param("article") Article article);
 }

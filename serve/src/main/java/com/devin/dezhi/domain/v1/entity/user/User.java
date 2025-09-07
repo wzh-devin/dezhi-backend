@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
  * @since 1.0
  */
 @Data
-@TableName("tb_user")
+@TableName("dz_user")
 public class User implements Serializable {
 
     @Serial
