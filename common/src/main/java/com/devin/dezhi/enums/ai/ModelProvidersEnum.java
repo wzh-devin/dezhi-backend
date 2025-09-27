@@ -20,5 +20,10 @@ public enum ModelProvidersEnum {
     /**
      * DeepSeek模型供应商.
      */
-    DEEPSEEK
+    DEEPSEEK,
+
+    /**
+     * 阿里百炼模型供应商.
+     */
+    ALI_BAI_LIAN,
 }

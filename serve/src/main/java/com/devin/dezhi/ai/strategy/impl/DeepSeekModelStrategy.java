@@ -6,7 +6,6 @@ import com.devin.dezhi.enums.HttpErrorEnum;
 import com.devin.dezhi.enums.ai.ModelProvidersEnum;
 import com.devin.dezhi.exception.ModelException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -32,32 +31,15 @@ public class DeepSeekModelStrategy implements ModelStrategy {
     }
 
     @Override
-    public Mono<String> chatModel(final String question) {
+    public Mono<String> chatModel(final ModelDTO modelDTO) {
         // 设置webclient
-        WebClient webClient = WebClient.builder()
-                .baseUrl("https://api.deepseek.com/chat/completions")
-                .defaultHeaders(headers -> {
-                    headers.add("Content-Type", "application/json");
-                    headers.add("Authorization", "Bearer sk-e668853b54764261a86ba00f0c4b2c3d");
-                }).build();
-
-        String requestBody = """
-                {
-                    "model": "deepseek-chat",
-                    "messages": [
-                      {"role": "system", "content": "You are a helpful assistant."},
-                      {"role": "user", "content": "Hello!"}
-                    ],
-                    "stream": false
-                }
-                """;
-
-        return webClient.post()
-                .bodyValue(requestBody)
-                .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, response -> Mono.error(new RuntimeException("Error: " + response.statusCode())))
-                .onStatus(HttpStatusCode::is5xxServerError, response -> Mono.error(new RuntimeException("Error: " + response.statusCode())))
-                .bodyToMono(String.class);
+//        WebClient webClient = WebClient.builder()
+//                .baseUrl(modelDTO.getBaseUrl())
+//                .defaultHeaders(headers -> {
+//                    headers.add("Content-Type", "application/json");
+//                    headers.add("Authorization", "Bearer " + modelDTO.getApiKey());
+//                }).build();
+        return null;
     }
 
     /**

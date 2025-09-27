@@ -36,6 +36,6 @@ public class AiController {
      */
     @GetMapping("/chat")
     public Mono<String> chat(final String question) {
-        return modelStrategyFactory.getModelStrategy(ModelProvidersEnum.DEEPSEEK).chatModel(question);
+        return modelStrategyFactory.getModelStrategy(ModelProvidersEnum.DEEPSEEK).chatModel(null);
     }
 }

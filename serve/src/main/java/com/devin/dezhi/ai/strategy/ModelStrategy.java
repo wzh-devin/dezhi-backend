@@ -25,10 +25,10 @@ public interface ModelStrategy {
     /**
      * 模型聊天.
      *
-     * @param question 问题
+     * @param modelDTO 模型DTO
      * @return 模型回答
      */
-    Mono<String> chatModel(String question);
+    Mono<String> chatModel(ModelDTO modelDTO);
 
     /**
      * 校验模型连接.
