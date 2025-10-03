@@ -2,6 +2,7 @@ package com.devin.dezhi.model;
 
 import com.devin.dezhi.enums.HttpErrorEnum;
 import com.devin.dezhi.exception.ModelException;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import java.util.ArrayList;
@@ -36,7 +37,19 @@ public class ModelReqBody {
     private Boolean stream = true;
 
     /**
+     * 工具列表（用于function calling）.
+     */
+    private List<Tool> tools;
+
+    /**
+     * 工具选择.
+     */
+    @JsonProperty("tool_choice")
+    private final String toolChoice = "auto";
+
+    /**
      * 构建器.
+     *
      * @return Builder.
      */
     public static Builder builder() {
@@ -47,12 +60,15 @@ public class ModelReqBody {
 
         private String model;
 
-        private List<ModelChatMessage> messages = new ArrayList<>();
+        private final List<ModelChatMessage> messages = new ArrayList<>();
 
         private Boolean stream;
 
+        private List<Tool> tools;
+
         /**
          * 模型名称.
+         *
          * @param model 模型名称.
          * @return Builder.
          */
@@ -63,6 +79,7 @@ public class ModelReqBody {
 
         /**
          * 流式返回.
+         *
          * @param stream 流式返回.
          * @return Builder.
          */
@@ -95,21 +112,49 @@ public class ModelReqBody {
         }
 
         /**
-         * 链式添加消息.
-         * @param role 角色.
-         * @param content 内容.
+         * 设置工具列表.
+         *
+         * @param tools 工具列表.
          * @return Builder.
          */
-        public Builder addMessage(final String role, final String content) {
-            if (this.messages == null) {
-                this.messages = new ArrayList<>();
-            }
-            this.messages.add(new ModelChatMessage(role, content));
+        public Builder tools(final List<Tool> tools) {
+            this.tools = tools;
             return this;
         }
 
         /**
+         * 添加工具.
+         * @param type 工具类型
+         * @param function 工具
+         * @return Builder.
+         */
+        public Builder functions(final String type, final FunctionBody function) {
+            if (Objects.isNull(this.tools)) {
+                this.tools = new ArrayList<>();
+            }
+            this.tools.add(
+                    Tool.builder()
+                            .type(type)
+                            .function(function)
+                            .build());
+            return this;
+        }
+
+        /**
+         * 添加默认类型 "function" 工具.
+         * @param function 工具
+         * @return Builder.
+         */
+        public Builder functions(final FunctionBody function) {
+            if (Objects.isNull(this.tools)) {
+                this.tools = new ArrayList<>();
+            }
+            return this.functions("function", function);
+        }
+
+        /**
          * 构建.
+         *
          * @return ModelReqBody.
          */
         public ModelReqBody build() {
@@ -120,6 +165,7 @@ public class ModelReqBody {
             modelReqBody.setModel(this.model);
             modelReqBody.setMessages(this.messages);
             modelReqBody.setStream(this.stream);
+            modelReqBody.setTools(this.tools);
             return modelReqBody;
         }
     }
@@ -140,5 +186,21 @@ public class ModelReqBody {
          * 内容.
          */
         private String content;
+    }
+
+    @Data
+    @lombok.Builder
+    @AllArgsConstructor
+    public static class Tool {
+
+        /**
+         * 工具类型.
+         */
+        private String type = "function";
+
+        /**
+         * 工具.
+         */
+        private FunctionBody function;
     }
 }

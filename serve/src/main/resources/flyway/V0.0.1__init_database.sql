@@ -1,5 +1,5 @@
 /* --------------- 启用Pgvector --------------- */
-CREATE EXTENSION IF NOT EXISTS vector;
+-- CREATE EXTENSION IF NOT EXISTS vector;
 
 /* --------------- 创建表 --------------- */
 DROP TABLE IF EXISTS sys_dict;
@@ -54,7 +54,7 @@ CREATE TABLE dz_article
     create_time timestamp    NOT NULL DEFAULT now(),
     update_time timestamp    NOT NULL DEFAULT now(),
     is_deleted  int2         NOT NULL DEFAULT 0,
-    summary_embedding vector(1536),
+--     summary_embedding vector(1536),
     PRIMARY KEY (id)
 );
 COMMENT
@@ -87,8 +87,8 @@ COMMENT
 ON COLUMN dz_article.update_time IS '更新时间';
 COMMENT
 ON COLUMN dz_article.is_deleted IS '是否被删除（0：未删除；1：已删除）';
-COMMENT
-ON COLUMN dz_article.summary_embedding IS '文章内容向量嵌入';
+-- COMMENT
+-- ON COLUMN dz_article.summary_embedding IS '文章内容向量嵌入';
 DROP TABLE IF EXISTS dz_article_tag;
 CREATE TABLE dz_article_tag
 (

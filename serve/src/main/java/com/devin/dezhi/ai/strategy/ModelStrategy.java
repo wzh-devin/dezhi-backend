@@ -2,7 +2,8 @@ package com.devin.dezhi.ai.strategy;
 
 import com.devin.dezhi.domain.v1.dto.ModelDTO;
 import com.devin.dezhi.enums.ai.ModelProvidersEnum;
-import reactor.core.publisher.Mono;
+import org.springframework.http.codec.ServerSentEvent;
+import reactor.core.publisher.Flux;
 
 /**
  * 2025/8/24 23:24.
@@ -28,7 +29,7 @@ public interface ModelStrategy {
      * @param modelDTO 模型DTO
      * @return 模型回答
      */
-    Mono<String> chatModel(ModelDTO modelDTO);
+    Flux<ServerSentEvent<String>> chatModel(ModelDTO modelDTO);
 
     /**
      * 校验模型连接.

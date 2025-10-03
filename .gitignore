@@ -42,3 +42,6 @@ build/
 ### generator data ###
 **/test/**/generator
 generate
+
+### env file ###
+**/.env
