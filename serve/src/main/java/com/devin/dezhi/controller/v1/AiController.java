@@ -1,5 +1,6 @@
 package com.devin.dezhi.controller.v1;
 
+import com.devin.dezhi.ai.configuration.ToolsRegistry;
 import com.devin.dezhi.ai.strategy.ModelStrategy;
 import com.devin.dezhi.ai.strategy.ModelStrategyFactory;
 import com.devin.dezhi.common.annocation.ApiV1;
@@ -43,6 +44,8 @@ public class AiController {
 
     private final ModelManagerDao modelManagerDao;
 
+    private final ToolsRegistry toolsRegistry;
+
     /**
      * 聊天.
      *
@@ -80,7 +83,8 @@ public class AiController {
         modelDTO.setApiKey(model.getApiKey());
         modelDTO.setModelReqBody(ModelReqBody.builder()
                 .model(modelName)
-                .stream(true)
+                .stream(false)
+                .tools(toolsRegistry.getTools())
                 .message("user", question)
                 .build());
 

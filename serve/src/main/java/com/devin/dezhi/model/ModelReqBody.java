@@ -2,9 +2,11 @@ package com.devin.dezhi.model;
 
 import com.devin.dezhi.enums.HttpErrorEnum;
 import com.devin.dezhi.exception.ModelException;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -96,7 +98,34 @@ public class ModelReqBody {
          * @return Builder.
          */
         public Builder message(final String role, final String content) {
-            this.messages.add(new ModelChatMessage(role, content));
+            this.messages.add(new ModelChatMessage(role, null, null, content));
+            return this;
+        }
+
+        /**
+         * 添加消息.
+         *
+         * @param role       角色.
+         * @param toolCallId 工具调用ID.
+         * @param content    内容.
+         * @return Builder.
+         */
+        public Builder message(final String role, final String toolCallId, final String content) {
+            this.messages.add(new ModelChatMessage(role, toolCallId, null, content));
+            return this;
+        }
+
+        /**
+         * 添加消息.
+         *
+         * @param role       角色.
+         * @param toolCallId 工具调用ID.
+         * @param content    内容.
+         * @param toolCalls 工具调用.
+         * @return Builder.
+         */
+        public Builder message(final String role, final String toolCallId, final String content, final Object toolCalls) {
+            this.messages.add(new ModelChatMessage(role, toolCallId, toolCalls, content));
             return this;
         }
 
@@ -124,7 +153,8 @@ public class ModelReqBody {
 
         /**
          * 添加工具.
-         * @param type 工具类型
+         *
+         * @param type     工具类型
          * @param function 工具
          * @return Builder.
          */
@@ -142,6 +172,7 @@ public class ModelReqBody {
 
         /**
          * 添加默认类型 "function" 工具.
+         *
          * @param function 工具
          * @return Builder.
          */
@@ -176,11 +207,26 @@ public class ModelReqBody {
      */
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class ModelChatMessage {
         /**
          * 角色.
          */
         private String role;
+
+        /**
+         * 工具调用ID.
+         */
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        @JsonProperty("tool_call_id")
+        private String toolCallId;
+
+        /**
+         * 工具调用.
+         */
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        @JsonProperty("tool_calls")
+        private Object toolCalls;
 
         /**
          * 内容.

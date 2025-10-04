@@ -1,13 +1,15 @@
 package com.devin.dezhi.ai.strategy.impl;
 
+import com.devin.dezhi.ai.configuration.ToolExecutor;
+import com.devin.dezhi.ai.configuration.ToolsRegistry;
 import com.devin.dezhi.ai.strategy.ModelStrategy;
 import com.devin.dezhi.dao.v1.ModelManagerDao;
 import com.devin.dezhi.domain.v1.dto.ModelDTO;
 import com.devin.dezhi.enums.HttpErrorEnum;
 import com.devin.dezhi.enums.ai.ModelProvidersEnum;
 import com.devin.dezhi.exception.ModelException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Component;
@@ -27,10 +29,14 @@ import reactor.core.publisher.Flux;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class DeepSeekModelStrategy implements ModelStrategy {
 
-    @Autowired
-    private ModelManagerDao modelManagerDao;
+    private final ModelManagerDao modelManagerDao;
+
+    private final ToolsRegistry toolsRegistry;
+
+    private final ToolExecutor toolExecutor;
 
     @Override
     public ModelProvidersEnum getModelProvidersEnum() {
@@ -72,51 +78,11 @@ public class DeepSeekModelStrategy implements ModelStrategy {
 //        modelDTO.setProvider(ModelProvidersEnum.DEEPSEEK);
 //        modelDTO.setBaseUrl(model.getBaseUrl());
 //        modelDTO.setApiKey(model.getApiKey());
-//
-//        FunctionBody func01 = FunctionBody.builder()
-//                .name("get_weather")
-//                .description("获取天气信息")
-//                .parameters(
-//                        ParametersBody.builder()
-//                                .type("object")
-//                                .properties(
-//                                        Map.of(
-//                                                "city",
-//                                                ParametersBody.Property.builder()
-//                                                        .type("string")
-//                                                        .description("城市名称")
-//                                                        .build()
-//                                        )
-//                                )
-//                                .required(List.of("city"))
-//                                .build())
-//                .build();
-//
-//        FunctionBody func02 = FunctionBody.builder()
-//                .name("get_user")
-//                .description("获取用户信息")
-//                .parameters(
-//                        ParametersBody.builder()
-//                                .type("object")
-//                                .properties(
-//                                        Map.of(
-//                                                "username",
-//                                                ParametersBody.Property.builder()
-//                                                        .type("string")
-//                                                        .description("用户信息")
-//                                                        .build()
-//                                        )
-//                                )
-//                                .required(List.of("username"))
-//                                .build())
-//                .build();
-//
 //        modelDTO.setModelReqBody(ModelReqBody.builder()
 //                .model("deepseek-chat")
 //                .stream(false)
 //                .message("user", "今天上海天气怎么样？")
-//                .functions(func01)
-//                .functions(func02)
+//                .tools(toolsRegistry.getTools())
 //                .build());
 //
 //        WebClient webClient = WebClient.builder()
@@ -126,8 +92,6 @@ public class DeepSeekModelStrategy implements ModelStrategy {
 //                    headers.add("Authorization", "Bearer " + modelDTO.getApiKey());
 //                }).build();
 //
-//        log.info("模型请求：{}", modelDTO.getModelReqBody());
-//
 //        // 大模型返回需要的工具列表
 //        ModelResp modelResp = webClient.post()
 //                .bodyValue(modelDTO.getModelReqBody())
@@ -135,7 +99,30 @@ public class DeepSeekModelStrategy implements ModelStrategy {
 //                .bodyToMono(ModelResp.class)
 //                .block();
 //
-//        log.info("模型返回：{}", modelResp);
+//        Choices.Message message = modelResp.getChoices().get(0).getMessage();
+//
+//        List<Choices.ToolCall> toolCalls = message.getToolCalls();
+//        Choices.ToolCall toolCall = toolCalls.get(0);
+//
+//        ModelReqBody modelReqBody = modelDTO.getModelReqBody();
+//        ModelReqBody.ModelChatMessage modelChatMessage = new ModelReqBody.ModelChatMessage();
+//        BeanUtils.copyProperties(message, modelChatMessage);
+//        modelReqBody.getMessages().add(modelChatMessage);
+//
+//        modelReqBody.getMessages().add(new ModelReqBody.ModelChatMessage(
+//                "tool",
+//                toolCall.getId(),
+//                null,
+//                toolExecutor.executeTool(toolCall.getFunction().getName(), toolCall.getFunction().getArguments()).toString()
+//        ));
+//
+//        String block = webClient.post()
+//                .bodyValue(modelDTO.getModelReqBody())
+//                .retrieve()
+//                .bodyToMono(String.class)
+//                .block();
+//
+//        log.info("block: {}", block);
 //    }
 
     /**
