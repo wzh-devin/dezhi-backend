@@ -33,14 +33,11 @@ public abstract class AbstractOpenAIModelStrategy implements ModelStrategy {
                 .retrieve()
                 .bodyToFlux(String.class)
                 .filter(line -> !line.isEmpty() && !line.equals("data: [DONE]"))
-                .map(line -> {
-                    return ServerSentEvent.<String>builder().data(line).build();
-                });
+                .map(line -> ServerSentEvent.<String>builder().data(line).build());
     }
 
     @Override
     public ModelResp chatModel(final ModelDTO modelDTO) {
-        String jsonString = JSONObject.toJSONString(modelDTO.getModelReqBody());
         return getWebClient(modelDTO.getBaseUrl(), modelDTO.getApiKey())
                 .post()
                 .bodyValue(modelDTO.getModelReqBody())
@@ -69,7 +66,7 @@ public abstract class AbstractOpenAIModelStrategy implements ModelStrategy {
                 .baseUrl(baseUrl)
                 .defaultHeaders(headers -> {
                     headers.add("Content-Type", "application/json");
-//                    headers.add("Authorization", "Bearer " + apiKey);
+                    headers.add("Authorization", "Bearer " + apiKey);
                 }).build();
     }
 }
