@@ -1,14 +1,14 @@
 package com.devin.dezhi.service.generate.common;
 
-import com.devin.dezhi.domain.v1.entity.Article;
-import com.devin.dezhi.domain.v1.entity.Material;
-import com.devin.dezhi.domain.v1.entity.user.User;
-import com.devin.dezhi.domain.v1.vo.ArticleVO;
-import com.devin.dezhi.domain.v1.vo.FileInfoVO;
-import com.devin.dezhi.domain.v1.vo.user.LoginVO;
-import com.devin.dezhi.domain.v1.vo.user.PermissionVO;
-import com.devin.dezhi.domain.v1.vo.user.RoleVO;
-import com.devin.dezhi.domain.v1.vo.user.UserInfoVO;
+import com.devin.dezhi.domain.entity.Article;
+import com.devin.dezhi.domain.entity.Material;
+import com.devin.dezhi.domain.entity.user.User;
+import com.devin.dezhi.domain.vo.ArticleVO;
+import com.devin.dezhi.domain.vo.FileInfoVO;
+import com.devin.dezhi.domain.vo.user.LoginVO;
+import com.devin.dezhi.domain.vo.user.PermissionVO;
+import com.devin.dezhi.domain.vo.user.RoleVO;
+import com.devin.dezhi.domain.vo.user.UserInfoVO;
 import com.devin.dezhi.utils.BeanCopyUtils;
 import org.springframework.beans.BeanUtils;
 import java.util.List;

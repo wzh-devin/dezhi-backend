@@ -21,13 +21,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <groupId>com.devin.dezhi</groupId>
+            <artifactId>framework</artifactId>
+            <version>0.0.1</version>
         </dependency>
     </dependencies>
 

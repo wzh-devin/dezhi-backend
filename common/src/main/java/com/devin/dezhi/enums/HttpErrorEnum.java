@@ -31,7 +31,8 @@ public enum HttpErrorEnum {
 
     /* 参数错误：5001-5999 */
     VERIFY_ERROR(5001, ErrMsgConstant.VERIFY_ERROR),
-    ILLEGAL_STATE_ERROR(5002, ErrMsgConstant.ILLEGAL_STATE_ERROR);
+    ILLEGAL_STATE_ERROR(5002, ErrMsgConstant.ILLEGAL_STATE_ERROR),
+    MODEL_ERROR(5003, ErrMsgConstant.MODEL_ERROR);
 
     private final Integer errCode;
 

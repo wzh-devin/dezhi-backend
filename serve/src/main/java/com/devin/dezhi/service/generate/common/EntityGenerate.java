@@ -1,9 +1,9 @@
 package com.devin.dezhi.service.generate.common;
 
-import com.devin.dezhi.domain.v1.entity.ArticleTag;
-import com.devin.dezhi.domain.v1.entity.Material;
+import com.devin.dezhi.domain.entity.ArticleTag;
+import com.devin.dezhi.domain.entity.Material;
 import com.devin.dezhi.enums.DelFlagEnum;
-import com.devin.dezhi.model.FileInfo;
+import com.devin.dezhi.utils.FileInfo;
 import com.devin.dezhi.utils.SnowFlake;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

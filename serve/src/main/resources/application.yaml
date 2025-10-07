@@ -157,10 +157,13 @@ spring:
 
   # 配置 flyway
   flyway:
+    validate-on-migrate: false
     clean-disabled: true
     baseline-on-migrate: true
     baseline-version: 0
     locations: classpath:flyway
+  profiles:
+    active: dev
 
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
 sa-token:

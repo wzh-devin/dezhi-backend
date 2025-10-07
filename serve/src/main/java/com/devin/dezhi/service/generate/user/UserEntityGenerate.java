@@ -1,8 +1,8 @@
 package com.devin.dezhi.service.generate.user;
 
-import com.devin.dezhi.domain.v1.entity.user.User;
-import com.devin.dezhi.domain.v1.entity.user.UserRole;
-import com.devin.dezhi.domain.v1.vo.user.UserInfoQueryVO;
+import com.devin.dezhi.domain.entity.user.User;
+import com.devin.dezhi.domain.entity.user.UserRole;
+import com.devin.dezhi.domain.vo.user.UserInfoQueryVO;
 import com.devin.dezhi.enums.DelFlagEnum;
 import com.devin.dezhi.utils.PasswordEncrypt;
 import com.devin.dezhi.utils.SnowFlake;

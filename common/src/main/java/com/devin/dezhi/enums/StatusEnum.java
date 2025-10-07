@@ -16,8 +16,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum StatusEnum {
 
-    DRAFT(1, "草稿"),
-    IS_PUBLISH(0, "已发布");
+    DRAFT(0, "草稿"),
+    IS_PUBLISH(1, "已发布");
 
     private final Integer status;
 
