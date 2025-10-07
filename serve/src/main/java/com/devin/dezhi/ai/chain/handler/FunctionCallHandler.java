@@ -7,7 +7,6 @@ import com.devin.dezhi.domain.dto.Choices;
 import com.devin.dezhi.domain.dto.ModelResp;
 import com.devin.dezhi.enums.ai.ModelRoleEnum;
 import com.devin.dezhi.model.ModelReqBody;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import java.util.List;
 
@@ -48,9 +47,13 @@ public class FunctionCallHandler extends AbstractModelHandler {
         List<Choices.ToolCall> toolCalls = message.getToolCalls();
 
         // 将返回的历史信息，添加到请求体中
-        ModelReqBody.ModelChatMessage assistantMessage = new ModelReqBody.ModelChatMessage();
-        BeanUtils.copyProperties(message, assistantMessage);
-        context.getModelReqBody().getMessages().add(assistantMessage);
+        context.getModelReqBody().getMessages().add(
+                ModelReqBody.ModelChatMessage.builder()
+                        .role(ModelRoleEnum.of(message.getRole()))
+                        .content(message.getContent())
+                        .toolCalls(toolCalls)
+                        .build()
+        );
 
         // 执行方法调用结果
         toolCalls.forEach(toolCall -> {
