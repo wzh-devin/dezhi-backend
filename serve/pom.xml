@@ -22,64 +22,11 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
-
-        <!-- dezhi服务基础依赖包 -->
-        <dependency>
-            <groupId>com.devin.dezhi</groupId>
-            <artifactId>framework</artifactId>
-            <version>0.0.1</version>
-        </dependency>
-
         <!-- dezhi公共包 -->
         <dependency>
             <groupId>com.devin.dezhi</groupId>
             <artifactId>common</artifactId>
             <version>0.0.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.minio</groupId>
-            <artifactId>minio</artifactId>
-        </dependency>
-
-        <!-- Sa-Token 权限认证，在线文档：https://sa-token.cc -->
-        <dependency>
-            <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-spring-boot3-starter</artifactId>
-        </dependency>
-
-        <!-- Sa-Token集成Redis -->
-        <dependency>
-            <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-redis-template</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>spring-boot-starter-data-redis</artifactId>
-                    <groupId>org.springframework.boot</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- Caffeine 本地缓存框架 -->
-        <dependency>
-            <groupId>com.github.ben-manes.caffeine</groupId>
-            <artifactId>caffeine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

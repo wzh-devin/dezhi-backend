@@ -1,8 +1,8 @@
 package com.devin.dezhi.ai.chain;
 
-import com.devin.dezhi.domain.v1.dto.ModelDTO;
-import com.devin.dezhi.domain.v1.dto.ModelResp;
-import com.devin.dezhi.domain.v1.entity.ModelManager;
+import com.devin.dezhi.domain.dto.ModelDTO;
+import com.devin.dezhi.domain.dto.ModelResp;
+import com.devin.dezhi.domain.entity.ModelManager;
 import com.devin.dezhi.model.ModelReqBody;
 import lombok.Data;
 import org.springframework.http.codec.ServerSentEvent;

@@ -1,8 +1,8 @@
 package com.devin.dezhi.ai.strategy.impl;
 
 import com.devin.dezhi.ai.strategy.ModelStrategy;
-import com.devin.dezhi.domain.v1.dto.ModelDTO;
-import com.devin.dezhi.domain.v1.dto.ModelResp;
+import com.devin.dezhi.domain.dto.ModelDTO;
+import com.devin.dezhi.domain.dto.ModelResp;
 import com.devin.dezhi.enums.HttpErrorEnum;
 import com.devin.dezhi.exception.ModelException;
 import org.springframework.http.MediaType;

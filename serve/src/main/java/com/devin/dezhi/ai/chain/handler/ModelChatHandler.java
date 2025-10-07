@@ -4,7 +4,7 @@ import com.devin.dezhi.ai.chain.ModelContext;
 import com.devin.dezhi.ai.chain.AbstractModelHandler;
 import com.devin.dezhi.ai.strategy.ModelStrategy;
 import com.devin.dezhi.ai.strategy.ModelStrategyFactory;
-import com.devin.dezhi.domain.v1.dto.ModelDTO;
+import com.devin.dezhi.domain.dto.ModelDTO;
 import com.devin.dezhi.enums.ai.ToolChoiceEnum;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Component;

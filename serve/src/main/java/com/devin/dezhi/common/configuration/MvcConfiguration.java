@@ -1,6 +1,6 @@
 package com.devin.dezhi.common.configuration;
 
-import com.devin.dezhi.common.annocation.ApiV1;
+import com.devin.dezhi.annocation.ApiV1;
 import com.devin.dezhi.common.interceptor.SaTokenInterceptor;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;

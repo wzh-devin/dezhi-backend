@@ -1,7 +1,7 @@
 package com.devin.dezhi.ai.tools;
 
-import com.devin.dezhi.common.annocation.AIParam;
-import com.devin.dezhi.common.annocation.AITool;
+import com.devin.dezhi.annocation.AIParam;
+import com.devin.dezhi.annocation.AITool;
 import org.springframework.stereotype.Component;
 
 /**

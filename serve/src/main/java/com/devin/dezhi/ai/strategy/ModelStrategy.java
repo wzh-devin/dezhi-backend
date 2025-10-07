@@ -1,7 +1,7 @@
 package com.devin.dezhi.ai.strategy;
 
-import com.devin.dezhi.domain.v1.dto.ModelDTO;
-import com.devin.dezhi.domain.v1.dto.ModelResp;
+import com.devin.dezhi.domain.dto.ModelDTO;
+import com.devin.dezhi.domain.dto.ModelResp;
 import com.devin.dezhi.enums.ai.ModelProvidersEnum;
 import org.springframework.http.codec.ServerSentEvent;
 import reactor.core.publisher.Flux;

@@ -1,7 +1,7 @@
 package com.devin.dezhi.ai.configuration;
 
-import com.devin.dezhi.common.annocation.AIParam;
-import com.devin.dezhi.common.annocation.AITool;
+import com.devin.dezhi.annocation.AIParam;
+import com.devin.dezhi.annocation.AITool;
 import com.devin.dezhi.model.FunctionBody;
 import com.devin.dezhi.model.ModelReqBody;
 import com.devin.dezhi.model.ParametersBody;
