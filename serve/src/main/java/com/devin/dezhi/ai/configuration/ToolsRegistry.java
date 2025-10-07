@@ -132,9 +132,6 @@ public class ToolsRegistry implements ApplicationListener<ContextRefreshedEvent>
         if (clazz == Double.class || clazz == double.class) {
             return "number";
         }
-        if (clazz.isEnum()) {
-            return "enum";
-        }
         if (clazz.isArray()) {
             return "array";
         }

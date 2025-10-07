@@ -1,16 +1,14 @@
 package com.devin.dezhi.controller.v1;
 
-import com.devin.dezhi.ai.configuration.ToolsRegistry;
-import com.devin.dezhi.ai.strategy.ModelStrategy;
-import com.devin.dezhi.ai.strategy.ModelStrategyFactory;
+import com.devin.dezhi.ai.chain.ModelChain;
+import com.devin.dezhi.ai.chain.ModelChainFactory;
+import com.devin.dezhi.ai.chain.ModelContext;
 import com.devin.dezhi.common.annocation.ApiV1;
 import com.devin.dezhi.dao.v1.ModelManagerDao;
-import com.devin.dezhi.domain.v1.dto.ModelDTO;
 import com.devin.dezhi.domain.v1.entity.ModelManager;
 import com.devin.dezhi.enums.HttpErrorEnum;
 import com.devin.dezhi.enums.ai.ModelProvidersEnum;
 import com.devin.dezhi.exception.ModelException;
-import com.devin.dezhi.model.ModelReqBody;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,11 +38,9 @@ import java.util.Objects;
 @RequestMapping("/ai")
 @RequiredArgsConstructor
 public class AiController {
-    private final ModelStrategyFactory modelStrategyFactory;
-
     private final ModelManagerDao modelManagerDao;
 
-    private final ToolsRegistry toolsRegistry;
+    private final ModelChainFactory modelChainFactory;
 
     /**
      * 聊天.
@@ -67,6 +63,7 @@ public class AiController {
             final ModelProvidersEnum modelProvider,
             final String modelName
     ) {
+        // 检查模型是否存在
         // 获取模型
         ModelManager model = modelManagerDao.lambdaQuery()
                 .eq(ModelManager::getProvider, modelProvider)
@@ -75,19 +72,13 @@ public class AiController {
         if (Objects.isNull(model)) {
             throw new ModelException(HttpErrorEnum.MODEL_ERROR.getErrCode(), "模型未注册");
         }
-        ModelStrategy modelStrategy = modelStrategyFactory.getModelStrategy(modelProvider);
-        // 封装模型DTO
-        ModelDTO modelDTO = new ModelDTO();
-        modelDTO.setProvider(modelProvider);
-        modelDTO.setBaseUrl(model.getBaseUrl());
-        modelDTO.setApiKey(model.getApiKey());
-        modelDTO.setModelReqBody(ModelReqBody.builder()
-                .model(modelName)
-                .stream(false)
-                .tools(toolsRegistry.getTools())
-                .message("user", question)
-                .build());
 
-        return modelStrategy.chatModel(modelDTO);
+        // 执行设置模型链
+        ModelChain chain = modelChainFactory.build();
+        ModelContext context = new ModelContext();
+        context.setModel(model);
+        context.setQuestion(question);
+
+        return chain.execute(context);
     }
 }

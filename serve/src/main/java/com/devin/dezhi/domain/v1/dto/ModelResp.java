@@ -16,14 +16,30 @@ import java.util.List;
  */
 @Data
 public class ModelResp {
+
+    /**
+     * 模型返回结果id.
+     */
     private String id;
 
+    /**
+     * 模型返回结果创建时间.
+     */
     private Date created;
 
+    /**
+     * 模型返回结果模型.
+     */
     private String model;
 
+    /**
+     * 模型返回结果系统指纹.
+     */
     @JsonProperty("system_fingerprint")
     private String systemFingerprint;
 
+    /**
+     * 模型返回结果.
+     */
     private List<Choices> choices;
 }

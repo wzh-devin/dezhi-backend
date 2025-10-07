@@ -2,13 +2,13 @@ package com.devin.dezhi.service.v1.impl;
 
 import com.devin.dezhi.ai.strategy.ModelStrategy;
 import com.devin.dezhi.ai.strategy.ModelStrategyFactory;
-import com.devin.dezhi.constant.ModelRoleConstant;
 import com.devin.dezhi.dao.v1.ModelManagerDao;
 import com.devin.dezhi.domain.v1.dto.ModelDTO;
 import com.devin.dezhi.domain.v1.entity.ModelManager;
 import com.devin.dezhi.domain.v1.vo.ai.ModelManagerSaveVO;
 import com.devin.dezhi.domain.v1.vo.ai.ModelManagerVO;
 import com.devin.dezhi.enums.ai.ModelProvidersEnum;
+import com.devin.dezhi.enums.ai.ModelRoleEnum;
 import com.devin.dezhi.model.ModelReqBody;
 import com.devin.dezhi.service.v1.ModelManagerService;
 import com.devin.dezhi.utils.BeanCopyUtils;
@@ -51,7 +51,9 @@ public class ModelManagerServiceImpl implements ModelManagerService {
         ModelReqBody modelReqBody = ModelReqBody.builder()
                 .model(modelManagerSaveVO.getModel())
                 .stream(false)
-                .message(ModelRoleConstant.USER, "hi")
+                .addMessage(ModelRoleEnum.USER)
+                .content("hi")
+                .done()
                 .build();
         modelDTO.setModelReqBody(modelReqBody);
         strategy.checkConnectModel(modelDTO);
